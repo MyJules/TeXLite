@@ -15,7 +15,13 @@ qt_add_executable(appTeXLite
 qt_add_qml_module(appTeXLite
     URI TeXLite
     VERSION 1.0
-    QML_FILES qml/Main.qml
+    QML_FILES
+    qml/Main.qml
+    qml/AppHeader.qml
+    qml/AppFooter.qml
+    qml/FileSystem.qml
+    qml/LatexTextEdit.qml
+    qml/PDFView.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES
