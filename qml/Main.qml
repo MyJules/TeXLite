@@ -1,10 +1,6 @@
 import QtQuick
-import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
-import Qt.labs.folderlistmodel 2.15
-import QtQuick.Dialogs
-
+import QtQuick.Controls.Material
 
 ApplicationWindow {
     id: root
@@ -19,10 +15,10 @@ ApplicationWindow {
     minimumHeight: 400
 
     Material.theme: Material.Dark
-    Material.accent: Material.BlueGrey
+    Material.accent: Material.Grey
+    Material.roundedScale: Material.NotRounded
 
     header: AppHeader{}
-
     footer: AppFooter{}
 
     SplitView {
@@ -31,10 +27,20 @@ ApplicationWindow {
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-        FileSystem{}
+//        FileSystem{
+//            SplitView.preferredWidth: 150
+//            SplitView.minimumWidth: 100
+//        }
 
-        LatexTextEdit{}
+        LatexTextEdit{
+            SplitView.preferredWidth: 400
+            SplitView.minimumWidth: 300
+        }
 
-        PDFView{}
+        PDFView{
+            SplitView.fillWidth: true
+            SplitView.preferredWidth: 400
+            SplitView.minimumWidth: 200
+        }
      }
 }

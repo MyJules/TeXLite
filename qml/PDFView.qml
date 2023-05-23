@@ -1,11 +1,20 @@
 import QtQuick
-import QtQuick.Layouts 1.15
-import QtQuick.Controls.Material 2.15
+import QtQuick.Pdf
+import QtQuick.Controls.Material
 
 Rectangle {
     id: latexPDF
-    color: "#171b40"
-    SplitView.fillWidth: true
-    SplitView.preferredWidth: 400
-    SplitView.minimumWidth: 200
+    color: "lightgrey"
+    radius: 4
+
+    PdfDocument {
+        id: doc
+        source: "qrc:/test/pdf/resource/Test.pdf"
+    }
+
+    PdfMultiPageView {
+        id: view
+        anchors.fill: parent
+        document: doc
+    }
 }
