@@ -6,6 +6,7 @@ import QtQuick.Controls.Material
 Rectangle {
     id: latexTextRect
     color: "#292929"
+    clip: true
 
     ScrollView {
         id: latexTextAreaScrollView

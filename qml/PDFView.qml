@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Pdf
-import QtQuick.Controls.Material
 
 Rectangle {
     id: latexPDF
+    clip: true
     color: "lightgrey"
     radius: 4
 
