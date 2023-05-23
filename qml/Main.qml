@@ -1,7 +1,8 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
+import Qt.labs.folderlistmodel 2.15
 
 ApplicationWindow {
     id: root
@@ -12,7 +13,7 @@ ApplicationWindow {
     width: 1280
     height: 720
 
-    minimumWidth: 600
+    minimumWidth: 800
     minimumHeight: 400
 
     Material.theme: Material.Dark
@@ -23,6 +24,7 @@ ApplicationWindow {
         leftPadding: 5
 
         Button {
+           flat: true
            font.pointSize: 10
            height: 30
            text: "File"
@@ -31,12 +33,17 @@ ApplicationWindow {
            }
            Menu {
                  id: filePopup
-                 MenuItem { text: "Open" }
+                 MenuItem { text: "New File" }
+                 MenuSeparator{}
+                 MenuItem { text: "Open File" }
+                 MenuItem { text: "Open Folder" }
+                 MenuSeparator{}
                  MenuItem { text: "Exit" }
              }
         }
 
         Button {
+           flat: true
            font.pointSize: 10
            height: 30
            text: "Help"
@@ -45,7 +52,9 @@ ApplicationWindow {
            }
            Menu {
                  id: helpPopup
-                 MenuItem { text: "About" }
+                 MenuItem {
+                    text: "About"
+                 }
              }
         }
     }
@@ -58,29 +67,49 @@ ApplicationWindow {
            anchors.verticalCenter: parent.verticalCenter
            font.pointSize: 10
            height: 20
-           text: "No Project"
+           text: "No Folder"
            color: "white"
         }
-
     }
-
 
     SplitView {
         id: rowLayout
         clip: true
         anchors.fill: parent
-        orientation: Qt.Horizonta
+        orientation: Qt.Horizontal
 
         Rectangle {
             id: fileSystem
-            color: "#3F51B5"
+            color: "#171b40"
             SplitView.preferredWidth: 120
-            SplitView.minimumWidth: 80
+            SplitView.minimumWidth: 100
+
+            ListView {
+                anchors.fill: parent
+
+                FolderListModel {
+                    id: folderModel
+                    showDirsFirst: true
+                    nameFilters: ["*.qml"]
+                }
+
+                Component {
+                    id: fileDelegate
+                    Button{
+                        flat: true
+                        text: fileName
+                        height: 30
+                    }
+                }
+
+                model: folderModel
+                delegate: fileDelegate
+            }
         }
 
         Rectangle {
             id: latexTextRect
-            color: "#607D8B"
+            color: "#292929"
             SplitView.preferredWidth: 400
             SplitView.minimumWidth: 200
 
@@ -112,7 +141,7 @@ ApplicationWindow {
 
         Rectangle {
             id: latexPDF
-            color: "#EEEEEE"
+            color: "#171b40"
             SplitView.fillWidth: true
             SplitView.preferredWidth: 400
             SplitView.minimumWidth: 200
