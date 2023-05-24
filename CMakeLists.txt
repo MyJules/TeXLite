@@ -6,7 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTORCC ON)
 
+set (CMAKE_CXX_STANDARD 17)
+
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+
+include_directories(external/MicroTeX/src)
 
 qt_standard_project_setup()
 
