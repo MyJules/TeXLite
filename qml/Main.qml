@@ -33,7 +33,7 @@ ApplicationWindow {
 //        }
 
         LatexTextEdit{
-            SplitView.preferredWidth: 400
+            SplitView.preferredWidth: root.width / 2
             SplitView.minimumWidth: 300
         }
 

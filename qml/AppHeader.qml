@@ -44,6 +44,25 @@ Row {
        flat: true
        height: 30
        font.pointSize: 10
+       text: "LaTeX Engine"
+       onClicked: {
+        latexEndginePopup.popup()
+       }
+
+       Menu {
+             id: latexEndginePopup
+             ComboBox {
+                 width: 200
+                 model: [ "pdfLatex", "LuaLatex", "XeLaTex" ]
+             }
+         }
+    }
+
+
+    ToolButton {
+       flat: true
+       height: 30
+       font.pointSize: 10
        text: "Help"
        onClicked: {
         helpPopup.popup()
@@ -66,5 +85,6 @@ Row {
              }
          }
     }
+
 }
 
