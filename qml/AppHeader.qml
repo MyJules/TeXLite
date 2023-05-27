@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import com.tex
 
 Row {
     ToolButton {
@@ -52,10 +53,32 @@ Row {
        Menu {
              id: latexEndginePopup
              ComboBox {
-                 width: 200
-                 model: [ "pdfLatex", "LuaLatex", "XeLaTex" ]
+                 id: latexEngineComboBox
+                 model: ListModel {
+                     id: model
+                     ListElement { text: "pdfTeX" }
+                     ListElement { text: "pdfLaTeX" }
+                 }
+
+                 onCurrentValueChanged: {
+                     switch(latexEngineComboBox.currentValue){
+                        case pdfLatexEngine.texEngineCommand:
+                            console.log("bbbb")
+                            break
+
+                        default:
+                            console.log("aaaa")
+                            break
+                     }
+                 }
              }
          }
+
+       TexEngine{
+            id: pdfLatexEngine
+            texEngineCommand: "pdfTeX"
+            texEngineArguments: [""]
+       }
     }
 
 
@@ -86,5 +109,14 @@ Row {
          }
     }
 
+    ToolButton {
+       flat: true
+       height: 30
+       font.pointSize: 10
+       text: "Compile"
+       onClicked: {
+
+       }
+    }
 }
 

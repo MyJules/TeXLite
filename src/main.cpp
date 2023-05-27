@@ -1,10 +1,15 @@
 
+#include "texengine.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtQml/qqmlregistration.h>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    qmlRegisterType<TexEngine>("com.tex", 1, 0, "TexEngine");
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/TeXLite/qml/Main.qml"_qs);

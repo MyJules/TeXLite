@@ -10,13 +10,14 @@ set (CMAKE_CXX_STANDARD 17)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
 
-include_directories(external/MicroTeX/src)
+include_directories(src)
 
 qt_standard_project_setup()
 
 qt_add_executable(appTeXLite
     resource.qrc
     src/main.cpp
+    src/texengine.cpp
 )
 
 qt_add_qml_module(appTeXLite

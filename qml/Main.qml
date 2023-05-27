@@ -14,6 +14,8 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 400
 
+    property string tempFileName: "tem.tex"
+
     Material.theme: Material.Dark
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
@@ -33,13 +35,13 @@ ApplicationWindow {
 //        }
 
         LatexTextEdit{
-            SplitView.preferredWidth: root.width / 2
+            SplitView.fillWidth: true
+            SplitView.preferredWidth: 400
             SplitView.minimumWidth: 300
         }
 
         PDFView{
-            SplitView.fillWidth: true
-            SplitView.preferredWidth: 400
+            SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
         }
      }
