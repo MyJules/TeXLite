@@ -9,7 +9,7 @@ Rectangle {
 
     PdfDocument {
         id: doc
-        source: "qrc:/test/pdf/resource/Test.pdf"
+        source: "file:temp.pdf"
     }
 
     PdfMultiPageView {

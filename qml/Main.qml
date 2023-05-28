@@ -14,13 +14,15 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 400
 
-    property string tempFileName: "tem.tex"
+    property string tempFileName: "temp.tex"
 
     Material.theme: Material.Dark
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
-    header: AppHeader{}
+    header: AppHeader{
+        tempFileName: tempFileName
+    }
     footer: AppFooter{}
 
     SplitView {

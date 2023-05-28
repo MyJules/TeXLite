@@ -5,6 +5,11 @@ import QtQuick.Controls.Material
 import com.tex
 
 Row {
+    id: root
+
+    property TexEngine currentEngine: pdfLatexEngine
+    property string tempFileName: "temp.tex"
+
     ToolButton {
        flat: true
        font.pointSize: 10
@@ -63,11 +68,11 @@ Row {
                  onCurrentValueChanged: {
                      switch(latexEngineComboBox.currentValue){
                         case pdfLatexEngine.texEngineCommand:
-                            console.log("bbbb")
+                            root.currentEngine = pdfLatexEngine
                             break
 
                         default:
-                            console.log("aaaa")
+                            root.currentEngine = pdfLatexEngine
                             break
                      }
                  }
@@ -76,11 +81,10 @@ Row {
 
        TexEngine{
             id: pdfLatexEngine
-            texEngineCommand: "pdfTeX"
-            texEngineArguments: [""]
+            texEngineCommand: "pdfLaTeX"
+            texEngineArguments: [tempFileName, "-quiet"]
        }
     }
-
 
     ToolButton {
        flat: true
@@ -115,7 +119,7 @@ Row {
        font.pointSize: 10
        text: "Compile"
        onClicked: {
-
+        currentEngine.execute()
        }
     }
 }
