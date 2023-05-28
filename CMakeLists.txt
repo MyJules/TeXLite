@@ -15,7 +15,6 @@ include_directories(src)
 qt_standard_project_setup()
 
 qt_add_executable(appTeXLite
-    resource.qrc
     src/main.cpp
     src/texengine.cpp
 )
