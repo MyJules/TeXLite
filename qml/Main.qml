@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Pdf
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
 
@@ -14,16 +15,12 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 400
 
-    property string tempFileName: "temp.tex"
-
     Material.theme: Material.Dark
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
-    header: AppHeader{
-        tempFileName: tempFileName
-    }
-    footer: AppFooter{}
+    header: AppHeader {}
+    footer: AppFooter {}
 
     SplitView {
         id: rowLayout
@@ -31,20 +28,20 @@ ApplicationWindow {
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-//        FileSystem{
-//            SplitView.preferredWidth: 150
-//            SplitView.minimumWidth: 100
-//        }
-
-        LatexTextEdit{
+        //        FileSystem{
+        //            SplitView.preferredWidth: 150
+        //            SplitView.minimumWidth: 100
+        //        }
+        LatexTextEdit {
             SplitView.fillWidth: true
             SplitView.preferredWidth: 400
             SplitView.minimumWidth: 300
         }
 
-        PDFView{
+        PDFView {
+            id: pdfView
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
         }
-     }
+    }
 }

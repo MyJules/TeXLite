@@ -17,6 +17,7 @@ qt_standard_project_setup()
 qt_add_executable(appTeXLite
     src/main.cpp
     src/texengine.cpp
+    src/tempfolderguard.cpp
 )
 
 qt_add_qml_module(appTeXLite

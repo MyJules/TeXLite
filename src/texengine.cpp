@@ -1,9 +1,9 @@
 
 #include "texengine.h"
 
-#include <QProcess>
 #include <QFile>
 #include <QDebug>
+#include <QProcess>
 
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}

@@ -7,6 +7,7 @@ import com.tex
 Row {
     id: root
 
+    signal compiled(texFileName: string)
     property TexEngine currentEngine: pdfLatexEngine
     property string tempFileName: "temp.tex"
 
@@ -120,6 +121,7 @@ Row {
        text: "Compile"
        onClicked: {
         currentEngine.execute()
+        compiled(tempFileName)
        }
     }
 }

@@ -3,13 +3,15 @@ import QtQuick.Pdf
 
 Rectangle {
     id: latexPDF
+    radius: 4
     clip: true
     color: "lightgrey"
-    radius: 4
+
+    property alias source: doc.source
 
     PdfDocument {
         id: doc
-        source: "file:temp.pdf"
+        source: Qt.resolvedUrl("file:temp.pdf")
     }
 
     PdfMultiPageView {

@@ -1,38 +1,14 @@
 
 #include "texengine.h"
+#include "tempfolderguard.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml/qqmlregistration.h>
-#include <QFile>
 
 int main(int argc, char *argv[])
 {
-    QFile tempFile("temp.tex");
-    tempFile.open(QIODevice::WriteOnly);
-    QTextStream tempFileStream(&tempFile);
-
-    tempFileStream << "\\documentclass{article} \n \n"
-                   << "\\title{Hello TeXLite} \n"
-                   << "\\author{Best User}"
-                   << "\\date{\\today} \n"
-                   << "\\begin{document} \n \n"
-                   << "\\maketitle \n"
-                   << "\\end{document}";
-
-//'\\documentclass{article}
-
-//\\title{Hello TeXLite}
-//    \\author{Best User}
-//    \\date{\\today}
-
-//    \\begin{document}
-
-//    \\maketitle
-
-//\\end{document}'
-
-    tempFile.close();
+    TempFolderGuard tempfolder(QDir::currentPath(), "temp");
 
     QGuiApplication app(argc, argv);
 
