@@ -1,6 +1,7 @@
 
-#include "texengine.h"
-#include "tempfolderguard.h"
+#include <texengine.h>
+#include <filesystem.h>
+#include <tempfolderguard.h>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<TexEngine>("com.tex", 1, 0, "TexEngine");
+    qmlRegisterType<FileSystem>("com.file", 1, 0, "FileSystem");
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/TeXLite/qml/Main.qml"_qs);
