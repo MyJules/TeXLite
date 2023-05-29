@@ -9,7 +9,7 @@ Row {
 
     signal compiled(string texFileName)
     property TexEngine currentEngine: pdfLatexEngine
-    property string tempFileName: "temp.tex"
+    property string currentFile: "file:temp.tex"
 
     ToolButton {
         flat: true
@@ -31,6 +31,18 @@ Row {
 
             MenuItem {
                 text: "Open File"
+                onClicked: {
+                    fileDialog.open()
+                }
+
+                FileDialog {
+                    id: fileDialog
+                    title: "Please choose a file"
+
+                    onAccepted: {
+                        root.currentFile = fileDialog.selectedFile
+                    }
+                }
             }
 
             MenuItem {
@@ -85,9 +97,10 @@ Row {
         TexEngine {
             id: pdfLatexEngine
             texEngineCommand: "pdfLaTeX"
-            texEngineArguments: [tempFileName, "-quiet"]
+            currentFile: root.currentFile
+            texEngineArguments: ["-quiet"]
             onStateChanged: {
-                console.log(pdfLatexEngine.state)
+                console.log(root.currentFile)
             }
         }
     }
@@ -126,7 +139,6 @@ Row {
         text: "Compile"
         onClicked: {
             currentEngine.execute()
-            compiled(tempFileName)
         }
     }
 }

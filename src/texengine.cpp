@@ -22,6 +22,16 @@ void TexEngine::setTexEngineCommand(const QString& texEngineCommand)
     m_texEngineCommand = texEngineCommand;
 }
 
+QString TexEngine::currentFile()
+{
+    return m_currentFile;
+}
+
+void TexEngine::setCurrentFile(const QString &currentFile)
+{
+    m_currentFile = QUrl(currentFile).toLocalFile();
+}
+
 QStringList TexEngine::texEngineArguments()
 {
     return m_texEngineArguments;
@@ -45,15 +55,17 @@ void TexEngine::setState(EngineState state)
 
 Q_INVOKABLE void TexEngine::execute()
 {
-    bool isFileExists = QFile::exists(m_texEngineArguments.first());
+    bool isFileExists = QFile::exists(m_currentFile);
     EngineState currentState = state();
+    qDebug()<< "execute:   " << m_currentFile;
 
     if(!isFileExists || currentState != EngineState::Idle) return;
 
     std::thread task([this](){
+        qDebug()<< "Compile!!!! " << m_texEngineArguments << m_texEngineCommand ;
         setState(EngineState::Processing);
         QProcess engineProcess;
-        engineProcess.start(m_texEngineCommand, m_texEngineArguments);
+        engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
         engineProcess.waitForFinished(-1);
         setState(EngineState::Idle);
     });

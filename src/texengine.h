@@ -16,6 +16,7 @@ class TexEngine : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString texEngineCommand READ texEngineCommand WRITE setTexEngineCommand)
+    Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile)
     Q_PROPERTY(QStringList texEngineArguments READ texEngineArguments WRITE setTexEngineArguments)
     Q_PROPERTY(EngineState state READ state WRITE setState NOTIFY stateChanged)
     QML_ELEMENT
@@ -23,6 +24,8 @@ public:
     explicit TexEngine(QObject *parent = nullptr);
     QString texEngineCommand();
     void setTexEngineCommand(const QString&);
+    QString currentFile();
+    void setCurrentFile(const QString&);
     QStringList texEngineArguments();
     void setTexEngineArguments(const QStringList&);
     EngineState state();
@@ -34,6 +37,7 @@ signals:
 
 private:
     QString m_texEngineCommand;
+    QString m_currentFile;
     QStringList m_texEngineArguments;
     EngineState m_state;
 };
