@@ -19,7 +19,7 @@ ApplicationWindow {
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
-    header: AppHeader {}
+    menuBar: AppMenuBar {}
     footer: AppFooter {}
 
     SplitView {

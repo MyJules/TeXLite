@@ -25,7 +25,7 @@ qt_add_qml_module(appTeXLite
     VERSION 1.0
     QML_FILES
     qml/Main.qml
-    qml/AppHeader.qml
+    qml/AppMenuBar.qml
     qml/AppFooter.qml
     qml/FileSystem.qml
     qml/LatexTextEdit.qml
