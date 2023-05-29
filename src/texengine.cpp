@@ -4,9 +4,11 @@
 #include <QFile>
 #include <QDebug>
 #include <QProcess>
+#include <thread>
 
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
+    , m_state(EngineState::Idle)
 {
 }
 
@@ -30,16 +32,30 @@ void TexEngine::setTexEngineArguments(const QStringList& texEngineArguments)
     m_texEngineArguments << texEngineArguments;
 }
 
+EngineState TexEngine::state()
+{
+    return m_state;
+}
+
+void TexEngine::setState(EngineState state)
+{
+    m_state = state;
+    emit stateChanged();
+}
+
 Q_INVOKABLE void TexEngine::execute()
 {
     bool isFileExists = QFile::exists(m_texEngineArguments.first());
-    qDebug() << m_texEngineArguments.first();
-    if(isFileExists)
-    {
+    EngineState currentState = state();
+
+    if(!isFileExists || currentState != EngineState::Idle) return;
+
+    std::thread task([&](){
+        setState(EngineState::Processing);
         QProcess engineProcess;
-        qDebug() << "Execute";
         engineProcess.start(m_texEngineCommand, m_texEngineArguments);
-        qDebug() << m_texEngineCommand << m_texEngineArguments;
         engineProcess.waitForFinished(-1);
-    }
+        setState(EngineState::Idle);
+    });
+    task.detach();
 }

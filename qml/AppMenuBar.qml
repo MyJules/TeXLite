@@ -7,122 +7,126 @@ import com.tex
 Row {
     id: root
 
-    signal compiled(texFileName: string)
+    signal compiled(string texFileName)
     property TexEngine currentEngine: pdfLatexEngine
     property string tempFileName: "temp.tex"
 
     ToolButton {
-       flat: true
-       font.pointSize: 10
-       height: 30
-       text: "File"
-       onClicked:{
-        filePopup.popup()
-       }
+        flat: true
+        font.pointSize: 10
+        height: 30
+        text: "File"
+        onClicked: {
+            filePopup.popup()
+        }
 
-       Menu {
-             id: filePopup
+        Menu {
+            id: filePopup
 
-             MenuItem {
+            MenuItem {
                 text: "New File"
-             }
+            }
 
-             MenuSeparator{}
+            MenuSeparator {}
 
-             MenuItem {
-                 text: "Open File"
-             }
+            MenuItem {
+                text: "Open File"
+            }
 
-             MenuItem {
-                 text: "Open Folder"
-             }
+            MenuItem {
+                text: "Open Folder"
+            }
 
-             MenuSeparator{}
+            MenuSeparator {}
 
-             MenuItem {
-                 text: "Exit"
-                 onClicked: Qt.quit()
-             }
-
-         }
+            MenuItem {
+                text: "Exit"
+                onClicked: Qt.quit()
+            }
+        }
     }
 
     ToolButton {
-       flat: true
-       height: 30
-       font.pointSize: 10
-       text: "LaTeX Engine"
-       onClicked: {
-        latexEndginePopup.popup()
-       }
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "LaTeX Engine"
+        onClicked: {
+            latexEndginePopup.popup()
+        }
 
-       Menu {
-             id: latexEndginePopup
-             ComboBox {
-                 id: latexEngineComboBox
-                 model: ListModel {
-                     id: model
-                     ListElement { text: "pdfTeX" }
-                     ListElement { text: "pdfLaTeX" }
-                 }
+        Menu {
+            id: latexEndginePopup
+            ComboBox {
+                id: latexEngineComboBox
+                model: ListModel {
+                    id: model
+                    ListElement {
+                        text: "pdfTeX"
+                    }
+                    ListElement {
+                        text: "pdfLaTeX"
+                    }
+                }
 
-                 onCurrentValueChanged: {
-                     switch(latexEngineComboBox.currentValue){
-                        case pdfLatexEngine.texEngineCommand:
-                            root.currentEngine = pdfLatexEngine
-                            break
+                onCurrentValueChanged: {
+                    switch (latexEngineComboBox.currentValue) {
+                    case pdfLatexEngine.texEngineCommand:
+                        root.currentEngine = pdfLatexEngine
+                        break
+                    default:
+                        root.currentEngine = pdfLatexEngine
+                        break
+                    }
+                }
+            }
+        }
 
-                        default:
-                            root.currentEngine = pdfLatexEngine
-                            break
-                     }
-                 }
-             }
-         }
-
-       TexEngine{
+        TexEngine {
             id: pdfLatexEngine
             texEngineCommand: "pdfLaTeX"
             texEngineArguments: [tempFileName, "-quiet"]
-       }
+            onStateChanged: {
+                console.log(pdfLatexEngine.state)
+            }
+        }
     }
 
     ToolButton {
-       flat: true
-       height: 30
-       font.pointSize: 10
-       text: "Help"
-       onClicked: {
-        helpPopup.popup()
-       }
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "Help"
+        onClicked: {
+            helpPopup.popup()
+        }
 
-       Menu {
-             id: helpPopup
-             MenuItem {
+        Menu {
+            id: helpPopup
+            MenuItem {
                 text: "About"
                 onClicked: {
                     helpMessage.open()
                 }
-             }
+            }
 
-             MessageDialog {
-                 id: helpMessage
-                 title: "About"
-                 text: "My simple LaTeX app, made with Qt 6, please be gentle."
-                 buttons: MessageDialog.Ok
-             }
-         }
+            MessageDialog {
+                id: helpMessage
+                title: "About"
+                text: "My simple LaTeX app, made with Qt 6, please be gentle."
+                buttons: MessageDialog.Ok
+            }
+        }
     }
 
     ToolButton {
-       flat: true
-       height: 30
-       font.pointSize: 10
-       text: "Compile"
-       onClicked: {
-        currentEngine.execute()
-        compiled(tempFileName)
-       }
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "Compile"
+        onClicked: {
+            currentEngine.execute()
+            compiled(tempFileName)
+        }
     }
 }
-

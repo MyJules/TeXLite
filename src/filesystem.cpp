@@ -16,3 +16,8 @@ void FileSystem::writeToFile(const QString &filePath, const QString &content)
 
 }
 
+void FileSystem::removeFile(const QString &filePath)
+{
+
+}
+
