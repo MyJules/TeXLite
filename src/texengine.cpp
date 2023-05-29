@@ -50,7 +50,7 @@ Q_INVOKABLE void TexEngine::execute()
 
     if(!isFileExists || currentState != EngineState::Idle) return;
 
-    std::thread task([&](){
+    std::thread task([this](){
         setState(EngineState::Processing);
         QProcess engineProcess;
         engineProcess.start(m_texEngineCommand, m_texEngineArguments);
