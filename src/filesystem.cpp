@@ -46,6 +46,4 @@ Q_INVOKABLE void FileSystem::newFile(const QString &filePath)
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     file.close();
-    qDebug() << "::: " + filePath ;
-    qDebug() << "::: " + path ;
 }
