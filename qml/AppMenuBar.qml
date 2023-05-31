@@ -9,7 +9,7 @@ Row {
 
     signal compiled(string texFileName)
     property TexEngine currentEngine: pdfLatexEngine
-    property string currentFile: "file:temp.tex"
+    property string currentFile: ""
 
     ToolButton {
         flat: true

@@ -19,7 +19,12 @@ ApplicationWindow {
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
-    menuBar: AppMenuBar {}
+    menuBar: AppMenuBar {
+        id: appMenuBar
+        onCurrentFileChanged: {
+
+        }
+    }
     footer: AppFooter {}
 
     SplitView {
@@ -33,6 +38,7 @@ ApplicationWindow {
         //            SplitView.minimumWidth: 100
         //        }
         LatexTextEdit {
+            id: latexTextEdit
             SplitView.fillWidth: true
             SplitView.preferredWidth: 400
             SplitView.minimumWidth: 300
