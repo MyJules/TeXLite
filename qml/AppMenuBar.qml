@@ -6,8 +6,27 @@ import QtQuick.Controls.Material
 Row {
     id: root
 
+    signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
+
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: [StandardKey.Save]
+
+        onActivated: {
+            saveFileClicked()
+        }
+    }
+
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: [StandardKey.Open]
+
+        onActivated: {
+            fileDialog.open()
+        }
+    }
 
     ToolButton {
         flat: true
@@ -45,6 +64,16 @@ Row {
 
             MenuItem {
                 text: "Open Folder"
+            }
+
+            MenuSeparator {}
+
+            MenuItem {
+                text: "Save File"
+
+                onClicked: {
+                    saveFileClicked()
+                }
             }
 
             MenuSeparator {}

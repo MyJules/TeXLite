@@ -3,6 +3,7 @@ import QtQuick.Pdf
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
 import com.tex
+import com.file
 
 ApplicationWindow {
     id: root
@@ -29,8 +30,11 @@ ApplicationWindow {
         }
         onNewFileSelected: function (fileName) {
             currentFilePath = fileName
-            latexTextEdit.currentFilePath = fileName
             texEngines.processingFile = fileName
+            latexTextEdit.text = fileSystem.readFile(currentFilePath)
+        }
+        onSaveFileClicked: {
+            fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
         }
     }
 
@@ -58,5 +62,9 @@ ApplicationWindow {
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
         }
+    }
+
+    FileSystem {
+        id: fileSystem
     }
 }

@@ -9,7 +9,7 @@ Rectangle {
     color: "#292929"
     clip: true
 
-    property string currentFilePath: ""
+    property alias text: latexTextArea.text
 
     ScrollView {
         id: latexTextAreaScrollView
@@ -21,14 +21,5 @@ Rectangle {
             wrapMode: TextEdit.Wrap
             font.pointSize: 12
         }
-    }
-
-    onCurrentFilePathChanged: {
-        console.log(currentFilePath)
-        latexTextArea.text = fileSystem.readFile(currentFilePath)
-    }
-
-    FileSystem {
-        id: fileSystem
     }
 }
