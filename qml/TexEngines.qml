@@ -4,7 +4,7 @@ import com.tex
 Item {
 
     property string processingFile: ""
-    property string texEngineCommand: "pdflatex"
+    property string engineName: "pdflatex"
     property TexEngine currentEngine: pdfLatex
 
     TexEngine {
@@ -21,8 +21,8 @@ Item {
         texEngineArguments: []
     }
 
-    onProcessingFileChanged: {
-        switch (texEngineCommand) {
+    onEngineNameChanged: {
+        switch (engineName) {
         case pdfLatex.texEngineCommand:
             currentEngine = pdfLatex
             break
