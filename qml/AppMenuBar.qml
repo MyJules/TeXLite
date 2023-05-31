@@ -37,8 +37,6 @@ Row {
                     id: fileDialog
                     title: "Please choose a file"
 
-                    nameFilters: ".tex"
-
                     onAccepted: {
                         newFileSelected(fileDialog.selectedFile)
                     }
