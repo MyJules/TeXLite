@@ -6,17 +6,17 @@ FileSystem::FileSystem(QObject *parent)
 
 }
 
-QString FileSystem::readFile(const QString &filePath)
+Q_INVOKABLE QString FileSystem::readFile(const QString &filePath)
 {
-    return "";
+    return "aaa";
 }
 
-void FileSystem::writeToFile(const QString &filePath, const QString &content)
+Q_INVOKABLE void FileSystem::writeToFile(const QString &filePath, const QString &content)
 {
 
 }
 
-void FileSystem::removeFile(const QString &filePath)
+Q_INVOKABLE void FileSystem::removeFile(const QString &filePath)
 {
 
 }

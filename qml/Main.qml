@@ -20,18 +20,20 @@ ApplicationWindow {
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
-    property string currentFile: ""
+    property string currentFilePath
 
     menuBar: AppMenuBar {
         id: appMenuBar
         onNewEngineSelected: function (engineName) {
-            console.log(engineName)
+            texEngines.engineName = engineName
         }
         onNewFileSelected: function (fileName) {
-            currentFile = fileName
-            console.log(fileName)
+            currentFilePath = fileName
+            latexTextEdit.currentFilePath = fileName
+            texEngines.processingFile = fileName
         }
     }
+
     footer: AppFooter {}
 
     TexEngines {
@@ -44,10 +46,6 @@ ApplicationWindow {
         anchors.fill: parent
         orientation: Qt.Horizontal
 
-        //        FileSystem{
-        //            SplitView.preferredWidth: 150
-        //            SplitView.minimumWidth: 100
-        //        }
         LatexTextEdit {
             id: latexTextEdit
             SplitView.fillWidth: true

@@ -2,11 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material
+import com.file
 
 Rectangle {
     id: latexTextRect
     color: "#292929"
     clip: true
+
+    property string currentFilePath: ""
 
     ScrollView {
         id: latexTextAreaScrollView
@@ -17,19 +20,15 @@ Rectangle {
             focus: true
             wrapMode: TextEdit.Wrap
             font.pointSize: 12
-
-            text:
-'\\documentclass{article}
-
-\\title{Hello TeXLite}
-\\author{Best User}
-\\date{\\today}
-
-\\begin{document}
-
-\\maketitle
-
-\\end{document}'
         }
+    }
+
+    onCurrentFilePathChanged: {
+        console.log(currentFilePath)
+        latexTextArea.text = fileSystem.readFile(currentFilePath)
+    }
+
+    FileSystem {
+        id: fileSystem
     }
 }
