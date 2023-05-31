@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Controls
 import QtQuick.Controls.Material
-import com.tex
 
 Row {
     id: root

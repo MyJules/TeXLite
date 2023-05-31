@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Pdf
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
+import com.tex
 
 ApplicationWindow {
     id: root
@@ -32,6 +33,10 @@ ApplicationWindow {
         }
     }
     footer: AppFooter {}
+
+    TexEngines {
+        id: texEngines
+    }
 
     SplitView {
         id: rowLayout

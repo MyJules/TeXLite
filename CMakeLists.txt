@@ -31,6 +31,7 @@ qt_add_qml_module(appTeXLite
     qml/FileSystem.qml
     qml/LatexTextEdit.qml
     qml/PDFView.qml
+    qml/TexEngines.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES

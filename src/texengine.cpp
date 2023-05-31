@@ -30,6 +30,7 @@ QString TexEngine::currentFile()
 void TexEngine::setCurrentFile(const QString &currentFile)
 {
     m_currentFile = QUrl(currentFile).toLocalFile();
+    currentFilechanged();
 }
 
 QStringList TexEngine::texEngineArguments()
