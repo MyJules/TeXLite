@@ -7,9 +7,8 @@ import com.tex
 Row {
     id: root
 
-    signal compiled(string texFileName)
-    property TexEngine currentEngine: pdfLatexEngine
-    property string currentFile: ""
+    signal newFileSelected(string file)
+    signal newEngineSelected(string engineName)
 
     ToolButton {
         flat: true
@@ -40,7 +39,7 @@ Row {
                     title: "Please choose a file"
 
                     onAccepted: {
-                        root.currentFile = fileDialog.selectedFile
+                        newFileSelected(fileDialog.selectedFile)
                     }
                 }
             }
@@ -74,33 +73,16 @@ Row {
                 model: ListModel {
                     id: model
                     ListElement {
-                        text: "pdfTeX"
+                        text: "pdflatex"
                     }
                     ListElement {
-                        text: "pdfLaTeX"
+                        text: "pdftex"
                     }
                 }
 
                 onCurrentValueChanged: {
-                    switch (latexEngineComboBox.currentValue) {
-                    case pdfLatexEngine.texEngineCommand:
-                        root.currentEngine = pdfLatexEngine
-                        break
-                    default:
-                        root.currentEngine = pdfLatexEngine
-                        break
-                    }
+                    newEngineSelected(latexEngineComboBox.currentValue)
                 }
-            }
-        }
-
-        TexEngine {
-            id: pdfLatexEngine
-            texEngineCommand: "pdfLaTeX"
-            currentFile: root.currentFile
-            texEngineArguments: ["-quiet"]
-            onStateChanged: {
-                console.log(root.currentFile)
             }
         }
     }
@@ -129,16 +111,6 @@ Row {
                 text: "My simple LaTeX app, made with Qt 6, please be gentle."
                 buttons: MessageDialog.Ok
             }
-        }
-    }
-
-    ToolButton {
-        flat: true
-        height: 30
-        font.pointSize: 10
-        text: "Compile"
-        onClicked: {
-            currentEngine.execute()
         }
     }
 }

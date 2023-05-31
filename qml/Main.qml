@@ -21,9 +21,6 @@ ApplicationWindow {
 
     menuBar: AppMenuBar {
         id: appMenuBar
-        onCurrentFileChanged: {
-
-        }
     }
     footer: AppFooter {}
 
