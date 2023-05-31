@@ -19,8 +19,17 @@ ApplicationWindow {
     Material.accent: Material.Grey
     Material.roundedScale: Material.NotRounded
 
+    property string currentFile: ""
+
     menuBar: AppMenuBar {
         id: appMenuBar
+        onNewEngineSelected: function (engineName) {
+            console.log(engineName)
+        }
+        onNewFileSelected: function (fileName) {
+            currentFile = fileName
+            console.log(fileName)
+        }
     }
     footer: AppFooter {}
 

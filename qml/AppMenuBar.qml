@@ -7,7 +7,7 @@ import com.tex
 Row {
     id: root
 
-    signal newFileSelected(string file)
+    signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
 
     ToolButton {
