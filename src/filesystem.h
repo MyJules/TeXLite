@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE QString readFile(const QString& filePath);
     Q_INVOKABLE void writeToFile(const QString& filePath, const QString& content);
     Q_INVOKABLE void removeFile(const QString& filePath);
+    Q_INVOKABLE void newFile(const QString& filePath);
 };
 
 #endif // FILESYSTEM_H

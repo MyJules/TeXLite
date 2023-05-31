@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Pdf
+import QtQuick.Dialogs
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
+
 import com.tex
 import com.file
 
@@ -25,16 +27,33 @@ ApplicationWindow {
 
     menuBar: AppMenuBar {
         id: appMenuBar
+
         onNewEngineSelected: function (engineName) {
             texEngines.engineName = engineName
         }
+
         onNewFileSelected: function (fileName) {
             currentFilePath = fileName
             texEngines.processingFile = fileName
             latexTextEdit.text = fileSystem.readFile(currentFilePath)
         }
+
         onSaveFileClicked: {
             fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
+        }
+
+        onCreateNewFileClicked: {
+            newFileDialog.open()
+        }
+
+        FileDialog {
+            id: newFileDialog
+            title: "New File"
+            fileMode: FileDialog.SaveFile
+
+            onAccepted: {
+                fileSystem.newFile("file:" + newFileDialog.currentFile)
+            }
         }
     }
 

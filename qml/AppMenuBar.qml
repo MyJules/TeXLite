@@ -6,6 +6,7 @@ import QtQuick.Controls.Material
 Row {
     id: root
 
+    signal createNewFileClicked
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
@@ -24,7 +25,16 @@ Row {
         sequences: [StandardKey.Open]
 
         onActivated: {
-            fileDialog.open()
+            openFileDialog.open()
+        }
+    }
+
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequences: [StandardKey.New]
+
+        onActivated: {
+            createNewFileClicked()
         }
     }
 
@@ -42,6 +52,9 @@ Row {
 
             MenuItem {
                 text: "New File"
+                onClicked: {
+                    createNewFileClicked
+                }
             }
 
             MenuSeparator {}
@@ -49,21 +62,18 @@ Row {
             MenuItem {
                 text: "Open File"
                 onClicked: {
-                    fileDialog.open()
+                    openFileDialog.open()
                 }
 
                 FileDialog {
-                    id: fileDialog
+                    id: openFileDialog
                     title: "Please choose a file"
+                    fileMode: FileDialog.OpenFile
 
                     onAccepted: {
-                        newFileSelected(fileDialog.selectedFile)
+                        newFileSelected(openFileDialog.selectedFile)
                     }
                 }
-            }
-
-            MenuItem {
-                text: "Open Folder"
             }
 
             MenuSeparator {}
