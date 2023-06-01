@@ -58,7 +58,7 @@ ApplicationWindow {
     }
 
     footer: AppFooter {
-        footerText: currentFilePath
+        footerText: currentFilePath ? currentFilePath : "No file selected"
     }
 
     TexEngines {
