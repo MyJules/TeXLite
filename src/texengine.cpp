@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QProcess>
+#include <QDir>
 #include <thread>
 
 TexEngine::TexEngine(QObject *parent)
@@ -54,7 +55,7 @@ void TexEngine::setState(EngineState state)
     emit stateChanged();
 }
 
-Q_INVOKABLE void TexEngine::execute()
+Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
     EngineState currentState = state();
@@ -62,12 +63,15 @@ Q_INVOKABLE void TexEngine::execute()
 
     if(!isFileExists || currentState != EngineState::Idle) return;
 
-    std::thread task([this](){
+    std::thread task([this, &fileName](){
         qDebug()<< "Compile!!!! " << m_texEngineArguments << m_texEngineCommand ;
         setState(EngineState::Processing);
         QProcess engineProcess;
         engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
         engineProcess.waitForFinished(-1);
+
+        QDir currentDir;
+        bool renamed = currentDir.rename(m_currentFile , "temp/" + fileName);
         setState(EngineState::Idle);
     });
     task.detach();

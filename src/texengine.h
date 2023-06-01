@@ -30,7 +30,7 @@ public:
     void setTexEngineArguments(const QStringList&);
     EngineState state();
     void setState(EngineState);
-    Q_INVOKABLE void execute();
+    Q_INVOKABLE void compileToTempFolder(const QString&);
 
 signals:
     void stateChanged();
