@@ -57,7 +57,9 @@ ApplicationWindow {
         }
     }
 
-    footer: AppFooter {}
+    footer: AppFooter {
+        footerText: currentFilePath
+    }
 
     TexEngines {
         id: texEngines
