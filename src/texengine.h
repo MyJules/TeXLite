@@ -20,6 +20,7 @@ class TexEngine : public QObject
     Q_PROPERTY(QStringList texEngineArguments READ texEngineArguments WRITE setTexEngineArguments)
     Q_PROPERTY(EngineState state READ state WRITE setState NOTIFY stateChanged)
     QML_ELEMENT
+
 public:
     explicit TexEngine(QObject *parent = nullptr);
     QString texEngineCommand();

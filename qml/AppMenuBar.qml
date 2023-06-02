@@ -10,32 +10,27 @@ Row {
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
+    signal compileClicked
 
     Shortcut {
         context: Qt.ApplicationShortcut
         sequences: [StandardKey.Save]
 
-        onActivated: {
-            saveFileClicked()
-        }
+        onActivated: saveFileClicked()
     }
 
     Shortcut {
         context: Qt.ApplicationShortcut
         sequences: [StandardKey.Open]
 
-        onActivated: {
-            openFileDialog.open()
-        }
+        onActivated: openFileDialog.open()
     }
 
     Shortcut {
         context: Qt.ApplicationShortcut
         sequences: [StandardKey.New]
 
-        onActivated: {
-            createNewFileClicked()
-        }
+        onActivated: createNewFileClicked()
     }
 
     ToolButton {
@@ -52,9 +47,7 @@ Row {
 
             MenuItem {
                 text: "New File"
-                onClicked: {
-                    createNewFileClicked
-                }
+                onClicked: createNewFileClicked
             }
 
             MenuSeparator {}
@@ -70,9 +63,7 @@ Row {
                     title: "Please choose a file"
                     fileMode: FileDialog.OpenFile
 
-                    onAccepted: {
-                        newFileSelected(openFileDialog.selectedFile)
-                    }
+                    onAccepted: newFileSelected(openFileDialog.selectedFile)
                 }
             }
 
@@ -100,9 +91,7 @@ Row {
         height: 30
         font.pointSize: 10
         text: "LaTeX Engine"
-        onClicked: {
-            latexEndginePopup.popup()
-        }
+        onClicked: latexEndginePopup.popup()
 
         Menu {
             id: latexEndginePopup
@@ -118,9 +107,8 @@ Row {
                     }
                 }
 
-                onCurrentValueChanged: {
-                    newEngineSelected(latexEngineComboBox.currentValue)
-                }
+                onCurrentValueChanged: newEngineSelected(
+                                           latexEngineComboBox.currentValue)
             }
         }
     }
@@ -130,9 +118,7 @@ Row {
         height: 30
         font.pointSize: 10
         text: "Help"
-        onClicked: {
-            helpPopup.popup()
-        }
+        onClicked: helpPopup.popup()
 
         Menu {
             id: helpPopup
@@ -150,5 +136,13 @@ Row {
                 buttons: MessageDialog.Ok
             }
         }
+    }
+
+    ToolButton {
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "Compile"
+        onClicked: compileClicked
     }
 }

@@ -11,14 +11,14 @@ Item {
         id: pdfLatex
         currentFile: processingFile
         texEngineCommand: "pdflatex"
-        texEngineArguments: []
+        texEngineArguments: ["-quiet"]
     }
 
     TexEngine {
         id: pdfTex
         currentFile: processingFile
         texEngineCommand: "pdftex"
-        texEngineArguments: []
+        texEngineArguments: ["-quiet"]
     }
 
     onEngineNameChanged: {
