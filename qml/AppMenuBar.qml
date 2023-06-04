@@ -47,7 +47,7 @@ Row {
 
             MenuItem {
                 text: "New File"
-                onClicked: createNewFileClicked
+                onClicked: createNewFileClicked()
             }
 
             MenuSeparator {}

@@ -54,4 +54,5 @@ Q_INVOKABLE void FileSystem::clearTempFolder()
 {
     QDir tempDir(QDir::currentPath() + "/temp");
     tempDir.removeRecursively();
+    tempDir.mkdir(QDir::currentPath() + "/temp");
 }

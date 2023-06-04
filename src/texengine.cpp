@@ -70,11 +70,14 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
         engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
         engineProcess.waitForFinished(-1);
 
-        QDir currentDir;
-        const QString tempFilePath = "temp/" + fileName + ".pdf";
-        bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
-        setState(EngineState::Idle);
-        emit compilationFinished(tempFilePath);
+        if(engineProcess.exitStatus() == 0)
+        {
+            QDir currentDir;
+            const QString tempFilePath = "temp/" + fileName + ".pdf";
+            bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
+            setState(EngineState::Idle);
+            emit compilationFinished(tempFilePath);
+        }
     });
     task.detach();
 }
