@@ -36,6 +36,7 @@ public:
 signals:
     void stateChanged();
     void currentFilechanged();
+    void compilationFinished(const QString&);
 
 private:
     QString m_texEngineCommand;

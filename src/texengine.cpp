@@ -1,10 +1,12 @@
 
 #include "texengine.h"
 
+#include <QDir>
 #include <QFile>
 #include <QDebug>
 #include <QProcess>
-#include <QDir>
+#include <QFileInfo>
+
 #include <thread>
 
 TexEngine::TexEngine(QObject *parent)
@@ -59,20 +61,22 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
     EngineState currentState = state();
-    qDebug()<< "execute:   " << m_currentFile;
+    qDebug()<< "execute:   " << fileName;
 
     if(!isFileExists || currentState != EngineState::Idle) return;
 
     std::thread task([this, &fileName](){
-        qDebug()<< "Compile!!!! " << m_texEngineArguments << m_texEngineCommand ;
+        qDebug()<< "Compile!!!! " << m_texEngineArguments << m_texEngineCommand;
         setState(EngineState::Processing);
         QProcess engineProcess;
         engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
         engineProcess.waitForFinished(-1);
 
         QDir currentDir;
-        bool renamed = currentDir.rename(m_currentFile , "temp/" + fileName);
+        const QString tempFilePath = "temp/" + fileName;
+        bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
         setState(EngineState::Idle);
+        emit compilationFinished(tempFilePath);
     });
     task.detach();
 }

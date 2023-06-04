@@ -57,7 +57,7 @@ ApplicationWindow {
         }
 
         onCompileClicked: {
-            console.log("asdasdasd")
+            texEngines.currentEngine.compileToTempFolder(Date.now() + ".pdf")
         }
     }
 
@@ -67,6 +67,10 @@ ApplicationWindow {
 
     TexEngines {
         id: texEngines
+        currentEngine.onCompilationFinished: function (compiledFilePath) {
+            console.log("Kekus " + compiledFilePath)
+            pdfView.source = "file:" + compiledFilePath
+        }
     }
 
     SplitView {
