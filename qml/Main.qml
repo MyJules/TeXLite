@@ -68,7 +68,6 @@ ApplicationWindow {
     TexEngines {
         id: texEngines
         currentEngine.onCompilationFinished: function (compiledFilePath) {
-            console.log("Kekus " + compiledFilePath)
             pdfView.source = "file:" + compiledFilePath
         }
     }

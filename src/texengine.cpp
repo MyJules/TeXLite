@@ -61,12 +61,10 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
     EngineState currentState = state();
-    qDebug()<< "execute:   " << fileName;
 
     if(!isFileExists || currentState != EngineState::Idle) return;
 
     std::thread task([this, &fileName](){
-        qDebug()<< "Compile!!!! " << m_texEngineArguments << m_texEngineCommand;
         setState(EngineState::Processing);
         QProcess engineProcess;
         engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
