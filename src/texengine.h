@@ -16,7 +16,7 @@ class TexEngine : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString texEngineCommand READ texEngineCommand WRITE setTexEngineCommand)
-    Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFilechanged)
+    Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
     Q_PROPERTY(QStringList texEngineArguments READ texEngineArguments WRITE setTexEngineArguments)
     Q_PROPERTY(EngineState state READ state WRITE setState NOTIFY stateChanged)
     QML_ELEMENT
@@ -35,7 +35,7 @@ public:
 
 signals:
     void stateChanged();
-    void currentFilechanged();
+    void currentFileChanged();
     void compilationFinished(const QString&);
 
 private:

@@ -57,7 +57,7 @@ ApplicationWindow {
         }
 
         onCompileClicked: {
-            texEngines.currentEngine.compileToTempFolder(Date.now() + ".pdf")
+            texEngines.currentEngine.compileToTempFolder(Date.now() + "")
         }
     }
 
@@ -68,8 +68,7 @@ ApplicationWindow {
     TexEngines {
         id: texEngines
         currentEngine.onCompilationFinished: function (compiledFilePath) {
-            pdfView.source = "file:" + compiledFilePath
-            fileSystem.clearTempFolder()
+            showPDF(compiledFilePath)
         }
     }
 
@@ -95,5 +94,10 @@ ApplicationWindow {
 
     FileSystem {
         id: fileSystem
+    }
+
+    function showPDF(compiledFilePath) {
+        pdfView.source = "file:" + compiledFilePath
+        fileSystem.clearTempFolder()
     }
 }

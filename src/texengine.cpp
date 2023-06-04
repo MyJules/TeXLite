@@ -33,7 +33,7 @@ QString TexEngine::currentFile()
 void TexEngine::setCurrentFile(const QString &currentFile)
 {
     m_currentFile = QUrl(currentFile).toLocalFile();
-    currentFilechanged();
+    emit currentFileChanged();
 }
 
 QStringList TexEngine::texEngineArguments()
@@ -71,7 +71,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
         engineProcess.waitForFinished(-1);
 
         QDir currentDir;
-        const QString tempFilePath = "temp/" + fileName;
+        const QString tempFilePath = "temp/" + fileName + ".pdf";
         bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
         setState(EngineState::Idle);
         emit compilationFinished(tempFilePath);
