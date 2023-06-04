@@ -6,11 +6,11 @@ import QtQuick.Controls.Material
 Row {
     id: root
 
+    signal compileClicked
     signal createNewFileClicked
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
-    signal compileClicked
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -143,6 +143,6 @@ Row {
         height: 30
         font.pointSize: 10
         text: "Compile"
-        onClicked: compileClicked
+        onClicked: compileClicked()
     }
 }

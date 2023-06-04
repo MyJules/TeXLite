@@ -46,11 +46,6 @@ ApplicationWindow {
             newFileDialog.open()
         }
 
-        onCompileClicked: {
-            console.log("Compile")
-            texEngines.currentEngine.compileToTempFolder("temp.tex")
-        }
-
         FileDialog {
             id: newFileDialog
             title: "New File"
@@ -59,6 +54,10 @@ ApplicationWindow {
             onAccepted: {
                 fileSystem.newFile("file:" + newFileDialog.currentFile)
             }
+        }
+
+        onCompileClicked: {
+            console.log("asdasdasd")
         }
     }
 
