@@ -60,7 +60,7 @@ ApplicationWindow {
         }
 
         onCompileClicked: {
-            texEngines.currentEngine.compileToTempFolder(Date.now() + "")
+            compile()
         }
     }
 
