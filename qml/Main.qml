@@ -30,6 +30,7 @@ ApplicationWindow {
 
         onNewEngineSelected: function (engineName) {
             texEngines.engineName = engineName
+            compile()
         }
 
         onNewFileSelected: function (fileName) {
@@ -40,6 +41,7 @@ ApplicationWindow {
 
         onSaveFileClicked: {
             fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
+            compile()
         }
 
         onCreateNewFileClicked: {
@@ -68,7 +70,8 @@ ApplicationWindow {
     TexEngines {
         id: texEngines
         currentEngine.onCompilationFinished: function (compiledFilePath) {
-            showPDF(compiledFilePath)
+            pdfView.source = "file:" + compiledFilePath
+            fileSystem.clearTempFolder()
         }
     }
 
@@ -96,8 +99,7 @@ ApplicationWindow {
         id: fileSystem
     }
 
-    function showPDF(compiledFilePath) {
-        pdfView.source = "file:" + compiledFilePath
-        fileSystem.clearTempFolder()
+    function compile() {
+        texEngines.currentEngine.compileToTempFolder(Date.now() + "")
     }
 }
