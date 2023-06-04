@@ -37,6 +37,7 @@ ApplicationWindow {
             currentFilePath = fileName
             texEngines.processingFile = fileName
             latexTextEdit.text = fileSystem.readFile(currentFilePath)
+            compile()
         }
 
         onSaveFileClicked: {
