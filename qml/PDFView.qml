@@ -11,7 +11,6 @@ Rectangle {
 
     PdfDocument {
         id: doc
-        source: Qt.resolvedUrl("file:temp.pdf")
     }
 
     PdfMultiPageView {
