@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE void writeToFile(const QString& filePath, const QString& content);
     Q_INVOKABLE void removeFile(const QString& filePath);
     Q_INVOKABLE void newFile(const QString& filePath);
+    Q_INVOKABLE void clearTempFolder();
 };
 
 #endif // FILESYSTEM_H

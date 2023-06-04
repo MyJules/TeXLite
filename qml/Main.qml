@@ -69,6 +69,7 @@ ApplicationWindow {
         id: texEngines
         currentEngine.onCompilationFinished: function (compiledFilePath) {
             pdfView.source = "file:" + compiledFilePath
+            fileSystem.clearTempFolder()
         }
     }
 
