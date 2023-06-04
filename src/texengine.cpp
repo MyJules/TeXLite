@@ -8,7 +8,6 @@
 #include <QFileInfo>
 
 #include <thread>
-
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
     , m_state(EngineState::Idle)
@@ -66,6 +65,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
 
     std::thread task([this, &fileName](){
         setState(EngineState::Processing);
+
         QProcess engineProcess;
         engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
         engineProcess.waitForFinished(-1);
@@ -78,6 +78,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
             setState(EngineState::Idle);
             emit compilationFinished(tempFilePath);
         }
+
     });
     task.detach();
 }
