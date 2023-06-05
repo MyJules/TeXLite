@@ -24,6 +24,7 @@ ApplicationWindow {
     Material.roundedScale: Material.NotRounded
 
     property string currentFilePath
+    property string compiledPDFPath
 
     menuBar: AppMenuBar {
         id: appMenuBar
@@ -71,13 +72,35 @@ ApplicationWindow {
     TexEngines {
         id: texEngines
 
-        currentEngine.onCompilationFinished: function (compiledFilePath) {
-            console.log(compiledFilePath)
-            pdfView.source = "file:" + compiledFilePath
+        currentEngine.onCompilationFinished: function (filePath) {
+            console.log("Compile: " + filePath)
+            compiledPDFPath = "file:" + filePath
         }
 
         currentEngine.onCompilationStarted: {
             fileSystem.clearTempFolder()
+        }
+
+        currentEngine.onCompilationError: function (error) {
+            console.log("Error: " + error)
+        }
+
+        currentEngine.onStateChanged: {
+            console.log("State: " + texEngines.currentEngine.state)
+            switch (texEngines.currentEngine.state) {
+            case 0:
+                console.log("PDF view")
+                pdfLoader.source = "PDFView.qml"
+                pdfLoader.item.source = compiledPDFPath
+
+                break
+            case 1:
+                console.log("Busy")
+                pdfLoader.source = "BusyPDFIndicator.qml"
+                break
+            default:
+                break
+            }
         }
     }
 
@@ -94,8 +117,10 @@ ApplicationWindow {
             SplitView.minimumWidth: 300
         }
 
-        PDFView {
-            id: pdfView
+        Loader {
+            id: pdfLoader
+            source: "PDFView.qml"
+
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
         }

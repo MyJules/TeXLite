@@ -6,8 +6,8 @@
 #include <QDebug>
 #include <QProcess>
 #include <QFileInfo>
+#include <QtConcurrent>
 
-#include <thread>
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
     , m_state(EngineState::Idle)
@@ -56,14 +56,14 @@ void TexEngine::setState(EngineState state)
     emit stateChanged();
 }
 
-Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
+Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
     EngineState currentState = state();
 
-    if(!isFileExists || currentState != EngineState::Idle) return;
+    if(!isFileExists || currentState == EngineState::Processing) return;
 
-    std::thread task([this, &fileName](){
+    QtConcurrent::run([this, fileName](){
         setState(EngineState::Processing);
         emit compilationStarted();
 
@@ -74,12 +74,15 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
         if(engineProcess.exitStatus() == 0)
         {
             QDir currentDir;
-            const QString tempFilePath = "temp/" + fileName + ".pdf";
+            QString tempFilePath = "temp/" + fileName + ".pdf";
             bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
             emit compilationFinished(tempFilePath);
+        }else
+        {
+            setState(EngineState::Error);
+            emit compilationError(engineProcess.exitStatus());
         }
-        setState(EngineState::Idle);
 
-    });
-    task.detach();
+        setState(EngineState::Idle);
+     });
 }

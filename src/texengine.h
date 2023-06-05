@@ -9,7 +9,8 @@
 enum class EngineState
 {
     Idle,
-    Processing
+    Processing,
+    Error
 };
 
 class TexEngine : public QObject
@@ -31,13 +32,14 @@ public:
     void setTexEngineArguments(const QStringList&);
     EngineState state();
     void setState(EngineState);
-    Q_INVOKABLE void compileToTempFolder(const QString&);
+    Q_INVOKABLE void compileToTempFolder(const QString);
 
 signals:
     void stateChanged();
     void currentFileChanged();
     void compilationFinished(const QString&);
     void compilationStarted();
+    void compilationError(int);
 
 private:
     QString m_texEngineCommand;

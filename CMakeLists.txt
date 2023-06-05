@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set (CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Concurrent)
 
 include_directories(src)
 
@@ -31,6 +31,7 @@ qt_add_qml_module(appTeXLite
     qml/LatexTextEdit.qml
     qml/PDFView.qml
     qml/TexEngines.qml
+    qml/BusyPDFIndicator.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES
@@ -44,6 +45,7 @@ set_target_properties(appTeXLite PROPERTIES
 target_link_libraries(appTeXLite
     PRIVATE
     Qt6::Quick
+    Qt6::Concurrent
 )
 
 install(TARGETS appTeXLite
