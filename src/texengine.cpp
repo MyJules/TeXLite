@@ -65,9 +65,10 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
 
     std::thread task([this, &fileName](){
         setState(EngineState::Processing);
+        emit compilationStarted();
 
         QProcess engineProcess;
-        engineProcess.start(m_texEngineCommand, QStringList() << m_currentFile << m_texEngineArguments);
+        engineProcess.start(m_texEngineCommand, QStringList() << m_texEngineArguments << m_currentFile);
         engineProcess.waitForFinished(-1);
 
         if(engineProcess.exitStatus() == 0)
@@ -75,9 +76,9 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString& fileName)
             QDir currentDir;
             const QString tempFilePath = "temp/" + fileName + ".pdf";
             bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
-            setState(EngineState::Idle);
             emit compilationFinished(tempFilePath);
         }
+        setState(EngineState::Idle);
 
     });
     task.detach();

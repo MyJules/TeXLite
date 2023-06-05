@@ -70,8 +70,13 @@ ApplicationWindow {
 
     TexEngines {
         id: texEngines
+
         currentEngine.onCompilationFinished: function (compiledFilePath) {
+            console.log(compiledFilePath)
             pdfView.source = "file:" + compiledFilePath
+        }
+
+        currentEngine.onCompilationStarted: {
             fileSystem.clearTempFolder()
         }
     }
