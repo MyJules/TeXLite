@@ -67,6 +67,12 @@ ApplicationWindow {
 
     footer: AppFooter {
         footerText: currentFilePath ? currentFilePath : "No file selected"
+
+        onShowHidePDFClicked: {
+            pdfLoader.visible = !pdfLoader.visible
+            if (pdfLoader.visible)
+                compile()
+        }
     }
 
     TexEngines {
@@ -113,8 +119,8 @@ ApplicationWindow {
         LatexTextEdit {
             id: latexTextEdit
             SplitView.fillWidth: true
-            SplitView.preferredWidth: 400
             SplitView.minimumWidth: 300
+            SplitView.preferredWidth: 400
         }
 
         Loader {

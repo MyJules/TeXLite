@@ -14,12 +14,13 @@ Rectangle {
     ScrollView {
         id: latexTextAreaScrollView
         anchors.fill: parent
+        clip: true
 
         TextArea {
             id: latexTextArea
             focus: true
-            wrapMode: TextEdit.Wrap
             font.pointSize: 12
+            wrapMode: TextEdit.NoWrap
         }
     }
 }

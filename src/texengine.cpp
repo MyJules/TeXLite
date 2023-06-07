@@ -71,7 +71,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         engineProcess.start(m_texEngineCommand, QStringList() << m_texEngineArguments << m_currentFile);
         engineProcess.waitForFinished(-1);
 
-        if(engineProcess.exitStatus() == 0)
+        if(engineProcess.exitCode() == 0)
         {
             QDir currentDir;
             QString tempFilePath = "temp/" + fileName + ".pdf";
