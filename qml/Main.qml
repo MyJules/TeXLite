@@ -38,6 +38,7 @@ ApplicationWindow {
             currentFilePath = fileName
             texEngines.processingFile = fileName
             latexTextEdit.text = fileSystem.readFile(currentFilePath)
+            pdfLoader.visible = true
             compile()
         }
 
@@ -57,6 +58,7 @@ ApplicationWindow {
 
             onAccepted: {
                 fileSystem.newFile("file:" + newFileDialog.currentFile)
+                pdfLoader.visible = true
             }
         }
 
@@ -126,6 +128,7 @@ ApplicationWindow {
         Loader {
             id: pdfLoader
             source: "PDFView.qml"
+            visible: false
 
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
