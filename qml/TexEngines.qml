@@ -11,14 +11,14 @@ Item {
         id: pdfLatex
         currentFile: processingFile
         texEngineCommand: "pdflatex"
-        texEngineArguments: ["-halt-on-error"]
+        texEngineArguments: ["-halt-on-error", "-file-line-error", "-interaction=nonstopmode"]
     }
 
     TexEngine {
         id: pdfTex
         currentFile: processingFile
         texEngineCommand: "pdftex"
-        texEngineArguments: ["-halt-on-error"]
+        texEngineArguments: ["-halt-on-error", "-file-line-error", "-interaction=nonstopmode"]
     }
 
     onEngineNameChanged: {

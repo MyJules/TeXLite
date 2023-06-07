@@ -137,6 +137,8 @@ ApplicationWindow {
     }
 
     function compile() {
+        if (!pdfLoader.visible)
+            return
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")
     }
 }
