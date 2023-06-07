@@ -87,8 +87,6 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
             setState(EngineState::Error);
             emit compilationError(engineProcess.exitStatus());
         }
-
         setState(EngineState::Idle);
-
     });
 }
