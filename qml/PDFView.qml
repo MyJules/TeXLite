@@ -28,7 +28,7 @@ Rectangle {
         Item {}
 
         Button {
-            text: "+"
+            text: " + "
             height: 28
             flat: true
             font.pointSize: 16
@@ -38,7 +38,7 @@ Rectangle {
             }
         }
         Button {
-            text: "-"
+            text: " - "
             height: 28
             flat: true
             font.pointSize: 16
@@ -48,7 +48,7 @@ Rectangle {
             }
         }
         Button {
-            text: "<->"
+            text: " <-> "
             height: 28
             flat: true
             font.pointSize: 16
@@ -59,7 +59,7 @@ Rectangle {
         }
 
         Button {
-            text: "|-|"
+            text: " |-| "
             height: 28
             flat: true
             font.pointSize: 16
