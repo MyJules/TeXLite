@@ -81,8 +81,6 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
             QString tempFilePath = QDir::currentPath() + "/temp/" + fileName + ".pdf";
             bool renamed = currentDir.rename(workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf" ,
                                              tempFilePath);
-
-            qDebug() << "AAAAA: " << workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf";
             emit compilationFinished(tempFilePath);
         }else
         {

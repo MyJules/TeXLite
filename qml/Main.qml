@@ -81,7 +81,6 @@ ApplicationWindow {
         id: texEngines
 
         currentEngine.onCompilationFinished: function (filePath) {
-            console.log("Compile: " + filePath)
             compiledPDFPath = "file:" + filePath
         }
 
@@ -89,21 +88,16 @@ ApplicationWindow {
             fileSystem.clearTempFolder()
         }
 
-        currentEngine.onCompilationError: function (error) {
-            console.log("Error: " + error)
-        }
+        currentEngine.onCompilationError: function (error) {}
 
         currentEngine.onStateChanged: {
-            console.log("State: " + texEngines.currentEngine.state)
             switch (texEngines.currentEngine.state) {
             case 0:
-                console.log("PDF view")
                 pdfLoader.source = "PDFView.qml"
                 pdfLoader.item.source = compiledPDFPath
 
                 break
             case 1:
-                console.log("Busy")
                 pdfLoader.source = "BusyPDFIndicator.qml"
                 break
             default:
