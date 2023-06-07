@@ -62,24 +62,35 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
 
     if(!isFileExists || currentState == EngineState::Processing) return;
 
-    setState(EngineState::Processing);
-    emit compilationStarted();
 
-    QProcess engineProcess;
-    engineProcess.startDetached(m_texEngineCommand, QStringList() << m_texEngineArguments << m_currentFile);
-    qDebug() << engineProcess.program() << engineProcess.arguments();
+    auto engineFuture = QtConcurrent::run([this, fileName](){
+        setState(EngineState::Processing);
+        emit compilationStarted();
 
-    if(engineProcess.exitCode() == 0)
-    {
-        QDir currentDir;
-        QString tempFilePath = "temp/" + fileName + ".pdf";
-        bool renamed = currentDir.rename(QFileInfo(m_currentFile).baseName() + ".pdf" , tempFilePath);
-        emit compilationFinished(tempFilePath);
-    }else
-    {
-        setState(EngineState::Error);
-        emit compilationError(engineProcess.exitStatus());
-    }
+        QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
+        QProcess engineProcess;
+        engineProcess.setWorkingDirectory(workingFolder);
+        engineProcess.setProgram(m_texEngineCommand);
+        engineProcess.setArguments(QStringList() << m_texEngineArguments << m_currentFile);
+        engineProcess.start();
+        engineProcess.waitForFinished(-1);
 
-    setState(EngineState::Idle);
+        if(engineProcess.exitCode() == 0)
+        {
+            QDir currentDir;
+            QString tempFilePath = QDir::currentPath() + "/temp/" + fileName + ".pdf";
+            bool renamed = currentDir.rename(workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf" ,
+                                             tempFilePath);
+
+            qDebug() << "AAAAA: " << workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf";
+            emit compilationFinished(tempFilePath);
+        }else
+        {
+            setState(EngineState::Error);
+            emit compilationError(engineProcess.exitStatus());
+        }
+
+        setState(EngineState::Idle);
+
+    });
 }
