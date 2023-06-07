@@ -57,5 +57,16 @@ Rectangle {
                 view.scaleToWidth(root.width, root.height)
             }
         }
+
+        Button {
+            text: "|-|"
+            height: 28
+            flat: true
+            font.pointSize: 16
+
+            onClicked: {
+                view.scaleToPage(root.width, root.height)
+            }
+        }
     }
 }
