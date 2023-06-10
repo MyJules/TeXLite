@@ -25,6 +25,7 @@ Rectangle {
         color: "gray"
         implicitWidth: row.implicitWidth
         implicitHeight: row.implicitHeight
+        radius: 4
 
         RowLayout {
             id: row
