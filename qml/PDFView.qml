@@ -21,51 +21,56 @@ Rectangle {
         document: doc
     }
 
-    RowLayout {
-        spacing: 10
-        anchors.topMargin: 10
+    Rectangle {
+        color: "gray"
+        implicitWidth: row.implicitWidth
+        implicitHeight: row.implicitHeight
 
-        Item {}
+        RowLayout {
+            id: row
+            spacing: 10
+            anchors.topMargin: 10
 
-        Button {
-            text: " + "
-            height: 28
-            flat: true
-            font.pointSize: 16
+            ToolButton {
+                text: " + "
+                height: 24
+                flat: true
+                font.pointSize: 14
 
-            onClicked: {
-                view.renderScale *= Math.sqrt(2)
+                onClicked: {
+                    view.renderScale *= Math.sqrt(2)
+                }
             }
-        }
-        Button {
-            text: " - "
-            height: 28
-            flat: true
-            font.pointSize: 16
+            ToolButton {
+                text: " - "
+                height: 24
+                flat: true
+                font.pointSize: 14
 
-            onClicked: {
-                view.renderScale /= Math.sqrt(2)
+                onClicked: {
+                    view.renderScale /= Math.sqrt(2)
+                }
             }
-        }
-        Button {
-            text: " <-> "
-            height: 28
-            flat: true
-            font.pointSize: 16
+            ToolButton {
+                text: " <-> "
+                height: 24
+                flat: true
+                font.pointSize: 14
 
-            onClicked: {
-                view.scaleToWidth(root.width, root.height)
+                onClicked: {
+                    view.scaleToWidth(root.width, root.height)
+                }
             }
-        }
 
-        Button {
-            text: " |-| "
-            height: 28
-            flat: true
-            font.pointSize: 16
+            ToolButton {
+                text: " |-| "
+                height: 24
+                flat: true
+                font.pointSize: 14
 
-            onClicked: {
-                view.scaleToPage(root.width, root.height)
+                onClicked: {
+                    view.scaleToPage(root.width, root.height)
+                }
             }
         }
     }
