@@ -9,7 +9,13 @@ Rectangle {
     clip: true
     color: "lightgrey"
 
+    function setPage(pageNum) {
+        view.goToPage(pageNum)
+    }
+
     property alias source: doc.source
+    property alias renderScale: view.renderScale
+    property alias currentPage: view.currentPage
 
     PdfDocument {
         id: doc

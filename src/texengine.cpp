@@ -9,7 +9,7 @@
 
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
-    , m_state(EngineState::Idle)
+    , m_state(TexEngine::EngineState::Idle)
 {
 }
 
@@ -44,12 +44,12 @@ void TexEngine::setTexEngineArguments(const QStringList& texEngineArguments)
     m_texEngineArguments << texEngineArguments;
 }
 
-EngineState TexEngine::state()
+TexEngine::EngineState TexEngine::state()
 {
     return m_state;
 }
 
-void TexEngine::setState(EngineState state)
+void TexEngine::setState(TexEngine::EngineState state)
 {
     m_state = state;
     emit stateChanged();
@@ -58,13 +58,13 @@ void TexEngine::setState(EngineState state)
 Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
-    EngineState currentState = state();
+    TexEngine::EngineState currentState = state();
 
-    if(!isFileExists || currentState == EngineState::Processing) return;
+    if(!isFileExists || currentState == TexEngine::EngineState::Processing) return;
 
 
     auto engineFuture = QtConcurrent::run([this, fileName](){
-        setState(EngineState::Processing);
+        setState(TexEngine::EngineState::Processing);
         emit compilationStarted();
 
         QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
@@ -84,9 +84,9 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
             emit compilationFinished(tempFilePath);
         }else
         {
-            setState(EngineState::Error);
+            setState(TexEngine::EngineState::Error);
             emit compilationError(engineProcess.exitStatus());
         }
-        setState(EngineState::Idle);
+        setState(TexEngine::EngineState::Idle);
     });
 }

@@ -20,7 +20,7 @@ Rectangle {
             id: latexTextArea
             focus: true
             font.pointSize: 12
-            wrapMode: TextEdit.NoWrap
+            wrapMode: TextEdit.Wrap
         }
     }
 }

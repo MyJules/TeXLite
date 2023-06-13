@@ -80,24 +80,26 @@ ApplicationWindow {
     TexEngines {
         id: texEngines
 
-        currentEngine.onCompilationFinished: function (filePath) {
+        onDCompilationFinished: function (filePath) {
             compiledPDFPath = "file:" + filePath
         }
 
-        currentEngine.onCompilationStarted: {
+        onDCompilationStarted: {
             fileSystem.clearTempFolder()
         }
 
-        currentEngine.onCompilationError: function (error) {}
+        onDCompilationError: function (error) {}
 
-        currentEngine.onStateChanged: {
-            switch (texEngines.currentEngine.state) {
-            case 0:
+        onDStateChanged: {
+            switch (currentEngine.state) {
+            case TexEngine.Idle:
                 pdfLoader.source = "PDFView.qml"
                 pdfLoader.item.source = compiledPDFPath
-
+                pdfLoader.item.renderScale = pdfLoader.lastRenderScale
                 break
-            case 1:
+            case TexEngine.Processing:
+                pdfLoader.lastRenderScale = pdfLoader.item.renderScale
+                pdfLoader.lastPage = pdfLoader.item.currentPage
                 pdfLoader.source = "BusyPDFIndicator.qml"
                 break
             default:
@@ -123,6 +125,9 @@ ApplicationWindow {
             id: pdfLoader
             source: "PDFView.qml"
             visible: false
+
+            property real lastRenderScale: 0
+            property int lastPage: 0
 
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200

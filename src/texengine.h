@@ -6,13 +6,6 @@
 #include <QQuickItem>
 #include <QStringList>
 
-enum class EngineState
-{
-    Idle,
-    Processing,
-    Error
-};
-
 class TexEngine : public QObject
 {
     Q_OBJECT
@@ -23,6 +16,14 @@ class TexEngine : public QObject
     QML_ELEMENT
 
 public:
+    enum class EngineState : int
+    {
+        Idle,
+        Processing,
+        Error
+    };
+    Q_ENUM(EngineState)
+
     explicit TexEngine(QObject *parent = nullptr);
     QString texEngineCommand();
     void setTexEngineCommand(const QString&);
