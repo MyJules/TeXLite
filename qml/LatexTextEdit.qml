@@ -9,7 +9,6 @@ import com.highliter
 Rectangle {
     id: latexTextRect
     color: "#292929"
-    radius: 4
     clip: true
 
     property alias text: latexTextArea.text
