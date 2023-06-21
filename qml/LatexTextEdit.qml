@@ -36,10 +36,6 @@ Rectangle {
             let rx = /\/\/.*|[A-Za-z.]+(\s*:)?|\d+(.\d*)?|'[^']*?'|"[^"]*?"/g
             let m
             while ((m = rx.exec(text)) != null) {
-                if (text.match(/\\documentclass\b/)) {
-                    setFormat(m.index, m[0].length, headerFormat)
-                }
-
                 if (text.match(/\\begin\{.*\}/)) {
                     setFormat(m.index, m[0].length, environmentBeginFormat)
                 }
@@ -59,13 +55,17 @@ Rectangle {
                 if (text.match(/%.*$/)) {
                     setFormat(m.index, m[0].length, commentFormat)
                 }
+
+                if (text.match(/\\documentclass\b/)) {
+                    setFormat(m.index, m[0].length, headerFormat)
+                }
             }
         }
     }
 
     TextCharFormat {
         id: headerFormat
-        foreground: "blue"
+        foreground: "#ff4d4d"
     }
 
     TextCharFormat {
@@ -80,12 +80,12 @@ Rectangle {
 
     TextCharFormat {
         id: commandFormat
-        foreground: "red"
+        foreground: "#ff8080"
     }
 
     TextCharFormat {
         id: groupFormat
-        foreground: "#3399ff"
+        foreground: "#809fff"
     }
 
     TextCharFormat {
