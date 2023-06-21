@@ -36,14 +36,6 @@ Rectangle {
             let m
             while ((m = rx.exec(text)) != null) {
                 console.log(text)
-                if (text.match(/\\begin\{.*\}/)) {
-                    setFormat(m.index, m[0].length, environmentBeginFormat)
-                }
-
-                if (text.match(/\\end\{.*\}/)) {
-                    setFormat(m.index, m[0].length, environmentEndFormat)
-                }
-
                 if (text.match(/\\[a-zA-Z]+\b/)) {
                     setFormat(m.index, m[0].length, commandFormat)
                 }
