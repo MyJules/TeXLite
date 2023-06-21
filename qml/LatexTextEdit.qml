@@ -32,48 +32,64 @@ Rectangle {
     SyntaxHighlighter {
         id: syntaxHighlighter
         textDocument: latexTextArea.textDocument
-        onHighlightBlock: {
+        onHighlightBlock: function (text) {
             let rx = /\/\/.*|[A-Za-z.]+(\s*:)?|\d+(.\d*)?|'[^']*?'|"[^"]*?"/g
             let m
-            while ((m = rx.exec(text)) !== null) {
-                if (m[0].match(/^'/)) {
-                    setFormat(m.index, m[0].length, stringFormat)
-                    continue
+            while ((m = rx.exec(text)) != null) {
+                if (text.match(/\\documentclass\b/)) {
+                    setFormat(m.index, m[0].length, headerFormat)
                 }
 
-                if (m[0].match(/^"/)) {
-                    setFormat(m.index, m[0].length, stringFormat)
-                    continue
+                if (text.match(/\\begin\{.*\}/)) {
+                    setFormat(m.index, m[0].length, environmentBeginFormat)
+                }
+
+                if (text.match(/\\end\{.*\}/)) {
+                    setFormat(m.index, m[0].length, environmentEndFormat)
+                }
+
+                if (text.match(/\\[a-zA-Z]+\b/)) {
+                    setFormat(m.index, m[0].length, commandFormat)
+                }
+
+                if (text.match(/{.*?}/)) {
+                    setFormat(m.index, m[0].length, groupFormat)
+                }
+
+                if (text.match(/%.*$/)) {
+                    setFormat(m.index, m[0].length, commentFormat)
                 }
             }
         }
     }
 
     TextCharFormat {
-        id: keywordFormat
-        foreground: "#808000"
+        id: headerFormat
+        foreground: "blue"
     }
+
     TextCharFormat {
-        id: componentFormat
-        foreground: "#aa00aa"
-        font.pointSize: 12
-        font.bold: true
-        font.italic: true
-    }
-    TextCharFormat {
-        id: numberFormat
-        foreground: "#0055af"
-    }
-    TextCharFormat {
-        id: propertyFormat
-        foreground: "#800000"
-    }
-    TextCharFormat {
-        id: stringFormat
+        id: environmentBeginFormat
         foreground: "green"
     }
+
+    TextCharFormat {
+        id: environmentEndFormat
+        foreground: "green"
+    }
+
+    TextCharFormat {
+        id: commandFormat
+        foreground: "red"
+    }
+
+    TextCharFormat {
+        id: groupFormat
+        foreground: "#3399ff"
+    }
+
     TextCharFormat {
         id: commentFormat
-        foreground: "green"
+        foreground: "gray"
     }
 }
