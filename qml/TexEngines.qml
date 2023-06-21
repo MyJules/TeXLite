@@ -20,7 +20,7 @@ Item {
 
         onCompilationFinished: filePath => dCompilationFinished(filePath)
         onCompilationStarted: dCompilationStarted()
-        onCompilationError: dCompilationError()
+        onCompilationError: error => dCompilationError(error)
         onStateChanged: dStateChanged()
     }
 

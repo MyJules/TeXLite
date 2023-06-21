@@ -35,6 +35,7 @@ Rectangle {
             let rx = /\/\/.*|[A-Za-z.]+(\s*:)?|\d+(.\d*)?|'[^']*?'|"[^"]*?"/g
             let m
             while ((m = rx.exec(text)) != null) {
+                console.log(text)
                 if (text.match(/\\begin\{.*\}/)) {
                     setFormat(m.index, m[0].length, environmentBeginFormat)
                 }
@@ -56,6 +57,10 @@ Rectangle {
                 }
 
                 if (text.match(/\\documentclass\b/)) {
+                    setFormat(m.index, m[0].length, headerFormat)
+                }
+
+                if (text.match(/\\usepackage\b/)) {
                     setFormat(m.index, m[0].length, headerFormat)
                 }
             }
