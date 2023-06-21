@@ -19,13 +19,12 @@ Rectangle {
         anchors.fill: parent
         clip: true
 
-        TextEdit {
+        TextArea {
             id: latexTextArea
             focus: true
             font.pointSize: 12
             selectByMouse: true
-            textMargin: 10.0
-            color: "white"
+            wrapMode: TextEdit.WordWrap
         }
     }
 
