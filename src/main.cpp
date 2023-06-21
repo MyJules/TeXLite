@@ -2,6 +2,8 @@
 #include <texengine.h>
 #include <filesystem.h>
 #include <tempfolderguard.h>
+#include <syntaxhighlihgter.h>
+#include <textcharformat.h>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -15,6 +17,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<TexEngine>("com.tex", 1, 0, "TexEngine");
     qmlRegisterType<FileSystem>("com.file", 1, 0, "FileSystem");
+    qmlRegisterType<SyntaxHighlighter>("com.highliter", 1, 0, "SyntaxHighlighter");
+    qmlRegisterType<TextCharFormat>("com.highliter", 1, 0, "TextCharFormat");
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/TeXLite/qml/Main.qml"_qs);

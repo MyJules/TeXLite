@@ -2,7 +2,6 @@ import QtQuick
 import com.tex
 
 Item {
-
     signal dCompilationFinished(string filePath)
     signal dCompilationStarted
     signal dCompilationError(int error)

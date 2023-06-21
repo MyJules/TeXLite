@@ -12,6 +12,11 @@ Row {
     signal showHidePDFClicked
     property alias footerText: text.text
 
+    Shortcut {
+        sequence: "Ctrl+H"
+        onActivated: showHidePDFClicked()
+    }
+
     Text {
         id: text
         anchors.verticalCenter: parent.verticalCenter
