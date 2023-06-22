@@ -114,6 +114,13 @@ ApplicationWindow {
         anchors.fill: parent
         orientation: Qt.Horizontal
 
+        DirView {
+            id: fileView
+            SplitView.minimumWidth: 100
+            SplitView.preferredWidth: 200
+            SplitView.maximumWidth: 300
+        }
+
         LatexTextEdit {
             id: latexTextEdit
             SplitView.fillWidth: true

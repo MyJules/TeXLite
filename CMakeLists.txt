@@ -34,6 +34,7 @@ qt_add_qml_module(appTeXLite
     qml/PDFView.qml
     qml/TexEngines.qml
     qml/BusyPDFIndicator.qml
+    qml/DirView.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES
