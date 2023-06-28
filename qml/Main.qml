@@ -105,6 +105,7 @@ ApplicationWindow {
                 pdfLoader.item.renderScale = pdfLoader.lastRenderScale
                 break
             case TexEngine.Processing:
+                pdfLoader.item.source = ""
                 pdfLoader.lastRenderScale = pdfLoader.item.renderScale
                 pdfLoader.lastPage = pdfLoader.item.currentPage
                 pdfLoader.source = "BusyPDFIndicator.qml"
