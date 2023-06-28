@@ -10,6 +10,7 @@ Row {
     leftPadding: 5
 
     signal showHidePDFClicked
+    signal showHideFileViewCliced
     property alias footerText: text.text
 
     Shortcut {
@@ -33,5 +34,14 @@ Row {
         text: "Show/Hide PDF"
 
         onClicked: showHidePDFClicked()
+    }
+
+    ToolButton {
+        flat: true
+        font.pointSize: 10
+        height: 30
+        text: "Show/Hide Files"
+
+        onClicked: showHideFileViewCliced()
     }
 }

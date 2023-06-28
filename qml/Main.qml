@@ -78,6 +78,10 @@ ApplicationWindow {
             if (pdfLoader.visible)
                 compile()
         }
+
+        onShowHideFileViewCliced: {
+            dirView.visible = !dirView.visible
+        }
     }
 
     TexEngines {
@@ -121,7 +125,7 @@ ApplicationWindow {
             id: dirView
             visible: false
             SplitView.minimumWidth: 100
-            SplitView.preferredWidth: 200
+            SplitView.preferredWidth: 150
             SplitView.maximumWidth: 300
         }
 

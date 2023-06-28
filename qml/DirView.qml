@@ -11,6 +11,7 @@ Item {
     property alias directory: folderModel.folder
 
     ListView {
+        id: listView
         anchors.fill: parent
         spacing: 5
 
@@ -23,20 +24,29 @@ Item {
         Component {
             id: fileDelegate
             Row {
-                Rectangle {
-                    width: 45
-                    height: parent.height
-                    color: "#cccccc"
-                }
-
                 ToolButton {
+                    width: listView.width
                     text: fileName
                     flat: true
+                    onClicked: {
+                        listView.currentIndex = index
+                        console.log(text)
+                    }
                 }
+            }
+        }
+
+        Component {
+            id: highlightDelegate
+            Rectangle {
+                color: "#0088cc"
             }
         }
 
         model: folderModel
         delegate: fileDelegate
+        highlight: highlightDelegate
+        highlightMoveDuration: 100
+        highlightMoveVelocity: 100
     }
 }
