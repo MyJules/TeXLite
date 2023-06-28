@@ -19,6 +19,7 @@ Item {
         FolderListModel {
             id: folderModel
             showDirsFirst: true
+            showDotAndDotDot: true
             sortField: FolderListModel.Type
             nameFilters: ["*.tex"]
         }
@@ -31,8 +32,11 @@ Item {
                     text: fileName
                     flat: true
 
-                    onDoubleClicked: {
+                    onClicked: {
                         listView.currentIndex = index
+                    }
+
+                    onDoubleClicked: {
                         if (folderModel.isFolder(index)) {
                             dirSelected(directory + "/" + text)
                         } else {

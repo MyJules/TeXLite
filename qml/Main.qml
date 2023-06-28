@@ -132,7 +132,7 @@ ApplicationWindow {
                 loadFileWithDir(filePath)
             }
             onDirSelected: function (dirPath) {
-                console.log(dirPath)
+                dirView.directory = dirPath
             }
         }
 
