@@ -29,8 +29,9 @@ Item {
             Row {
                 ToolButton {
                     width: listView.width
-                    text: fileName
                     flat: true
+                    text: fileName
+                    font.pointSize: 10
 
                     onClicked: {
                         listView.currentIndex = index
