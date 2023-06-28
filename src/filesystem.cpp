@@ -36,7 +36,6 @@ Q_INVOKABLE void FileSystem::removeFile(const QString &filePath)
 {
     QString path = QUrl(filePath).toLocalFile();
     QFile file(path);
-    qDebug() << "remove ?:" << file.remove();
 }
 
 Q_INVOKABLE void FileSystem::newFile(const QString &filePath)

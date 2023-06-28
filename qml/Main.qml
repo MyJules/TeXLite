@@ -35,7 +35,6 @@ ApplicationWindow {
         }
 
         onNewFileSelected: function (fileName) {
-            console.log(fileName)
             loadFile(fileName)
             pdfLoader.visible = true
             dirView.visible = true
@@ -59,7 +58,6 @@ ApplicationWindow {
             onAccepted: {
                 fileSystem.newFile(newFileDialog.currentFile)
                 loadFile(newFileDialog.currentFile)
-                console.log(newFileDialog.currentFile)
                 pdfLoader.visible = true
                 dirView.visible = true
             }
