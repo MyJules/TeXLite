@@ -20,6 +20,7 @@ Item {
             id: folderModel
             showDirsFirst: true
             sortField: FolderListModel.Type
+            nameFilters: ["*.tex"]
         }
 
         Component {
@@ -30,11 +31,8 @@ Item {
                     text: fileName
                     flat: true
 
-                    onClicked: {
-                        listView.currentIndex = index
-                    }
-
                     onDoubleClicked: {
+                        listView.currentIndex = index
                         if (folderModel.isFolder(index)) {
                             dirSelected(directory + "/" + text)
                         } else {
