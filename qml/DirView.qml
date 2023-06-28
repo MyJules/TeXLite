@@ -40,6 +40,7 @@ Item {
                     onDoubleClicked: {
                         if (folderModel.isFolder(index)) {
                             dirSelected(directory + "/" + text)
+                            listView.currentIndex = 0
                         } else {
                             fileSelected(directory + "/" + text)
                         }
