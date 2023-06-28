@@ -56,3 +56,9 @@ Q_INVOKABLE void FileSystem::clearTempFolder()
     tempDir.removeRecursively();
     tempDir.mkdir(QDir::currentPath() + "/temp");
 }
+
+Q_INVOKABLE QString FileSystem::getFileDir(const QString &filePath)
+{
+    QFileInfo info(filePath);
+    return info.dir().path();
+}

@@ -4,6 +4,12 @@ import QtQuick.Controls.Material
 import Qt.labs.folderlistmodel
 
 Item {
+    id: root
+
+    signal onNewFileSelected(string filePath)
+
+    property alias directory: folderModel.folder
+
     ListView {
         anchors.fill: parent
         spacing: 5
@@ -12,7 +18,6 @@ Item {
             id: folderModel
             showDirsFirst: true
             sortField: FolderListModel.Type
-            folder: "file:///E:/MY/TeXLite/TestProj/"
         }
 
         Component {

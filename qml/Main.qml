@@ -38,7 +38,9 @@ ApplicationWindow {
             currentFilePath = fileName
             texEngines.processingFile = fileName
             latexTextEdit.text = fileSystem.readFile(currentFilePath)
+            dirView.directory = fileSystem.getFileDir(currentFilePath)
             pdfLoader.visible = true
+            dirView.visible = true
             compile()
         }
 
@@ -59,6 +61,7 @@ ApplicationWindow {
             onAccepted: {
                 fileSystem.newFile("file:" + newFileDialog.currentFile)
                 pdfLoader.visible = true
+                dirView.visible = true
             }
         }
 
@@ -115,7 +118,8 @@ ApplicationWindow {
         orientation: Qt.Horizontal
 
         DirView {
-            id: fileView
+            id: dirView
+            visible: false
             SplitView.minimumWidth: 100
             SplitView.preferredWidth: 200
             SplitView.maximumWidth: 300

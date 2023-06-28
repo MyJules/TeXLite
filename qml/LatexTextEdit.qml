@@ -34,7 +34,6 @@ Rectangle {
             let rx = /\/\/.*|[A-Za-z.]+(\s*:)?|\d+(.\d*)?|'[^']*?'|"[^"]*?"/g
             let m
             while ((m = rx.exec(text)) != null) {
-                console.log(text)
                 if (text.match(/\\[a-zA-Z]+\b/)) {
                     setFormat(m.index, m[0].length, commandFormat)
                 }
