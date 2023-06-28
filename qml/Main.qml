@@ -26,6 +26,8 @@ ApplicationWindow {
     property string currentFilePath
     property string compiledPDFPath
 
+    onClosing: pdfLoader.item.source = ""
+
     menuBar: AppMenuBar {
         id: appMenuBar
 
