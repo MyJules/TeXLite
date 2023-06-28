@@ -6,7 +6,8 @@ import Qt.labs.folderlistmodel
 Item {
     id: root
 
-    signal onNewFileSelected(string filePath)
+    signal fileSelected(string filePath)
+    signal dirSelected(string dirPath)
 
     property alias directory: folderModel.folder
 
@@ -28,9 +29,17 @@ Item {
                     width: listView.width
                     text: fileName
                     flat: true
+
                     onClicked: {
                         listView.currentIndex = index
-                        console.log(text)
+                    }
+
+                    onDoubleClicked: {
+                        if (folderModel.isFolder(index)) {
+                            dirSelected(directory + "/" + text)
+                        } else {
+                            fileSelected(directory + "/" + text)
+                        }
                     }
                 }
             }

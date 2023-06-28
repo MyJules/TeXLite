@@ -31,17 +31,17 @@ Row {
         flat: true
         font.pointSize: 10
         height: 30
-        text: "Show/Hide PDF"
+        text: "Show/Hide Files"
 
-        onClicked: showHidePDFClicked()
+        onClicked: showHideFileViewCliced()
     }
 
     ToolButton {
         flat: true
         font.pointSize: 10
         height: 30
-        text: "Show/Hide Files"
+        text: "Show/Hide PDF"
 
-        onClicked: showHideFileViewCliced()
+        onClicked: showHidePDFClicked()
     }
 }

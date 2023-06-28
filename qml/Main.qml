@@ -35,10 +35,8 @@ ApplicationWindow {
         }
 
         onNewFileSelected: function (fileName) {
-            currentFilePath = fileName
-            texEngines.processingFile = fileName
-            latexTextEdit.text = fileSystem.readFile(currentFilePath)
-            dirView.directory = fileSystem.getFileDir(currentFilePath)
+            console.log(fileName)
+            loadFile(fileName)
             pdfLoader.visible = true
             dirView.visible = true
             compile()
@@ -59,7 +57,9 @@ ApplicationWindow {
             fileMode: FileDialog.SaveFile
 
             onAccepted: {
-                fileSystem.newFile("file:" + newFileDialog.currentFile)
+                fileSystem.newFile(newFileDialog.currentFile)
+                loadFile(newFileDialog.currentFile)
+                console.log(newFileDialog.currentFile)
                 pdfLoader.visible = true
                 dirView.visible = true
             }
@@ -127,6 +127,13 @@ ApplicationWindow {
             SplitView.minimumWidth: 100
             SplitView.preferredWidth: 150
             SplitView.maximumWidth: 300
+
+            onFileSelected: function (filePath) {
+                console.log(filePath)
+            }
+            onDirSelected: function (dirPath) {
+                console.log(dirPath)
+            }
         }
 
         LatexTextEdit {
@@ -157,5 +164,12 @@ ApplicationWindow {
         if (!pdfLoader.visible)
             return
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")
+    }
+
+    function loadFile(fileName) {
+        texEngines.processingFile = fileName
+        latexTextEdit.text = fileSystem.readFile(fileName)
+        dirView.directory = fileSystem.getFileDir(fileName)
+        currentFilePath = fileName
     }
 }

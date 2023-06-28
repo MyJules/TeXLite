@@ -43,11 +43,10 @@ Q_INVOKABLE void FileSystem::newFile(const QString &filePath)
 {
     QString path = QUrl(filePath).toLocalFile();
 
-    if (QFile::exists(path)) return;
-
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     file.close();
+    qDebug() << path;
 }
 
 Q_INVOKABLE void FileSystem::clearTempFolder()
