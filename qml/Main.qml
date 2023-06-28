@@ -26,7 +26,7 @@ ApplicationWindow {
     property string currentFilePath
     property string compiledPDFPath
 
-    onClosing: pdfLoader.item.source = ""
+    onClosing: clearPDFSource()
 
     menuBar: AppMenuBar {
         id: appMenuBar
@@ -107,7 +107,7 @@ ApplicationWindow {
                 pdfLoader.item.renderScale = pdfLoader.lastRenderScale
                 break
             case TexEngine.Processing:
-                pdfLoader.item.source = ""
+                clearPDFSource()
                 pdfLoader.lastRenderScale = pdfLoader.item.renderScale
                 pdfLoader.lastPage = pdfLoader.item.currentPage
                 pdfLoader.source = "BusyPDFIndicator.qml"
@@ -177,5 +177,9 @@ ApplicationWindow {
         latexTextEdit.text = fileSystem.readFile(fileName)
         dirView.directory = fileSystem.getFileDir(fileName)
         currentFilePath = fileName
+    }
+
+    function clearPDFSource() {
+        pdfLoader.item.source = ""
     }
 }
