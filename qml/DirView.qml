@@ -52,7 +52,11 @@ Item {
 
                     onDoubleClicked: {
                         if (folderModel.isFolder(index)) {
-                            dirSelected(directory + "/" + text)
+                            if (text == "..") {
+                                dirSelected(folderModel.parentFolder)
+                            } else {
+                                dirSelected(directory + "/" + text)
+                            }
                         } else {
                             fileSelected(directory + "/" + text)
                         }
@@ -71,8 +75,8 @@ Item {
         model: folderModel
         delegate: fileDelegate
         highlight: highlightDelegate
-        highlightMoveDuration: 100
-        highlightMoveVelocity: 100
+        highlightMoveDuration: 10
+        //        highlightMoveVelocity: 100
         highlightResizeDuration: 0
     }
 }
