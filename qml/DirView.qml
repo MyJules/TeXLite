@@ -30,7 +30,7 @@ Item {
 
                 Component.onCompleted: {
                     if (folderModel.isFolder(index)) {
-                        backgrounRect.color = "#808c1aff"
+                        backgrounRect.color = "#800066ff"
                     }
                 }
 
@@ -64,7 +64,7 @@ Item {
         Component {
             id: highlightDelegate
             Rectangle {
-                color: "#0088cc"
+                color: "#1a75ff"
             }
         }
 
