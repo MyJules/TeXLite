@@ -27,11 +27,24 @@ Item {
         Component {
             id: fileDelegate
             Row {
+
+                Component.onCompleted: {
+                    if (folderModel.isFolder(index)) {
+                        backgrounRect.color = "#808c1aff"
+                    }
+                }
+
                 ToolButton {
+                    id: toolButton
                     width: listView.width
                     flat: true
                     text: fileName
                     font.pointSize: 10
+
+                    background: Rectangle {
+                        id: backgrounRect
+                        color: "transparent"
+                    }
 
                     onClicked: {
                         listView.currentIndex = index
@@ -60,5 +73,6 @@ Item {
         highlight: highlightDelegate
         highlightMoveDuration: 100
         highlightMoveVelocity: 100
+        highlightResizeDuration: 0
     }
 }
