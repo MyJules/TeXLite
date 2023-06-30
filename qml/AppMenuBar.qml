@@ -102,9 +102,6 @@ Row {
                     ListElement {
                         text: "pdflatex"
                     }
-                    ListElement {
-                        text: "pdftex"
-                    }
                 }
 
                 onCurrentValueChanged: newEngineSelected(
