@@ -110,6 +110,7 @@ ApplicationWindow {
                 pdfLoader.source = "BusyPDFIndicator.qml"
                 break
             case TexEngine.Error:
+                clearPDFSource()
                 pdfLoader.source = "CompilationErrorView.qml"
                 break
             default:
@@ -180,7 +181,8 @@ ApplicationWindow {
     }
 
     function clearPDFSource() {
-        if (pdfLoader.source === "PDFView.qml")
+        if (pdfLoader.source == "PDFView.qml") {
             pdfLoader.item.source = ""
+        }
     }
 }
