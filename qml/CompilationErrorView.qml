@@ -5,11 +5,23 @@ import QtQuick.Controls.Material
 Item {
     property alias errorString: errorText.text
 
-    Text {
-        id: errorText
-
-        color: "red"
+    Rectangle {
         anchors.fill: parent
-        font.pointSize: 12
+        radius: 4
+        color: "#262626"
+        border.color: "#ff4d4d"
+
+        Text {
+            id: errorText
+
+            color: "#ff4d4d"
+            anchors.fill: parent
+            font.pointSize: 12
+
+            leftPadding: 10
+            rightPadding: 10
+            topPadding: 10
+            bottomPadding: 10
+        }
     }
 }
