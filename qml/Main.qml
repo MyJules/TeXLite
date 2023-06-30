@@ -107,6 +107,7 @@ ApplicationWindow {
                 pdfLoader.source = "PDFView.qml"
                 pdfLoader.item.source = compiledPDFPath
                 pdfLoader.item.renderScale = pdfLoader.lastRenderScale
+                pdfLoader.item.openPage(pdfLoader.lastPage)
                 break
             case TexEngine.Processing:
                 clearPDFSource()

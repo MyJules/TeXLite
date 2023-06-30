@@ -9,13 +9,24 @@ Rectangle {
     clip: true
     color: "lightgrey"
 
-    function setPage(pageNum) {
-        view.goToPage(pageNum)
+    function openPage(pageNumber) {
+        openPageNum = pageNumber
+        goToPageTimer.start()
+        console.log("asas")
     }
 
+    property int openPageNum: 0
     property alias source: doc.source
     property alias renderScale: view.renderScale
     property alias currentPage: view.currentPage
+
+    Timer {
+        id: goToPageTimer
+        interval: 20
+        running: true
+        repeat: false
+        onTriggered: view.goToLocation(openPageNum, Qt.point(0, 0), renderScale)
+    }
 
     PdfDocument {
         id: doc
