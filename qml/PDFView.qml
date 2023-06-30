@@ -12,7 +12,6 @@ Rectangle {
     function openPage(pageNumber) {
         openPageNum = pageNumber
         goToPageTimer.start()
-        console.log("asas")
     }
 
     property int openPageNum: 0
