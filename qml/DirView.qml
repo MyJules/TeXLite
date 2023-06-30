@@ -52,7 +52,7 @@ Item {
 
                     onDoubleClicked: {
                         if (folderModel.isFolder(index)) {
-                            if (text == "..") {
+                            if (text === "..") {
                                 dirSelected(folderModel.parentFolder)
                             } else {
                                 dirSelected(directory + "/" + text)
