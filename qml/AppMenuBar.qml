@@ -7,7 +7,7 @@ Row {
     id: root
 
     signal compileClicked
-    signal createNewFileClicked
+    signal createNewFileClicked(string fileName)
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
@@ -30,7 +30,7 @@ Row {
         context: Qt.ApplicationShortcut
         sequences: [StandardKey.New]
 
-        onActivated: createNewFileClicked()
+        onActivated: newFileDialog.open()
     }
 
     ToolButton {
@@ -47,7 +47,17 @@ Row {
 
             MenuItem {
                 text: "New File"
-                onClicked: createNewFileClicked()
+                onClicked: newFileDialog.open()
+
+                FileDialog {
+                    id: newFileDialog
+                    title: "New File"
+                    fileMode: FileDialog.SaveFile
+
+                    onAccepted: {
+                        createNewFileClicked(newFileDialog.selectedFile)
+                    }
+                }
             }
 
             MenuSeparator {}

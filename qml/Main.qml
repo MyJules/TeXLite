@@ -49,22 +49,12 @@ ApplicationWindow {
             compile()
         }
 
-        onCreateNewFileClicked: {
-            newFileDialog.open()
-        }
-
-        FileDialog {
-            id: newFileDialog
-            title: "New File"
-            fileMode: FileDialog.SaveFile
-
-            onAccepted: {
-                fileSystem.newFile(newFileDialog.currentFile)
-                setProcessingFile(newFileDialog.currentFile)
-                loadFileWithDir(newFileDialog.currentFile)
-                pdfLoader.visible = true
-                dirView.visible = true
-            }
+        onCreateNewFileClicked: function (fileName) {
+            fileSystem.newFile(fileName)
+            setProcessingFile(fileName)
+            loadFileWithDir(fileName)
+            pdfLoader.visible = true
+            dirView.visible = true
         }
 
         onCompileClicked: {
