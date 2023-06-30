@@ -76,7 +76,6 @@ Item {
         delegate: fileDelegate
         highlight: highlightDelegate
         highlightMoveDuration: 50
-        //        highlightMoveVelocity: 100
         highlightResizeDuration: 0
     }
 }
