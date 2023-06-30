@@ -21,6 +21,7 @@ qt_add_executable(appTeXLite
     src/filesystem.cpp
     src/syntaxhighlihgter.cpp
     src/textcharformat.cpp
+    resource.qrc
 )
 
 qt_add_qml_module(appTeXLite
