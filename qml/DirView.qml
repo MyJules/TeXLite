@@ -75,7 +75,7 @@ Item {
         model: folderModel
         delegate: fileDelegate
         highlight: highlightDelegate
-        highlightMoveDuration: 10
+        highlightMoveDuration: 50
         //        highlightMoveVelocity: 100
         highlightResizeDuration: 0
     }
