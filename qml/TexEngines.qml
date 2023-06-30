@@ -4,7 +4,7 @@ import com.tex
 Item {
     signal dCompilationFinished(string filePath)
     signal dCompilationStarted
-    signal dCompilationError(int error)
+    signal dCompilationError(string error)
     signal dStateChanged
 
     property string processingFile: ""

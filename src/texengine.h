@@ -40,7 +40,7 @@ signals:
     void currentFileChanged();
     void compilationFinished(const QString&);
     void compilationStarted();
-    void compilationError(int);
+    void compilationError(const QString&);
 
 private:
     QString m_texEngineCommand;

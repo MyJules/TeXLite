@@ -85,7 +85,11 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         }else
         {
             setState(TexEngine::EngineState::Error);
-            emit compilationError(engineProcess.exitStatus());
+            QRegularExpression errorPattern(R"([^//]* error [^.]*\.)");
+            QString standardOutput = engineProcess.readAllStandardOutput();
+            auto match = errorPattern.match(standardOutput);
+            emit compilationError(match.captured());
+            return;
         }
         setState(TexEngine::EngineState::Idle);
     });

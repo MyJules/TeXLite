@@ -97,7 +97,9 @@ ApplicationWindow {
             fileSystem.clearTempFolder()
         }
 
-        onDCompilationError: function (error) {}
+        onDCompilationError: function (error) {
+            pdfLoader.item.errorString = error
+        }
 
         onDStateChanged: {
             switch (currentEngine.state) {
@@ -108,9 +110,16 @@ ApplicationWindow {
                 break
             case TexEngine.Processing:
                 clearPDFSource()
-                pdfLoader.lastRenderScale = pdfLoader.item.renderScale
-                pdfLoader.lastPage = pdfLoader.item.currentPage
+
+                if (pdfLoader.source == "PDFView.qml") {
+                    pdfLoader.lastRenderScale = pdfLoader.item.renderScale
+                    pdfLoader.lastPage = pdfLoader.item.currentPage
+                }
+
                 pdfLoader.source = "BusyPDFIndicator.qml"
+                break
+            case TexEngine.Error:
+                pdfLoader.source = "CompilationErrorView.qml"
                 break
             default:
                 break
@@ -180,6 +189,7 @@ ApplicationWindow {
     }
 
     function clearPDFSource() {
-        pdfLoader.item.source = ""
+        if (pdfLoader.source === "PDFView.qml")
+            pdfLoader.item.source = ""
     }
 }
