@@ -100,13 +100,13 @@ ApplicationWindow {
                 pdfLoader.item.openPage(pdfLoader.lastPage)
                 break
             case TexEngine.Processing:
-                clearPDFSource()
 
                 if (pdfLoader.source == "PDFView.qml") {
                     pdfLoader.lastRenderScale = pdfLoader.item.renderScale
                     pdfLoader.lastPage = pdfLoader.item.currentPage
                 }
 
+                clearPDFSource()
                 pdfLoader.source = "BusyPDFIndicator.qml"
                 break
             case TexEngine.Error:
