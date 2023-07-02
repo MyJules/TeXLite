@@ -38,6 +38,7 @@ qt_add_qml_module(appTeXLite
     qml/DirView.qml
     qml/CompilationErrorView.qml
     qml/IntellisenseMenu.qml
+    qml/LatexListModel.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES

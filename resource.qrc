@@ -4,5 +4,6 @@
     </qresource>
     <qresource prefix="/">
         <file>qml/IntellisenseMenu.qml</file>
+        <file>qml/LatexListModel.qml</file>
     </qresource>
 </RCC>

@@ -143,11 +143,19 @@ ApplicationWindow {
         LatexTextEdit {
             id: latexTextEdit
             SplitView.fillWidth: true
-            SplitView.minimumWidth: 300
-            SplitView.preferredWidth: 400
+            SplitView.minimumWidth: 150
+            SplitView.preferredWidth: 200
 
             IntellisenseMenu {
                 id: intellisenseMenu
+
+                onIntelisenceActivated: {
+                    intellisenseMenu.open()
+                }
+
+                onKeywordSelected: function (keyword) {
+                    intellisenseMenu.close()
+                }
             }
         }
 
