@@ -2,15 +2,15 @@ import QtQuick
 
 ListModel {
     ListElement {
-        keyword: "\\section"
+        keyword: "\\section{}"
     }
 
     ListElement {
-        keyword: "\\subsection"
+        keyword: "\\subsection{}"
     }
 
     ListElement {
-        keyword: "\\subsubsection"
+        keyword: "\\subsubsection{}"
     }
 
     ListElement {

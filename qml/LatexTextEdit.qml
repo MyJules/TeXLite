@@ -11,7 +11,12 @@ Rectangle {
     color: "#292929"
     clip: true
 
+    function insertText(position, text) {
+        latexTextArea.insert(position, text)
+    }
+
     property alias text: latexTextArea.text
+    property alias cursorPosition: latexTextArea.cursorPosition
 
     ScrollView {
         id: latexTextAreaScrollView

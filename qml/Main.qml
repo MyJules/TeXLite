@@ -135,6 +135,7 @@ ApplicationWindow {
             onFileSelected: function (filePath) {
                 loadFileWithDir(filePath)
             }
+
             onDirSelected: function (dirPath) {
                 dirView.directory = dirPath
             }
@@ -154,6 +155,8 @@ ApplicationWindow {
                 }
 
                 onKeywordSelected: function (keyword) {
+                    latexTextEdit.insertText(latexTextEdit.cursorPosition,
+                                             keyword)
                     intellisenseMenu.close()
                 }
             }
