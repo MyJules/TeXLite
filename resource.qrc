@@ -2,4 +2,7 @@
     <qresource prefix="/icons">
         <file>imgs/icon.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>qml/IntellisenseMenu.qml</file>
+    </qresource>
 </RCC>

@@ -145,6 +145,10 @@ ApplicationWindow {
             SplitView.fillWidth: true
             SplitView.minimumWidth: 300
             SplitView.preferredWidth: 400
+
+            IntellisenseMenu {
+                id: intellisenseMenu
+            }
         }
 
         Loader {
