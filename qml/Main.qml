@@ -129,7 +129,7 @@ ApplicationWindow {
             id: dirView
             visible: false
             SplitView.minimumWidth: 100
-            SplitView.preferredWidth: 150
+            SplitView.preferredWidth: 120
             SplitView.maximumWidth: 300
 
             onFileSelected: function (filePath) {
