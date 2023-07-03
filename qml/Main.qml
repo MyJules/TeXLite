@@ -100,7 +100,6 @@ ApplicationWindow {
                 pdfLoader.item.openPage(pdfLoader.lastPage)
                 break
             case TexEngine.Processing:
-
                 if (pdfLoader.source == "PDFView.qml") {
                     pdfLoader.lastRenderScale = pdfLoader.item.renderScale
                     pdfLoader.lastPage = pdfLoader.item.currentPage
@@ -141,25 +140,11 @@ ApplicationWindow {
             }
         }
 
-        LatexTextEdit {
+        LatexTextEditWithIntellisense {
             id: latexTextEdit
             SplitView.fillWidth: true
             SplitView.minimumWidth: 150
             SplitView.preferredWidth: 200
-
-            IntellisenseMenu {
-                id: intellisenseMenu
-
-                onIntelisenceActivated: {
-                    intellisenseMenu.open()
-                }
-
-                onKeywordSelected: function (keyword) {
-                    latexTextEdit.insertText(latexTextEdit.cursorPosition,
-                                             keyword)
-                    intellisenseMenu.close()
-                }
-            }
         }
 
         Loader {

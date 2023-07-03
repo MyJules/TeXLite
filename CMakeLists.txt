@@ -39,6 +39,7 @@ qt_add_qml_module(appTeXLite
     qml/CompilationErrorView.qml
     qml/IntellisenseMenu.qml
     qml/LatexListModel.qml
+    qml/LatexTextEditWithIntellisense.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES

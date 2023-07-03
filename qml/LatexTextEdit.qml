@@ -7,7 +7,7 @@ import com.file
 import com.highliter
 
 Rectangle {
-    id: latexTextRect
+    id: root
     color: "#292929"
     clip: true
 
@@ -15,8 +15,13 @@ Rectangle {
         latexTextArea.insert(position, text)
     }
 
+    signal dCursorPositionChanged
+
     property alias text: latexTextArea.text
+    property alias textFocus: latexTextArea.focus
     property alias cursorPosition: latexTextArea.cursorPosition
+    property int cursorX: 0
+    property int cursorY: 0
 
     ScrollView {
         id: latexTextAreaScrollView
@@ -29,6 +34,20 @@ Rectangle {
             font.pointSize: 12
             selectByMouse: true
             wrapMode: TextEdit.WordWrap
+
+            onCursorPositionChanged: {
+                let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
+                let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
+                var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
+                var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
+
+                cursorX = latexTextArea.positionToRectangle(
+                            latexTextArea.cursorPosition).x - scrolledLineX
+
+                cursorY = latexTextArea.positionToRectangle(
+                            latexTextArea.cursorPosition).y - scrolledLineY
+                dCursorPositionChanged()
+            }
         }
     }
 

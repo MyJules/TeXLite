@@ -10,6 +10,8 @@ Item {
         radius: 4
         color: "#262626"
         border.color: "#ff4d4d"
+        anchors.rightMargin: 4
+        clip: true
 
         Text {
             id: errorText
