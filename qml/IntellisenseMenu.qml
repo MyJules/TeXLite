@@ -4,10 +4,11 @@ import QtQuick.Controls.Material
 
 Popup {
     id: root
+    clip: true
     focus: true
+    modal: false
     width: 300
     height: 200
-    modal: false
 
     signal intelisenceActivated
     signal keywordSelected(string keyword)

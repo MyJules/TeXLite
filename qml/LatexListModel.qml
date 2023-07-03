@@ -14,10 +14,42 @@ ListModel {
     }
 
     ListElement {
-        keyword: "\\title"
+        keyword: "\\title{}"
     }
 
     ListElement {
-        keyword: "\\author"
+        keyword: "\\author{}"
+    }
+
+    ListElement {
+        keyword: "\\maketitle"
+    }
+
+    ListElement {
+        keyword: "\\documentclass{}"
+    }
+
+    ListElement {
+        keyword: "\\begin{}"
+    }
+
+    ListElement {
+        keyword: "\\end{}"
+    }
+
+    ListElement {
+        keyword: "\\input{}"
+    }
+
+    ListElement {
+        keyword: "\\usepackage"
+    }
+
+    ListElement {
+        keyword: "\\tableofcontents"
+    }
+
+    ListElement {
+        keyword: "\\newpage"
     }
 }
