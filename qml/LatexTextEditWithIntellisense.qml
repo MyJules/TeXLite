@@ -30,6 +30,10 @@ LatexTextEdit {
                 //Enter
             case 16777220:
                 break
+            case Qt.Key_Space:
+                intellisense.close()
+                root.insertText(root.cursorPosition, text)
+                break
             default:
                 root.insertText(root.cursorPosition, text)
                 break
