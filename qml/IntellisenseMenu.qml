@@ -14,7 +14,11 @@ Popup {
     signal keywordSelected(string keyword)
     signal keyPreseed(int key, string text)
 
-    onClosed: listView.currentIndex = 0
+    property string searchWord
+
+    onClosed: {
+        listView.currentIndex = 0
+    }
 
     Shortcut {
         sequence: "Ctrl+Space"
@@ -75,8 +79,15 @@ Popup {
                 }
             }
 
-            model: LatexListModel {}
-            delegate: delegate
+            model: FilterDelegateModel {
+                model: LatexListModel {}
+                filter: search ? model => model.keyword.toLowerCase().indexOf(
+                                     search) !== -1 : null
+                property string search: searchWord.toLowerCase()
+                onSearchChanged: Qt.callLater(update)
+                delegate: delegate
+            }
+
             highlight: highlightDelegate
             highlightMoveDuration: 0
             highlightResizeDuration: 0

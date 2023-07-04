@@ -40,6 +40,7 @@ qt_add_qml_module(appTeXLite
     qml/IntellisenseMenu.qml
     qml/LatexListModel.qml
     qml/LatexTextEditWithIntellisense.qml
+    qml/FilterDelegateModel.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES
