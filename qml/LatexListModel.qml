@@ -11,6 +11,9 @@ ListModel {
         keyword: "\\subsubsection{}"
     }
     ListElement {
+        keyword: "\\newpage"
+    }
+    ListElement {
         keyword: "\\paragraph{}"
     }
     ListElement {
