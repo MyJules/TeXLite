@@ -18,25 +18,15 @@ LatexTextEdit {
             switch (key) {
             case Qt.Key_Left:
                 root.cursorPosition--
-                console.log("left")
-                root.textCursorVisible = true
-
                 break
             case Qt.Key_Right:
                 root.cursorPosition++
-                console.log("right")
-                root.textCursorVisible = true
-
                 break
             case Qt.Key_Backspace:
-                console.log("backspace")
                 root.removeText(root.cursorPosition - 1, root.cursorPosition)
-                root.textCursorVisible = true
-
                 break
             default:
                 root.insertText(root.cursorPosition, text)
-
                 break
             }
         }
