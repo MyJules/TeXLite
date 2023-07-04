@@ -25,6 +25,11 @@ LatexTextEdit {
             case Qt.Key_Backspace:
                 root.removeText(root.cursorPosition - 1, root.cursorPosition)
                 break
+            case Qt.Key_Escape:
+                break
+                //Enter
+            case 16777220:
+                break
             default:
                 root.insertText(root.cursorPosition, text)
                 break
