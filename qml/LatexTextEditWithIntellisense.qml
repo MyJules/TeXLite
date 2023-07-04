@@ -44,6 +44,7 @@ LatexTextEdit {
         }
 
         onIntelisenceActivated: {
+            intellisense.searchWord = ""
             intellisense.x = root.cursorX - 15
             intellisense.y = root.cursorY + 10
             intellisense.focus = true
@@ -58,7 +59,6 @@ LatexTextEdit {
             intellisense.focus = false
             intellisense.close()
             latexTextEdit.textFocus = true
-            intellisense.searchWord = ""
         }
     }
 }
