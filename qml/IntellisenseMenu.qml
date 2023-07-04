@@ -12,6 +12,7 @@ Popup {
 
     signal intelisenceActivated
     signal keywordSelected(string keyword)
+    signal keyPreseed(int key, string text)
 
     onClosed: listView.currentIndex = 0
 
@@ -50,6 +51,7 @@ Popup {
                 if (event.key === 16777220) {
                     keywordSelected(listView.currentItem.text)
                 }
+                keyPreseed(event.key, event.text)
             }
 
             Component {

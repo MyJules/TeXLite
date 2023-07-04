@@ -15,11 +15,16 @@ Rectangle {
         latexTextArea.insert(position, text)
     }
 
+    function removeText(start, end) {
+        latexTextArea.remove(start, end)
+    }
+
     signal dCursorPositionChanged
 
     property alias text: latexTextArea.text
     property alias textFocus: latexTextArea.focus
     property alias cursorPosition: latexTextArea.cursorPosition
+    property alias textCursorVisible: latexTextArea.cursorVisible
     property int cursorX: 0
     property int cursorY: 0
 
