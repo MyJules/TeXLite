@@ -41,8 +41,6 @@ LatexTextEdit {
             intellisense.y = root.cursorY + 10
             intellisense.focus = true
             intellisense.open()
-
-            root.textCursorVisible = true
         }
 
         onKeywordSelected: function (keyword) {

@@ -23,13 +23,6 @@ Popup {
         }
     }
 
-    Shortcut {
-        sequence: "Space"
-        onActivated: {
-            keywordSelected(listView.currentItem.text)
-        }
-    }
-
     Rectangle {
         anchors.fill: parent
         clip: true
