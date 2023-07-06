@@ -119,7 +119,7 @@ ApplicationWindow {
     }
 
     SplitView {
-        id: rowLayout
+        id: splitView
         clip: true
         anchors.fill: parent
         orientation: Qt.Horizontal

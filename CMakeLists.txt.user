@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 10.0.0, 2023-07-04T18:49:22. -->
+<!-- Written by QtCreator 10.0.0, 2023-07-05T21:40:03. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -90,7 +90,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 6.5.0 MSVC2019 64bit</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop Qt 6.5.0 MSVC2019 64bit</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">qt.qt6.650.win64_msvc2019_64_kit</value>
-   <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
+   <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
@@ -398,7 +398,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">E:/MY/TeXLite/build-TeXLite-Desktop_Qt_6_5_0_MSVC2019_64bit-Release</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">E:/MY/TeXLite/build-TeXLite-Desktop_Qt_6_5_0_MSVC2019_64bit-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
