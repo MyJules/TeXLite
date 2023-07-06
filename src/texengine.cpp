@@ -72,26 +72,25 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         engineProcess.setWorkingDirectory(workingFolder);
         engineProcess.setProgram(m_texEngineCommand);
         engineProcess.setArguments(QStringList() << m_texEngineArguments << m_currentFile);
-
-        QObject::connect(&engineProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, workingFolder, &engineProcess, fileName](int exitCode, QProcess::ExitStatus exitStatus) {
-            if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
-                QDir currentDir;
-                QString tempFilePath = QDir::currentPath() + "/temp/" + fileName + ".pdf";
-                bool renamed = currentDir.rename(workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf",
-                                                 tempFilePath);
-                emit compilationFinished(tempFilePath);
-            }
-            else {
-                setState(TexEngine::EngineState::Error);
-                QRegularExpression errorPattern(R"(.*:(\d+).*\n(.*)\n)");
-                QString standardOutput = engineProcess.readAllStandardOutput();
-                auto match = errorPattern.match(standardOutput);
-                emit compilationError(match.captured());
-            }
-            setState(TexEngine::EngineState::Idle);
-        });
-
         engineProcess.start();
         engineProcess.waitForFinished(-1);
+
+        if(engineProcess.exitCode() == 0)
+        {
+            QDir currentDir;
+            QString tempFilePath = QDir::currentPath() + "/temp/" + fileName + ".pdf";
+            bool renamed = currentDir.rename(workingFolder + "/" + QFileInfo(m_currentFile).baseName() + ".pdf" ,
+                                             tempFilePath);
+            emit compilationFinished(tempFilePath);
+        }else
+        {
+            setState(TexEngine::EngineState::Error);
+            QRegularExpression errorPattern(R"(.*:(\d+).*\n(.*)\n)");
+            QString standardOutput = engineProcess.readAllStandardOutput();
+            auto match = errorPattern.match(standardOutput);
+            emit compilationError(match.captured());
+            return;
+        }
+        setState(TexEngine::EngineState::Idle);
     });
 }
