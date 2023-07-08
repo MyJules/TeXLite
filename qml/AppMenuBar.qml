@@ -97,25 +97,15 @@ Row {
         flat: true
         height: 30
         font.pointSize: 10
-        text: "Document"
-        onClicked: docementMenu.open()
+        text: "Save Document"
+        onClicked: saveDocumentDialog.open()
 
-        Menu {
-            id: docementMenu
+        FileDialog {
+            id: saveDocumentDialog
+            title: "Save PDF document"
+            fileMode: FileDialog.SaveFile
 
-            MenuItem {
-                text: "Save document"
-                onClicked: saveDocumentDialog.open()
-
-                FileDialog {
-                    id: saveDocumentDialog
-                    title: "Save PDF document"
-                    fileMode: FileDialog.SaveFile
-
-                    onAccepted: saveDocumentClicked(
-                                    saveDocumentDialog.selectedFile)
-                }
-            }
+            onAccepted: saveDocumentClicked(saveDocumentDialog.selectedFile)
         }
     }
 
