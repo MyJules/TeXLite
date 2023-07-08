@@ -60,3 +60,8 @@ Q_INVOKABLE QString FileSystem::getFileDir(const QString &filePath)
     QFileInfo info(filePath);
     return info.dir().path();
 }
+
+Q_INVOKABLE void FileSystem::copyFile(const QString &from, const QString &to)
+{
+    QFile::copy(QUrl(from).toLocalFile(), QUrl(to).toLocalFile());
+}

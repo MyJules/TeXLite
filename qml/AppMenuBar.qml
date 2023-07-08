@@ -11,6 +11,7 @@ Row {
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
+    signal saveDocumentClicked(string fileName)
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -60,8 +61,6 @@ Row {
                 }
             }
 
-            MenuSeparator {}
-
             MenuItem {
                 text: "Open File"
                 onClicked: {
@@ -77,8 +76,6 @@ Row {
                 }
             }
 
-            MenuSeparator {}
-
             MenuItem {
                 text: "Save File"
 
@@ -92,6 +89,32 @@ Row {
             MenuItem {
                 text: "Exit"
                 onClicked: Qt.quit()
+            }
+        }
+    }
+
+    ToolButton {
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "Document"
+        onClicked: docementMenu.open()
+
+        Menu {
+            id: docementMenu
+
+            MenuItem {
+                text: "Save document"
+                onClicked: saveDocumentDialog.open()
+
+                FileDialog {
+                    id: saveDocumentDialog
+                    title: "Save PDF document"
+                    fileMode: FileDialog.SaveFile
+
+                    onAccepted: saveDocumentClicked(
+                                    saveDocumentDialog.selectedFile)
+                }
             }
         }
     }

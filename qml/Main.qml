@@ -60,6 +60,15 @@ ApplicationWindow {
         onCompileClicked: {
             compile()
         }
+
+        onSaveDocumentClicked: function (filePath) {
+            if (!filePath || !compiledPDFPath)
+                return
+
+            console.log(compiledPDFPath)
+            console.log(filePath)
+            fileSystem.copyFile(compiledPDFPath, filePath)
+        }
     }
 
     footer: AppFooter {

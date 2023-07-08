@@ -18,6 +18,7 @@ public:
     Q_INVOKABLE void newFile(const QString& filePath);
     Q_INVOKABLE void clearTempFolder();
     Q_INVOKABLE QString getFileDir(const QString& filePath);
+    Q_INVOKABLE void copyFile(const QString& from, const QString& to);
 };
 
 #endif // FILESYSTEM_H
