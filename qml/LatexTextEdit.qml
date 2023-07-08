@@ -39,7 +39,7 @@ Rectangle {
             focus: true
             font.pointSize: 12
             selectByMouse: true
-            wrapMode: TextEdit.Wrap
+            wrapMode: TextEdit.NoWrap
 
             onCursorPositionChanged: {
                 let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
