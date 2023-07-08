@@ -52,11 +52,8 @@ Rectangle {
 
                 cursorLine = (cursorRect.y) / (zeroRect.height)
 
-                cursorX = latexTextArea.positionToRectangle(
-                            latexTextArea.cursorPosition).x - scrolledLineX
-
-                cursorY = latexTextArea.positionToRectangle(
-                            latexTextArea.cursorPosition).y - scrolledLineY
+                cursorX = cursorRect.x - scrolledLineX
+                cursorY = cursorRect.y - scrolledLineY
                 dCursorPositionChanged()
             }
         }
