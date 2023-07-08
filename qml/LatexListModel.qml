@@ -17,6 +17,9 @@ ListModel {
         keyword: "\\newpage"
     }
     ListElement {
+        keyword: "\\hline"
+    }
+    ListElement {
         keyword: "\\paragraph{}"
     }
     ListElement {
@@ -24,6 +27,12 @@ ListModel {
     }
     ListElement {
         keyword: "\\part{}"
+    }
+    ListElement {
+        keyword: "\\begin{}"
+    }
+    ListElement {
+        keyword: "\\end{}"
     }
     ListElement {
         keyword: "\\chapter{}"
