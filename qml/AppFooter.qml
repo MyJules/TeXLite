@@ -23,7 +23,7 @@ Row {
     Text {
         id: text
         anchors.verticalCenter: parent.verticalCenter
-        font.pointSize: 10
+        font.pointSize: 10.5
         height: 20
         text: "No File"
         color: "white"
@@ -32,7 +32,7 @@ Row {
     Text {
         id: lineCountText
         anchors.verticalCenter: parent.verticalCenter
-        font.pointSize: 10
+        font.pointSize: 10.5
         height: 20
         text: ""
         color: "white"
