@@ -70,6 +70,7 @@ ApplicationWindow {
     }
 
     footer: AppFooter {
+        id: appFooter
         footerText: currentFilePath ? currentFilePath : "No file selected"
 
         onShowHidePDFClicked: {
@@ -152,6 +153,10 @@ ApplicationWindow {
             SplitView.fillWidth: true
             SplitView.minimumWidth: 150
             SplitView.preferredWidth: 200
+
+            onCursorPositionChanged: {
+                appFooter.foooterLineCountText = ": " + (latexTextEdit.cursorLine + 1)
+            }
         }
 
         Loader {

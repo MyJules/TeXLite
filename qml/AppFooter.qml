@@ -11,7 +11,9 @@ Row {
 
     signal showHidePDFClicked
     signal showHideFileViewCliced
+
     property alias footerText: text.text
+    property alias foooterLineCountText: lineCountText.text
 
     Shortcut {
         sequence: "Ctrl+H"
@@ -24,6 +26,15 @@ Row {
         font.pointSize: 10
         height: 20
         text: "No File"
+        color: "white"
+    }
+
+    Text {
+        id: lineCountText
+        anchors.verticalCenter: parent.verticalCenter
+        font.pointSize: 10
+        height: 20
+        text: ""
         color: "white"
     }
 

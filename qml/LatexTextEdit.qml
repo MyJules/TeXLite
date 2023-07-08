@@ -25,6 +25,7 @@ Rectangle {
     property alias textFocus: latexTextArea.focus
     property alias cursorPosition: latexTextArea.cursorPosition
     property alias textCursorVisible: latexTextArea.cursorVisible
+    property int cursorLine: 0
     property int cursorX: 0
     property int cursorY: 0
 
@@ -38,13 +39,18 @@ Rectangle {
             focus: true
             font.pointSize: 12
             selectByMouse: true
-            wrapMode: TextEdit.WordWrap
+            wrapMode: TextEdit.Wrap
 
             onCursorPositionChanged: {
                 let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
                 let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
                 var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
                 var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
+                var cursorRect = latexTextArea.positionToRectangle(
+                            latexTextArea.cursorPosition)
+                var zeroRect = latexTextArea.positionToRectangle(0)
+
+                cursorLine = (cursorRect.y) / (zeroRect.height)
 
                 cursorX = latexTextArea.positionToRectangle(
                             latexTextArea.cursorPosition).x - scrolledLineX
