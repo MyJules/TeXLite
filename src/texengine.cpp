@@ -3,14 +3,20 @@
 
 #include <QDir>
 #include <QFile>
-#include <QDebug>
 #include <QFileInfo>
-#include <QtConcurrent>
+#include <QRegularExpression>
 
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
     , m_state(TexEngine::EngineState::Idle)
+    , m_compilationProcess(nullptr)
 {
+}
+
+TexEngine::~TexEngine()
+{
+    if(m_compilationProcess)
+        delete m_compilationProcess;
 }
 
 QString TexEngine::texEngineCommand()
@@ -62,20 +68,23 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
 
     if(!isFileExists || currentState == TexEngine::EngineState::Processing) return;
 
+    if(m_compilationProcess){
+        delete m_compilationProcess;
+    }
 
-    auto engineFuture = QtConcurrent::run([this, fileName](){
-        setState(TexEngine::EngineState::Processing);
-        emit compilationStarted();
+    m_compilationProcess = new QProcess;
+    QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
+    m_compilationProcess->setWorkingDirectory(workingFolder);
+    m_compilationProcess->setProgram(m_texEngineCommand);
+    m_compilationProcess->setArguments(QStringList() << m_texEngineArguments << m_currentFile);
+    m_compilationProcess->start();
 
+    setState(TexEngine::EngineState::Processing);
+    emit compilationStarted();
+
+    connect(m_compilationProcess, &QProcess::finished, [this, fileName](int exitCode, QProcess::ExitStatus exitStatus){
         QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
-        QProcess engineProcess;
-        engineProcess.setWorkingDirectory(workingFolder);
-        engineProcess.setProgram(m_texEngineCommand);
-        engineProcess.setArguments(QStringList() << m_texEngineArguments << m_currentFile);
-        engineProcess.start();
-        engineProcess.waitForFinished(-1);
-
-        if(engineProcess.exitCode() == 0)
+        if(exitCode == 0)
         {
             QDir currentDir;
             QString tempFilePath = QDir::currentPath() + "/temp/" + fileName + ".pdf";
@@ -86,11 +95,11 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         {
             setState(TexEngine::EngineState::Error);
             QRegularExpression errorPattern(R"(.*:(\d+).*\n(.*)\n)");
-            QString standardOutput = engineProcess.readAllStandardOutput();
+            QString standardOutput = m_compilationProcess->readAllStandardOutput();
             auto match = errorPattern.match(standardOutput);
             emit compilationError(match.captured());
             return;
         }
         setState(TexEngine::EngineState::Idle);
-    });
+     });
 }

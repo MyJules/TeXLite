@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QQuickItem>
+#include <QProcess>
 #include <QStringList>
 
 class TexEngine : public QObject
@@ -25,6 +26,7 @@ public:
     Q_ENUM(EngineState)
 
     explicit TexEngine(QObject *parent = nullptr);
+    ~TexEngine();
     QString texEngineCommand();
     void setTexEngineCommand(const QString&);
     QString currentFile();
@@ -47,6 +49,7 @@ private:
     QString m_currentFile;
     QStringList m_texEngineArguments;
     EngineState m_state;
+    QProcess *m_compilationProcess;
 };
 
 #endif // TEXENGINE_H
