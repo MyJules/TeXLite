@@ -11,7 +11,7 @@ Item {
 
     //Properties forline count
     property int step: 1
-    property real zeroMargin: 0.5
+    property real zeroMargin: -(latexTextEditWithIntellisense.scrolledLines)
     property real size: latexTextEditWithIntellisense.areaLineCount
     property real _ws: width / size
     property real _hs: height / size
@@ -52,9 +52,9 @@ Item {
         for (var y = 0; y < size; y += step) {
             let yLinePosition = (y + (zeroMargin % step)) * _hs
             let lineValue = Math.floor(firstLine + ((y + (zeroMargin % step))))
-            if (lineValue <= 0)
-                continue
 
+            //            if (lineValue <= 0)
+            //                continue
             ctx.moveTo(0, yLinePosition)
             ctx.text(lineValue, ctx.measureText(lineValue).width / 4,
                      yLinePosition)
