@@ -28,6 +28,9 @@ Rectangle {
     property int cursorLine: 0
     property int cursorX: 0
     property int cursorY: 0
+    property real lineGapSize: 1
+    property int areaLineCount: 0
+    property real scrolledLines: 0
 
     ScrollView {
         id: latexTextAreaScrollView
@@ -51,6 +54,11 @@ Rectangle {
                 var zeroRect = latexTextArea.positionToRectangle(0)
 
                 cursorLine = (cursorRect.y) / (zeroRect.height)
+
+                lineGapSize = zeroRect.height
+                areaLineCount = root.height / lineGapSize
+
+                scrolledLines = scrolledLineY / lineGapSize
 
                 cursorX = cursorRect.x - scrolledLineX
                 cursorY = cursorRect.y - scrolledLineY
