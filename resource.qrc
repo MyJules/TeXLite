@@ -7,6 +7,5 @@
         <file>qml/LatexListModel.qml</file>
         <file>qml/LatexTextEditWithIntellisense.qml</file>
         <file>qml/FilterDelegateModel.qml</file>
-        <file>qml/LatexTextEditWithIntellisenseAndLineCount.qml</file>
     </qresource>
 </RCC>

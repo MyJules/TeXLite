@@ -148,14 +148,14 @@ ApplicationWindow {
             }
         }
 
-        LatexTextEditWithIntellisenseAndLineCount {
+        LatexTextEditWithIntellisense {
             id: latexTextEdit
             SplitView.fillWidth: true
             SplitView.minimumWidth: 150
             SplitView.preferredWidth: 200
 
-            onDdCursorPositionChanged: {
-                appFooter.foooterLineCountText = ": " + (latexTextEdit.corsorLine + 1)
+            onDCursorPositionChanged: {
+                appFooter.foooterLineCountText = ": " + (latexTextEdit.cursorLine + 1)
             }
         }
 
