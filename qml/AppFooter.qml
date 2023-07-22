@@ -11,7 +11,6 @@ Row {
 
     signal showHidePDFClicked
     signal showHideFileViewCliced
-    signal compileClicked
 
     property alias footerText: text.text
     property alias foooterLineCountText: lineCountText.text
@@ -37,14 +36,6 @@ Row {
         height: 20
         text: ""
         color: "white"
-    }
-
-    ToolButton {
-        flat: true
-        height: 30
-        font.pointSize: 10
-        text: "Compile"
-        onClicked: compileClicked()
     }
 
     ToolButton {

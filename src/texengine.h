@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QString>
-#include <QProcess>
 #include <QQuickItem>
+#include <QProcess>
 #include <QStringList>
 
 class TexEngine : public QObject

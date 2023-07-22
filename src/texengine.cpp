@@ -82,7 +82,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
     setState(TexEngine::EngineState::Processing);
     emit compilationStarted();
 
-    connect(m_compilationProcess, &QProcess::finished, [this, fileName](int exitCode, QProcess::ExitStatus){
+    connect(m_compilationProcess, &QProcess::finished, [this, fileName](int exitCode, QProcess::ExitStatus exitStatus){
         QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
         if(exitCode == 0)
         {

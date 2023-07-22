@@ -57,6 +57,10 @@ ApplicationWindow {
             dirView.visible = true
         }
 
+        onCompileClicked: {
+            compile()
+        }
+
         onSaveDocumentClicked: function (filePath) {
             if (!filePath || !compiledPDFPath)
                 return
@@ -77,10 +81,6 @@ ApplicationWindow {
 
         onShowHideFileViewCliced: {
             dirView.visible = !dirView.visible
-        }
-
-        onCompileClicked: {
-            compile()
         }
     }
 

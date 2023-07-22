@@ -6,6 +6,7 @@ import QtQuick.Controls.Material
 Row {
     id: root
 
+    signal compileClicked
     signal createNewFileClicked(string fileName)
     signal saveFileClicked
     signal newFileSelected(string fileName)
@@ -96,46 +97,38 @@ Row {
         flat: true
         height: 30
         font.pointSize: 10
-        text: "LaTeX"
-        onClicked: latexPopup.open()
+        text: "Save Document"
+        onClicked: saveDocumentDialog.open()
+
+        FileDialog {
+            id: saveDocumentDialog
+            title: "Save PDF document"
+            fileMode: FileDialog.SaveFile
+
+            onAccepted: saveDocumentClicked(saveDocumentDialog.selectedFile)
+        }
+    }
+
+    ToolButton {
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "LaTeX Engine"
+        onClicked: latexEndginePopup.popup()
 
         Menu {
-            id: latexPopup
-
-            MenuItem {
-                text: "Save PDF Document"
-
-                onClicked: saveDocumentDialog.open()
-
-                FileDialog {
-                    id: saveDocumentDialog
-                    title: "Save PDF document"
-                    fileMode: FileDialog.SaveFile
-
-                    onAccepted: saveDocumentClicked(
-                                    saveDocumentDialog.selectedFile)
-                }
-            }
-
-            MenuItem {
-                text: "LatexEngine"
-                onClicked: latexEndginePopup.popup()
-
-                Menu {
-                    id: latexEndginePopup
-                    ComboBox {
-                        id: latexEngineComboBox
-                        model: ListModel {
-                            id: model
-                            ListElement {
-                                text: "pdflatex"
-                            }
-                        }
-
-                        onCurrentValueChanged: newEngineSelected(
-                                                   latexEngineComboBox.currentValue)
+            id: latexEndginePopup
+            ComboBox {
+                id: latexEngineComboBox
+                model: ListModel {
+                    id: model
+                    ListElement {
+                        text: "pdflatex"
                     }
                 }
+
+                onCurrentValueChanged: newEngineSelected(
+                                           latexEngineComboBox.currentValue)
             }
         }
     }
@@ -163,5 +156,13 @@ Row {
                 buttons: MessageDialog.Ok
             }
         }
+    }
+
+    ToolButton {
+        flat: true
+        height: 30
+        font.pointSize: 10
+        text: "Compile"
+        onClicked: compileClicked()
     }
 }
