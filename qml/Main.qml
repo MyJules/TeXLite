@@ -74,7 +74,7 @@ ApplicationWindow {
 
             onAccepted: {
                 fileSystem.copyFile(compiledPDFPath,
-                                    saveDocumentDialog.selectedFile + ".pdf")
+                                    saveDocumentDialog.selectedFile)
             }
         }
     }
