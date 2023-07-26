@@ -61,11 +61,21 @@ ApplicationWindow {
             compile()
         }
 
-        onSaveDocumentClicked: function (filePath) {
-            if (!filePath || !compiledPDFPath)
+        onSaveDocumentClicked: {
+            if (!compiledPDFPath)
                 return
+            saveDocumentDialog.open()
+        }
 
-            fileSystem.copyFile(compiledPDFPath, filePath)
+        FileDialog {
+            id: saveDocumentDialog
+            title: "Save PDF document"
+            fileMode: FileDialog.SaveFile
+
+            onAccepted: {
+                fileSystem.copyFile(compiledPDFPath,
+                                    saveDocumentDialog.selectedFile + ".pdf")
+            }
         }
     }
 

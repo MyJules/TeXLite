@@ -11,7 +11,7 @@ Row {
     signal saveFileClicked
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
-    signal saveDocumentClicked(string fileName)
+    signal saveDocumentClicked
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -98,15 +98,7 @@ Row {
         height: 30
         font.pointSize: 10
         text: "Save Document"
-        onClicked: saveDocumentDialog.open()
-
-        FileDialog {
-            id: saveDocumentDialog
-            title: "Save PDF document"
-            fileMode: FileDialog.SaveFile
-
-            onAccepted: saveDocumentClicked(saveDocumentDialog.selectedFile)
-        }
+        onClicked: saveDocumentClicked()
     }
 
     ToolButton {
