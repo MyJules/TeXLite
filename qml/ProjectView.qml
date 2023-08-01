@@ -8,7 +8,6 @@ Item {
     id: root
 
     signal newFileSelected(string fileName)
-    signal newProjectCreated(string projectPath)
 
     RowLayout {
         anchors.fill: parent
@@ -34,13 +33,6 @@ Item {
 
                     onAccepted: newFileSelected(openFileDialog.selectedFile)
                 }
-            }
-
-            Button {
-                text: "Create Project"
-                flat: true
-                Layout.fillWidth: true
-                Material.roundedScale: Material.ExtraSmallScale
             }
         }
 
