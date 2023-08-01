@@ -16,6 +16,8 @@ Row {
 
     property alias saveDocumentButtonEnabled: saveDocumentButton.enabled
     property alias comileButtonEnabled: compileButton.enabled
+    property alias saveButtonEnabled: saveFileButton.enabled
+    property alias closeButtonEnabled: closeFileButton.enabled
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -81,6 +83,7 @@ Row {
             }
 
             MenuItem {
+                id: saveFileButton
                 text: "Save File"
 
                 onClicked: {
@@ -91,6 +94,7 @@ Row {
             MenuSeparator {}
 
             MenuItem {
+                id: closeFileButton
                 text: "Close File"
                 onClicked: {
                     closeFileClicked()

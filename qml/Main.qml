@@ -33,6 +33,8 @@ ApplicationWindow {
 
         saveDocumentButtonEnabled: editor.visible
         comileButtonEnabled: editor.visible
+        saveButtonEnabled: editor.visible
+        closeButtonEnabled: editor.visible
 
         onNewEngineSelected: function (engineName) {
             texEngines.engineName = engineName
