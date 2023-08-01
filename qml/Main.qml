@@ -21,7 +21,7 @@ ApplicationWindow {
 
     Material.theme: Material.Dark
     Material.accent: Material.Grey
-    Material.roundedScale: Material.NotRounded
+    Material.roundedScale: Material.ExtraSmallScale
 
     property string currentFilePath
     property string compiledPDFPath
