@@ -14,10 +14,10 @@ Item {
 
     TexEngine {
         id: pdfLatex
-        currentFile: processingFile
         texEngineCommand: "pdflatex"
         texEngineArguments: ["-halt-on-error", "-file-line-error", "-interaction=nonstopmode"]
 
+        currentFile: processingFile
         onCompilationFinished: filePath => dCompilationFinished(filePath)
         onCompilationStarted: dCompilationStarted()
         onCompilationError: error => dCompilationError(error)
