@@ -94,7 +94,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         }else
         {
             setState(TexEngine::EngineState::Error);
-            QRegularExpression errorPattern(R"(.*:(\d+).*\n(.*)\n)");
+            static QRegularExpression errorPattern(R"(.*:(\d+).*\n(.*)\n)");
             QString standardOutput = m_compilationProcess->readAllStandardOutput();
             auto match = errorPattern.match(standardOutput);
             emit compilationError(match.captured());
