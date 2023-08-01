@@ -15,7 +15,7 @@ Item {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.maximumWidth: 300
+            Layout.maximumWidth: 380
 
             Button {
                 text: "Open File"

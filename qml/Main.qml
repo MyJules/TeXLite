@@ -37,7 +37,7 @@ ApplicationWindow {
         }
 
         onNewFileSelected: function (fileName) {
-            onNewFileSelected(fileName)
+            root.onNewFileSelected(fileName)
         }
 
         onSaveFileClicked: {
