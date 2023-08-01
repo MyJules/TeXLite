@@ -73,6 +73,15 @@ ApplicationWindow {
                                     saveDocumentDialog.selectedFile)
             }
         }
+
+        onCloseFileClicked: {
+            clearPDFSource()
+            compiledPDFPath = ""
+            currentFilePath = ""
+            appFooter.foooterLineCountText = ""
+            editor.visible = false
+            projectView.visible = true
+        }
     }
 
     footer: AppFooter {

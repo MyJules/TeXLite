@@ -12,6 +12,7 @@ Row {
     signal newFileSelected(string fileName)
     signal newEngineSelected(string engineName)
     signal saveDocumentClicked
+    signal closeFileClicked
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -84,6 +85,14 @@ Row {
                 }
             }
 
+            MenuSeparator {}
+
+            MenuItem {
+                text: "Close File"
+                onClicked: {
+                    closeFileClicked()
+                }
+            }
             MenuSeparator {}
 
             MenuItem {

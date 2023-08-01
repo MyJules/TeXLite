@@ -18,7 +18,7 @@ Item {
             Layout.maximumWidth: 380
 
             Button {
-                text: "Open File"
+                text: "Open Project"
                 flat: true
                 Layout.fillWidth: true
                 Material.roundedScale: Material.ExtraSmallScale
@@ -37,7 +37,7 @@ Item {
             }
 
             Button {
-                text: "Create project"
+                text: "Create Project"
                 flat: true
                 Layout.fillWidth: true
                 Material.roundedScale: Material.ExtraSmallScale
