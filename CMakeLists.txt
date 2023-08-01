@@ -41,6 +41,7 @@ qt_add_qml_module(appTeXLite
     qml/LatexListModel.qml
     qml/LatexTextEditWithIntellisense.qml
     qml/FilterDelegateModel.qml
+    qml/ProjectView.qml
 )
 
 set_target_properties(appTeXLite PROPERTIES

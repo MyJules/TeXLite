@@ -37,11 +37,7 @@ ApplicationWindow {
         }
 
         onNewFileSelected: function (fileName) {
-            setProcessingFile(fileName)
-            loadFileWithDir(fileName)
-            pdfLoader.visible = true
-            dirView.visible = true
-            compile()
+            onNewFileSelected(fileName)
         }
 
         onSaveFileClicked: {
@@ -53,8 +49,8 @@ ApplicationWindow {
             fileSystem.newFile(fileName)
             setProcessingFile(fileName)
             loadFileWithDir(fileName)
-            pdfLoader.visible = true
-            dirView.visible = true
+            projectView.visible = false
+            editor.visible = true
         }
 
         onCompileClicked: {
@@ -136,15 +132,26 @@ ApplicationWindow {
         }
     }
 
+    ProjectView {
+        id: projectView
+        visible: true
+        anchors.fill: parent
+
+        onNewFileSelected: function (fileName) {
+            root.onNewFileSelected(fileName)
+        }
+    }
+
     SplitView {
-        id: rowLayout
+        id: editor
+        visible: false
         clip: true
         anchors.fill: parent
         orientation: Qt.Horizontal
 
         DirView {
             id: dirView
-            visible: false
+            visible: true
             SplitView.minimumWidth: 100
             SplitView.preferredWidth: 120
             SplitView.maximumWidth: 300
@@ -172,7 +179,7 @@ ApplicationWindow {
         Loader {
             id: pdfLoader
             source: "PDFView.qml"
-            visible: false
+            visible: true
 
             property real lastRenderScale: 0
             property int lastPage: 0
@@ -206,5 +213,13 @@ ApplicationWindow {
         if (pdfLoader.source == "PDFView.qml") {
             pdfLoader.item.source = ""
         }
+    }
+
+    function onNewFileSelected(fileName) {
+        setProcessingFile(fileName)
+        loadFileWithDir(fileName)
+        projectView.visible = false
+        editor.visible = true
+        compile()
     }
 }
