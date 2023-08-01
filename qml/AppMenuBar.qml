@@ -14,6 +14,9 @@ Row {
     signal saveDocumentClicked
     signal closeFileClicked
 
+    property alias saveDocumentButtonEnabled: saveDocumentButton.enabled
+    property alias comileButtonEnabled: compileButton.enabled
+
     Shortcut {
         context: Qt.ApplicationShortcut
         sequences: [StandardKey.Save]
@@ -103,6 +106,7 @@ Row {
     }
 
     ToolButton {
+        id: saveDocumentButton
         flat: true
         height: 30
         font.pointSize: 10
@@ -160,6 +164,7 @@ Row {
     }
 
     ToolButton {
+        id: compileButton
         flat: true
         height: 30
         font.pointSize: 10

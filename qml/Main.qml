@@ -31,6 +31,9 @@ ApplicationWindow {
     menuBar: AppMenuBar {
         id: appMenuBar
 
+        saveDocumentButtonEnabled: editor.visible
+        comileButtonEnabled: editor.visible
+
         onNewEngineSelected: function (engineName) {
             texEngines.engineName = engineName
             compile()
@@ -86,7 +89,11 @@ ApplicationWindow {
 
     footer: AppFooter {
         id: appFooter
+
         footerText: currentFilePath ? currentFilePath : "No file selected"
+
+        showHideFilesEnabled: editor.visible
+        showHidePDFEnabled: editor.visible
 
         onShowHidePDFClicked: {
             pdfLoader.visible = !pdfLoader.visible

@@ -14,6 +14,8 @@ Row {
 
     property alias footerText: text.text
     property alias foooterLineCountText: lineCountText.text
+    property alias showHideFilesEnabled: showHideFilesButton.enabled
+    property alias showHidePDFEnabled: showHidePDFButton.enabled
 
     Shortcut {
         sequence: "Ctrl+H"
@@ -39,6 +41,7 @@ Row {
     }
 
     ToolButton {
+        id: showHideFilesButton
         flat: true
         font.pointSize: 10
         height: 30
@@ -48,6 +51,7 @@ Row {
     }
 
     ToolButton {
+        id: showHidePDFButton
         flat: true
         font.pointSize: 10
         height: 30
