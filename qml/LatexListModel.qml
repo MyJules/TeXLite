@@ -38,6 +38,9 @@ ListModel {
         keyword: "\\chapter{}"
     }
     ListElement {
+        keyword: "\\input{}"
+    }
+    ListElement {
         keyword: "\\tableofcontents"
     }
     ListElement {

@@ -52,8 +52,6 @@ ApplicationWindow {
 
         onCreateNewFileClicked: function (fileName) {
             fileSystem.newFile(fileName)
-            setProcessingFile(fileName)
-            loadFileWithDir(fileName)
             projectView.visible = false
             editor.visible = true
         }
