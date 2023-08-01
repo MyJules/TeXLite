@@ -20,6 +20,7 @@ Item {
                 text: "Open Project"
                 flat: true
                 Layout.fillWidth: true
+                Layout.leftMargin: 4
                 Material.roundedScale: Material.ExtraSmallScale
 
                 onClicked: {
@@ -39,6 +40,8 @@ Item {
         Rectangle {
             color: '#b3b3b3'
             clip: true
+            radius: 3
+            Layout.rightMargin: 4
 
             Layout.fillWidth: true
             Layout.fillHeight: true
