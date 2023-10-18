@@ -34,7 +34,7 @@ Popup {
         clip: true
         radius: 3
         color: "#242323"
-        border.color: "#b5b5b5"
+        border.color: "#363945"
 
         ListView {
             id: listView
@@ -56,7 +56,7 @@ Popup {
             Component {
                 id: highlightDelegate
                 Rectangle {
-                    color: "#7a7a7a77"
+                    color: "#363945"
                     radius: 3
                 }
             }
