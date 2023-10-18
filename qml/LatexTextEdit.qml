@@ -24,12 +24,17 @@ Rectangle {
         return latexTextArea.selectedText
     }
 
+    function deselectText() {
+        latexTextArea.deselect()
+    }
+
     signal dCursorPositionChanged
 
     property alias text: latexTextArea.text
     property alias textFocus: latexTextArea.focus
     property alias cursorPosition: latexTextArea.cursorPosition
     property alias textCursorVisible: latexTextArea.cursorVisible
+    property alias textPointSize: latexTextArea.font.pointSize
     property int cursorLine: 0
     property int cursorX: 0
     property int cursorY: 0

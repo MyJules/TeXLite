@@ -11,6 +11,7 @@ Popup {
     background: Item {}
 
     signal intelisenceActivated
+    signal intelisenseDisactivated
     signal keywordSelected(string keyword)
     signal keyPreseed(int key, string text)
 
@@ -18,6 +19,7 @@ Popup {
 
     onClosed: {
         listView.currentIndex = 0
+        intelisenseDisactivated()
     }
 
     Shortcut {

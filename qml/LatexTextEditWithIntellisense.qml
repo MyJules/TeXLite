@@ -3,6 +3,26 @@ import QtQuick
 LatexTextEdit {
     id: root
 
+    Shortcut {
+        sequence: "F2"
+        onActivated: {
+            if (root.textPointSize > 19)
+                return
+
+            root.textPointSize += 1
+        }
+    }
+
+    Shortcut {
+        sequence: "F1"
+        onActivated: {
+            if (root.textPointSize < 6)
+                return
+
+            root.textPointSize -= 1
+        }
+    }
+
     onDCursorPositionChanged: {
         if (!intellisense.opened)
             return
@@ -47,6 +67,10 @@ LatexTextEdit {
             placeIntelisense(root.cursorX, root.cursorY)
             intellisense.focus = true
             intellisense.open()
+        }
+
+        onIntelisenseDisactivated: {
+            root.deselectText()
         }
 
         onKeywordSelected: function (keyword) {
