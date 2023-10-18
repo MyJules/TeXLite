@@ -10,7 +10,6 @@ Row {
     signal createNewFileClicked(string fileName)
     signal saveFileClicked
     signal newFileSelected(string fileName)
-    signal newEngineSelected(string engineName)
     signal saveDocumentClicked
     signal closeFileClicked
 
@@ -116,30 +115,6 @@ Row {
         font.pointSize: 10
         text: "Save Document"
         onClicked: saveDocumentClicked()
-    }
-
-    ToolButton {
-        flat: true
-        height: 30
-        font.pointSize: 10
-        text: "LaTeX Engine"
-        onClicked: latexEndginePopup.popup()
-
-        Menu {
-            id: latexEndginePopup
-            ComboBox {
-                id: latexEngineComboBox
-                model: ListModel {
-                    id: model
-                    ListElement {
-                        text: "pdflatex"
-                    }
-                }
-
-                onCurrentValueChanged: newEngineSelected(
-                                           latexEngineComboBox.currentValue)
-            }
-        }
     }
 
     ToolButton {

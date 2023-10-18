@@ -36,11 +36,6 @@ ApplicationWindow {
         saveButtonEnabled: editor.visible
         closeButtonEnabled: editor.visible
 
-        onNewEngineSelected: function (engineName) {
-            texEngines.engineName = engineName
-            compile()
-        }
-
         onNewFileSelected: function (fileName) {
             root.onNewFileSelected(fileName)
         }
