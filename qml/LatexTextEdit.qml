@@ -19,6 +19,11 @@ Rectangle {
         latexTextArea.remove(start, end)
     }
 
+    function selectColsestWord() {
+        latexTextArea.selectWord()
+        return latexTextArea.selectedText
+    }
+
     signal dCursorPositionChanged
 
     property alias text: latexTextArea.text
@@ -43,6 +48,7 @@ Rectangle {
             font.pointSize: 12
             selectByMouse: true
             wrapMode: TextEdit.NoWrap
+            placeholderText: "LaTeX Editor"
 
             onCursorPositionChanged: {
                 let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position

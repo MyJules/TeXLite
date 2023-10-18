@@ -90,7 +90,16 @@ ApplicationWindow {
     footer: AppFooter {
         id: appFooter
 
-        footerText: currentFilePath ? currentFilePath : "No file selected"
+        footerText: {
+            if (currentFilePath) {
+                var fileNameRegexp = /\/([^/]+)$/
+                var match = fileNameRegexp.exec(currentFilePath)
+
+                return match[1]
+            } else {
+                return "No file selected"
+            }
+        }
 
         showHideFilesEnabled: editor.visible
         showHidePDFEnabled: editor.visible

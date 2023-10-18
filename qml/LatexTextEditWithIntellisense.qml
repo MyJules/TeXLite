@@ -7,8 +7,7 @@ LatexTextEdit {
         if (!intellisense.opened)
             return
 
-        intellisense.x = root.cursorX - 15
-        intellisense.y = root.cursorY + 10
+        placeIntelisense(root.cursorX, root.cursorY)
     }
 
     IntellisenseMenu {
@@ -44,9 +43,8 @@ LatexTextEdit {
         }
 
         onIntelisenceActivated: {
-            intellisense.searchWord = ""
-            intellisense.x = root.cursorX - 15
-            intellisense.y = root.cursorY + 10
+            intellisense.searchWord = root.selectColsestWord()
+            placeIntelisense(root.cursorX, root.cursorY)
             intellisense.focus = true
             intellisense.open()
         }
@@ -60,5 +58,22 @@ LatexTextEdit {
             intellisense.close()
             latexTextEdit.textFocus = true
         }
+    }
+
+    function placeIntelisense(x, y) {
+        let farRight = x + intellisense.width
+        let farBottom = y + intellisense.height
+
+        if (farRight > root.width) {
+            x += (root.width - farRight)
+        }
+
+        if (farBottom > root.height) {
+            y += (root.height - farBottom)
+            x += 5
+        }
+
+        intellisense.x = x - 15
+        intellisense.y = y + 10
     }
 }

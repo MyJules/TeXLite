@@ -38,7 +38,7 @@ Rectangle {
     }
 
     Rectangle {
-        color: "gray"
+        color: "#7a7a7a77"
         implicitWidth: row.implicitWidth
         implicitHeight: row.implicitHeight
         radius: 4
