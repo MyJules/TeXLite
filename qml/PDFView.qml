@@ -14,9 +14,13 @@ Rectangle {
         goToPageTimer.start()
     }
 
+    function reset() {
+        view.resetScale()
+    }
+
     property int openPageNum: 0
     property alias source: doc.source
-    property alias renderScale: view.renderScale
+    property alias scale: view.renderScale
     property alias currentPage: view.currentPage
 
     Timer {
@@ -24,7 +28,7 @@ Rectangle {
         interval: 20
         running: true
         repeat: false
-        onTriggered: view.goToLocation(openPageNum, Qt.point(0, 0), renderScale)
+        onTriggered: view.goToLocation(openPageNum, Qt.point(0, 0), scale)
     }
 
     PdfDocument {
@@ -35,6 +39,7 @@ Rectangle {
         id: view
         anchors.fill: parent
         document: doc
+        renderScale: 1
     }
 
     Rectangle {
@@ -42,6 +47,7 @@ Rectangle {
         implicitWidth: row.implicitWidth
         implicitHeight: row.implicitHeight
         radius: 4
+        visible: false
 
         RowLayout {
             id: row

@@ -130,13 +130,14 @@ ApplicationWindow {
             case TexEngine.Idle:
                 pdfLoader.source = "PDFView.qml"
                 pdfLoader.item.source = compiledPDFPath
-                pdfLoader.item.renderScale = pdfLoader.lastRenderScale
+                pdfLoader.item.scale = pdfLoader.lastRenderScale
                 pdfLoader.item.openPage(pdfLoader.lastPage)
                 break
             case TexEngine.Processing:
                 if (pdfLoader.source == "PDFView.qml") {
-                    pdfLoader.lastRenderScale = pdfLoader.item.renderScale
+                    pdfLoader.lastRenderScale = pdfLoader.item.scale
                     pdfLoader.lastPage = pdfLoader.item.currentPage
+                    pdfLoader.item.reset()
                 }
 
                 clearPDFSource()
@@ -171,7 +172,7 @@ ApplicationWindow {
 
         DirView {
             id: dirView
-            visible: true
+            visible: false
             SplitView.minimumWidth: 100
             SplitView.preferredWidth: 120
             SplitView.maximumWidth: 300

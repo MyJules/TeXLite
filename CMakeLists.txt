@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set (CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Concurrent Pdf)
+find_package(Qt6 REQUIRED COMPONENTS Quick Concurrent Pdf)
 
 include_directories(src)
 
