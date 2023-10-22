@@ -58,6 +58,8 @@ ApplicationWindow {
         onSaveDocumentClicked: {
             if (!compiledPDFPath)
                 return
+            fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
+            compileForce()
             saveDocumentDialog.open()
         }
 
@@ -217,6 +219,10 @@ ApplicationWindow {
     function compile() {
         if (!pdfLoader.visible)
             return
+        texEngines.currentEngine.compileToTempFolder(Date.now() + "")
+    }
+
+    function compileForce() {
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")
     }
 

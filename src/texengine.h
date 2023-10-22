@@ -27,14 +27,6 @@ public:
 
     explicit TexEngine(QObject *parent = nullptr);
     ~TexEngine();
-    QString texEngineCommand();
-    void setTexEngineCommand(const QString&);
-    QString currentFile();
-    void setCurrentFile(const QString&);
-    QStringList texEngineArguments();
-    void setTexEngineArguments(const QStringList&);
-    EngineState state();
-    void setState(EngineState);
     Q_INVOKABLE void compileToTempFolder(const QString);
 
 signals:
@@ -45,6 +37,15 @@ signals:
     void compilationError(const QString&);
 
 private:
+    QString texEngineCommand();
+    void setTexEngineCommand(const QString&);
+    QString currentFile();
+    void setCurrentFile(const QString&);
+    QStringList texEngineArguments();
+    void setTexEngineArguments(const QStringList&);
+    EngineState state();
+    void setState(EngineState);
+
     QString m_texEngineCommand;
     QString m_currentFile;
     QStringList m_texEngineArguments;

@@ -42,59 +42,59 @@ Rectangle {
         renderScale: 1
     }
 
-    Rectangle {
-        color: "#7a7a7a77"
-        implicitWidth: row.implicitWidth
-        implicitHeight: row.implicitHeight
-        radius: 4
-        visible: false
+    //    Rectangle {
+    //        color: "#7a7a7a77"
+    //        implicitWidth: row.implicitWidth
+    //        implicitHeight: row.implicitHeight
+    //        radius: 4
+    //        visible: true
 
-        RowLayout {
-            id: row
-            spacing: 10
-            anchors.topMargin: 10
+    //        RowLayout {
+    //            id: row
+    //            spacing: 10
+    //            anchors.topMargin: 10
 
-            ToolButton {
-                text: " + "
-                height: 24
-                flat: true
-                font.pointSize: 14
+    //            ToolButton {
+    //                text: " + "
+    //                height: 24
+    //                flat: true
+    //                font.pointSize: 14
 
-                onClicked: {
-                    view.renderScale *= Math.sqrt(2)
-                }
-            }
-            ToolButton {
-                text: " - "
-                height: 24
-                flat: true
-                font.pointSize: 14
+    //                onClicked: {
+    //                    view.renderScale *= Math.sqrt(2)
+    //                }
+    //            }
+    //            ToolButton {
+    //                text: " - "
+    //                height: 24
+    //                flat: true
+    //                font.pointSize: 14
 
-                onClicked: {
-                    view.renderScale /= Math.sqrt(2)
-                }
-            }
-            ToolButton {
-                text: " <-> "
-                height: 24
-                flat: true
-                font.pointSize: 14
+    //                onClicked: {
+    //                    view.renderScale /= Math.sqrt(2)
+    //                }
+    //            }
+    //            ToolButton {
+    //                text: " <-> "
+    //                height: 24
+    //                flat: true
+    //                font.pointSize: 14
 
-                onClicked: {
-                    view.scaleToWidth(root.width, root.height)
-                }
-            }
+    //                onClicked: {
+    //                    view.scaleToWidth(root.width, root.height)
+    //                }
+    //            }
 
-            ToolButton {
-                text: " |-| "
-                height: 24
-                flat: true
-                font.pointSize: 14
+    //            ToolButton {
+    //                text: " |-| "
+    //                height: 24
+    //                flat: true
+    //                font.pointSize: 14
 
-                onClicked: {
-                    view.scaleToPage(root.width, root.height)
-                }
-            }
-        }
-    }
+    //                onClicked: {
+    //                    view.scaleToPage(root.width, root.height)
+    //                }
+    //            }
+    //        }
+    //    }
 }
