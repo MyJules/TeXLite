@@ -31,6 +31,8 @@ ApplicationWindow {
     menuBar: AppMenuBar {
         id: appMenuBar
 
+        property bool saveDocumentClickedFlag: false
+
         saveDocumentButtonEnabled: editor.visible
         comileButtonEnabled: editor.visible
         saveButtonEnabled: editor.visible
@@ -60,7 +62,7 @@ ApplicationWindow {
                 return
             fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
             compileForce()
-            saveDocumentDialog.open()
+            appMenuBar.saveDocumentClickedFlag = true
         }
 
         FileDialog {
@@ -130,24 +132,29 @@ ApplicationWindow {
         onDStateChanged: {
             switch (currentEngine.state) {
             case TexEngine.Idle:
-                pdfLoader.source = "PDFView.qml"
+                pdfLoader.sourceComponent = pdfViewComponent
                 pdfLoader.item.source = compiledPDFPath
                 pdfLoader.item.scale = pdfLoader.lastRenderScale
                 pdfLoader.item.openPage(pdfLoader.lastPage)
+
+                if (appMenuBar.saveDocumentClickedFlag) {
+                    appMenuBar.saveDocumentClickedFlag = false
+                    saveDocumentDialog.open()
+                }
+
                 break
             case TexEngine.Processing:
-                if (pdfLoader.source == "PDFView.qml") {
+                if (pdfLoader.sourceComponent == pdfViewComponent) {
                     pdfLoader.lastRenderScale = pdfLoader.item.scale
                     pdfLoader.lastPage = pdfLoader.item.currentPage
-                    pdfLoader.item.reset()
                 }
 
                 clearPDFSource()
-                pdfLoader.source = "BusyPDFIndicator.qml"
+                pdfLoader.sourceComponent = bisyPDFIndicatorComponent
                 break
             case TexEngine.Error:
                 clearPDFSource()
-                pdfLoader.source = "CompilationErrorView.qml"
+                pdfLoader.sourceComponent = compilationErrorViewComponent
                 break
             default:
                 break
@@ -201,7 +208,7 @@ ApplicationWindow {
 
         Loader {
             id: pdfLoader
-            source: "PDFView.qml"
+            sourceComponent: pdfViewComponent
             visible: true
 
             property real lastRenderScale: 0
@@ -209,6 +216,20 @@ ApplicationWindow {
 
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
+        }
+
+        Component {
+            id: pdfViewComponent
+            PDFView {}
+        }
+        Component {
+            id: bisyPDFIndicatorComponent
+            BusyPDFIndicator {}
+        }
+
+        Component {
+            id: compilationErrorViewComponent
+            CompilationErrorView {}
         }
     }
 

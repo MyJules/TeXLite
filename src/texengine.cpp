@@ -72,7 +72,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
         delete m_compilationProcess;
     }
 
-    m_compilationProcess = new QProcess;
+    m_compilationProcess = new QProcess(this);
     QString workingFolder = QFileInfo(m_currentFile).dir().canonicalPath();
     m_compilationProcess->setWorkingDirectory(workingFolder);
     m_compilationProcess->setProgram(m_texEngineCommand);
