@@ -60,19 +60,21 @@ Rectangle {
                 let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
                 var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
                 var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
-                var cursorRect = latexTextArea.positionToRectangle(
-                            latexTextArea.cursorPosition)
                 var zeroRect = latexTextArea.positionToRectangle(0)
 
-                cursorLine = (cursorRect.y) / (zeroRect.height)
+                cursorLine = (cursorRectangle.y - zeroRect.y) / (cursorRectangle.height)
 
-                lineGapSize = zeroRect.height
+                lineGapSize = cursorRectangle.height
                 areaLineCount = root.height / lineGapSize
 
                 scrolledLines = scrolledLineY / lineGapSize
 
-                cursorX = cursorRect.x - scrolledLineX
-                cursorY = cursorRect.y - scrolledLineY
+                var mappedGlobal = mapToGlobal(cursorRectangle.x,
+                                               cursorRectangle.y)
+                var mapped = root.mapFromGlobal(mappedGlobal.x, mappedGlobal.y)
+                cursorX = mapped.x
+                cursorY = mapped.y
+
                 dCursorPositionChanged()
             }
         }
