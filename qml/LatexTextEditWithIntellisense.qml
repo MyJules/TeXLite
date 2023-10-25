@@ -85,15 +85,23 @@ LatexTextEdit {
     }
 
     function placeIntelisense(x, y) {
-        let farRight = x + intellisense.width - 10
-        let farBottom = y + intellisense.height - 15
+        let farRight = x + intellisense.width - 12
+        let farBottom = y + intellisense.height + 10
 
-        if (farRight > root.width) {
+        if (farRight > root.width - 12) {
             x += (root.width - farRight)
         }
 
-        if (farBottom > root.height) {
+        if (farBottom > root.height + 10) {
             y += (root.height - farBottom)
+        }
+
+        if (x < -12) {
+            y = 12
+        }
+
+        if (y < 10) {
+            y = 10
         }
 
         intellisense.x = x - 12

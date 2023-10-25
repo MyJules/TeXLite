@@ -47,6 +47,11 @@ Rectangle {
         anchors.fill: parent
         clip: true
 
+        ScrollBar.vertical.onPositionChanged: {
+            calculateCoords()
+            dCursorPositionChanged()
+        }
+
         TextArea {
             id: latexTextArea
             focus: true
@@ -56,25 +61,7 @@ Rectangle {
             placeholderText: "LaTeX Editor"
 
             onCursorPositionChanged: {
-                let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
-                let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
-                var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
-                var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
-                var zeroRect = latexTextArea.positionToRectangle(0)
-
-                cursorLine = (cursorRectangle.y - zeroRect.y) / (cursorRectangle.height)
-
-                lineGapSize = cursorRectangle.height
-                areaLineCount = root.height / lineGapSize
-
-                scrolledLines = scrolledLineY / lineGapSize
-
-                var mappedGlobal = mapToGlobal(cursorRectangle.x,
-                                               cursorRectangle.y)
-                var mapped = root.mapFromGlobal(mappedGlobal.x, mappedGlobal.y)
-                cursorX = mapped.x
-                cursorY = mapped.y
-
+                calculateCoords()
                 dCursorPositionChanged()
             }
         }
@@ -138,5 +125,28 @@ Rectangle {
     TextCharFormat {
         id: commentFormat
         foreground: "gray"
+    }
+
+    function calculateCoords() {
+        let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
+        let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
+        var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
+        var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
+        var zeroRect = latexTextArea.positionToRectangle(0)
+
+        cursorLine = (latexTextArea.cursorRectangle.y - zeroRect.y)
+                / (latexTextArea.cursorRectangle.height)
+
+        lineGapSize = latexTextArea.cursorRectangle.height
+        areaLineCount = root.height / lineGapSize
+
+        scrolledLines = scrolledLineY / lineGapSize
+
+        var mappedGlobal = latexTextArea.mapToGlobal(
+                    latexTextArea.cursorRectangle.x,
+                    latexTextArea.cursorRectangle.y)
+        var mapped = root.mapFromGlobal(mappedGlobal.x, mappedGlobal.y)
+        cursorX = mapped.x
+        cursorY = mapped.y
     }
 }
