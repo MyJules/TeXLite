@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
 DelegateModel {
+    signal updated
     property var filter: null
     onFilterChanged: Qt.callLater(update)
     groups: [
@@ -26,6 +27,7 @@ DelegateModel {
                 continue
             allItems.setGroups(index, 1, ["all", "visible"])
         }
+        updated()
     }
     Component.onCompleted: Qt.callLater(update)
 }

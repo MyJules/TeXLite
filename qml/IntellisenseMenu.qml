@@ -17,9 +17,35 @@ Popup {
 
     property string searchWord
 
+    function setNoSuggestionState() {
+        root.width = 300
+        root.height = 45
+        noSuggestionText.visible = true
+    }
+
+    function setSuggestionState() {
+        root.width = 300
+        root.height = 200
+        noSuggestionText.visible = false
+    }
+
+    function checkSuggestionState() {
+        if (listView.count == 0) {
+            setNoSuggestionState()
+        } else {
+            setSuggestionState()
+        }
+    }
+
+    onOpened: {
+        setSuggestionState()
+        checkSuggestionState()
+    }
+
     onClosed: {
         listView.currentIndex = 0
         intelisenseDisactivated()
+        noSuggestionText.visible = false
     }
 
     Shortcut {
@@ -30,11 +56,22 @@ Popup {
     }
 
     Rectangle {
+        id: inteliRect
         anchors.fill: parent
         clip: true
         radius: 3
         color: "#242323"
         border.color: "#363945"
+
+        Text {
+            id: noSuggestionText
+            text: "No suggestions"
+            visible: false
+            color: "white"
+            font.pointSize: 10
+            anchors.left: inteliRect.left
+            anchors.leftMargin: 4
+        }
 
         ListView {
             id: listView
@@ -48,7 +85,11 @@ Popup {
             Keys.onPressed: function (event) {
                 //Qt.Key_Enter
                 if (event.key === 16777220) {
-                    keywordSelected(listView.currentItem.text)
+                    if (listView.currentItem) {
+                        keywordSelected(listView.currentItem.text)
+                    } else {
+                        root.close()
+                    }
                 }
                 keyPreseed(event.key, event.text)
             }
@@ -88,6 +129,9 @@ Popup {
                 property string search: searchWord.toLowerCase()
                 onSearchChanged: Qt.callLater(update)
                 delegate: delegate
+                onUpdated: {
+                    checkSuggestionState()
+                }
             }
 
             highlight: highlightDelegate
