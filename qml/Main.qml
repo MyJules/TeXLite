@@ -202,7 +202,8 @@ ApplicationWindow {
             SplitView.preferredWidth: 200
 
             onDCursorPositionChanged: {
-                appFooter.foooterLineCountText = ": " + (latexTextEdit.cursorLine + 1)
+                appFooter.foooterLineCountText
+                        = editor.visible ? ": " + (latexTextEdit.cursorLine + 1) : ""
             }
         }
 

@@ -1,4 +1,3 @@
-
 #include <texengine.h>
 #include <filesystem.h>
 #include <tempfolderguard.h>
