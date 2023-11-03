@@ -21,6 +21,7 @@ Item {
                 flat: true
                 Layout.fillWidth: true
                 Layout.leftMargin: 4
+                font.pointSize: 10
                 Material.roundedScale: Material.ExtraSmallScale
 
                 onClicked: {
