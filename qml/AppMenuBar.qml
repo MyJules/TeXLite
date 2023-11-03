@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Controls
-import QtQuick.Controls.Material
+import QtQuick.Controls.Material 2.15
 
 Row {
     id: root
@@ -53,6 +53,7 @@ Row {
 
             MenuItem {
                 text: "New File"
+                font.pointSize: 10
                 onClicked: newFileDialog.open()
 
                 FileDialog {
@@ -68,6 +69,7 @@ Row {
 
             MenuItem {
                 text: "Open File"
+                font.pointSize: 10
                 onClicked: {
                     openFileDialog.open()
                 }
@@ -83,6 +85,7 @@ Row {
 
             MenuItem {
                 id: saveFileButton
+                font.pointSize: 10
                 text: "Save File"
 
                 onClicked: {
@@ -94,6 +97,7 @@ Row {
 
             MenuItem {
                 id: closeFileButton
+                font.pointSize: 10
                 text: "Close File"
                 onClicked: {
                     closeFileClicked()
@@ -103,6 +107,7 @@ Row {
 
             MenuItem {
                 text: "Exit"
+                font.pointSize: 10
                 onClicked: Qt.quit()
             }
         }
@@ -128,6 +133,7 @@ Row {
             id: helpPopup
             MenuItem {
                 text: "About"
+                font.pointSize: 10
                 onClicked: {
                     helpMessage.open()
                 }

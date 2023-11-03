@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
 {
     TempFolderGuard tempfolder(QDir::currentPath(), "temp");
 
+    qputenv("QT_QUICK_CONTROLS_STYLE", QByteArray("Material"));
+
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/icons/imgs/icon.png"));
 

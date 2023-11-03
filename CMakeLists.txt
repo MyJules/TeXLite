@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set (CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick Concurrent Pdf)
+find_package(Qt6 REQUIRED COMPONENTS Quick Concurrent Qml)
 
 include_directories(src)
 
@@ -56,7 +56,7 @@ target_link_libraries(appTeXLite
     PRIVATE
     Qt6::Quick
     Qt6::Concurrent
-    Qt6::Pdf
+    Qt6::Qml
 )
 
 install(TARGETS appTeXLite

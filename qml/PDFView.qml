@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Pdf
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Controls.Universal
 
 Rectangle {
     id: root
@@ -25,7 +26,7 @@ Rectangle {
 
     Timer {
         id: goToPageTimer
-        interval: 20
+        interval: 10
         running: true
         repeat: false
         onTriggered: view.goToLocation(openPageNum, Qt.point(0, 0), scale)
@@ -56,7 +57,7 @@ Rectangle {
 
             ToolButton {
                 text: " + "
-                height: 24
+                height: 18
                 flat: true
                 font.pointSize: 14
 
@@ -66,7 +67,7 @@ Rectangle {
             }
             ToolButton {
                 text: " - "
-                height: 24
+                height: 18
                 flat: true
                 font.pointSize: 14
 
@@ -76,7 +77,7 @@ Rectangle {
             }
             ToolButton {
                 text: " <-> "
-                height: 24
+                height: 18
                 flat: true
                 font.pointSize: 14
 
@@ -87,7 +88,7 @@ Rectangle {
 
             ToolButton {
                 text: " |-| "
-                height: 24
+                height: 18
                 flat: true
                 font.pointSize: 14
 

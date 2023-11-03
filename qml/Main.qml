@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Pdf
 import QtQuick.Dialogs
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
