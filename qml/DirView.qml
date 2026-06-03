@@ -28,6 +28,22 @@ Item {
         return path ? path.toString() : ""
     }
 
+    function currentFolderName(path) {
+        const normalized = normalizePath(path)
+
+        if (!normalized)
+            return "Files"
+
+        const parts = normalized.split("/").filter(function(part) {
+            return part !== "" && !part.endsWith(":") && part !== "file:"
+        })
+
+        if (parts.length >= 2)
+            return parts[parts.length - 2] + "/" + parts[parts.length - 1]
+
+        return parts.length > 0 ? parts[parts.length - 1] : normalized
+    }
+
     function childPath(folderPath, name) {
         const basePath = normalizePath(folderPath)
 
@@ -99,7 +115,7 @@ Item {
                     Label {
                         Layout.fillWidth: true
                         elide: Text.ElideMiddle
-                        text: root.normalizePath(root.directory)
+                        text: root.currentFolderName(root.directory)
                         color: root.textColor
                         font.pointSize: 11
                         verticalAlignment: Text.AlignVCenter

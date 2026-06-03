@@ -211,9 +211,9 @@ ApplicationWindow {
         DirView {
             id: dirView
             visible: false
-            SplitView.minimumWidth: 100
-            SplitView.preferredWidth: 120
-            SplitView.maximumWidth: 300
+            SplitView.minimumWidth: 150
+            SplitView.preferredWidth: 250
+            SplitView.maximumWidth: 250
 
             onFileSelected: function (filePath) {
                 loadFileWithDir(filePath)
