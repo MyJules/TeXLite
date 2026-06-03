@@ -111,7 +111,9 @@ Item {
                     flat: true
                     text: "Up"
                     Material.roundedScale: Material.ExtraSmallScale
-                    font.pointSize: 10
+                    font.pointSize: 11
+                    implicitWidth: 70
+                    implicitHeight: 42
 
                     background: Rectangle {
                         radius: 8
