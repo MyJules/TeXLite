@@ -23,6 +23,7 @@ ApplicationWindow {
     Material.roundedScale: Material.ExtraSmallScale
 
     property string currentFilePath
+    property string mainFilePath: ""
     property string compiledPDFPath
     property string projectCreationErrorText: ""
     property string saveErrorText: ""
@@ -32,6 +33,16 @@ ApplicationWindow {
     property string pendingExternalFilePath: ""
 
     onClosing: clearPDFSource()
+
+    function fileNameFromPath(filePath) {
+        if (!filePath)
+            return ""
+
+        const fileNameRegexp = /\/([^/]+)$/
+        const match = fileNameRegexp.exec(filePath)
+
+        return match ? match[1] : filePath
+    }
 
     menuBar: AppMenuBar {
         id: appMenuBar
@@ -89,6 +100,7 @@ ApplicationWindow {
             clearPDFSource()
             compiledPDFPath = ""
             currentFilePath = ""
+            mainFilePath = ""
             loadedFileText = ""
             editorDirty = false
             fileSystem.watchFile("")
@@ -102,14 +114,16 @@ ApplicationWindow {
         id: appFooter
 
         footerText: {
-            if (currentFilePath) {
-                var fileNameRegexp = /\/([^/]+)$/
-                var match = fileNameRegexp.exec(currentFilePath)
-
-                return match[1]
-            } else {
+            if (!currentFilePath)
                 return "No file selected"
-            }
+
+            const currentFileName = root.fileNameFromPath(currentFilePath)
+            const mainFileName = root.fileNameFromPath(mainFilePath)
+
+            if (!mainFileName || currentFilePath === mainFilePath)
+                return currentFileName
+
+            return mainFileName + " -> " + currentFileName
         }
 
         showHideFilesEnabled: editor.visible
@@ -246,7 +260,7 @@ ApplicationWindow {
 
             onDCursorPositionChanged: {
                 appFooter.foooterLineCountText
-                        = editor.visible ? ": " + (latexTextEdit.cursorLine + 1) : ""
+                        = editor.visible ? " : " + (latexTextEdit.cursorLine + 1) : ""
             }
         }
 
@@ -327,6 +341,7 @@ ApplicationWindow {
     }
 
     function setProcessingFile(fileName) {
+        root.mainFilePath = fileName
         texEngines.processingFile = fileName
     }
 

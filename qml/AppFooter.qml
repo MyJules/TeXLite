@@ -22,22 +22,27 @@ Row {
         onActivated: showHidePDFClicked()
     }
 
-    Text {
-        id: text
+    Row {
         anchors.verticalCenter: parent.verticalCenter
-        font.pointSize: 10.5
-        height: 20
-        text: "No File"
-        color: "white"
-    }
+        spacing: 0
 
-    Text {
-        id: lineCountText
-        anchors.verticalCenter: parent.verticalCenter
-        font.pointSize: 10.5
-        height: 20
-        text: ""
-        color: "white"
+        Text {
+            id: text
+            anchors.verticalCenter: parent.verticalCenter
+            font.pointSize: 10.5
+            height: 20
+            text: "No File"
+            color: "white"
+        }
+
+        Text {
+            id: lineCountText
+            anchors.verticalCenter: parent.verticalCenter
+            font.pointSize: 10.5
+            height: 20
+            text: ""
+            color: "white"
+        }
     }
 
     ToolButton {
