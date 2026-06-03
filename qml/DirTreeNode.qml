@@ -80,48 +80,107 @@ Item {
                             anchors.rightMargin: 10
                             spacing: 12
 
-                            Rectangle {
+                            Item {
                                 Layout.alignment: Qt.AlignVCenter
                                 Layout.preferredWidth: 16
                                 Layout.preferredHeight: 16
-                                radius: 8
-                                color: entryItem.folderEntry
-                                       ? "transparent"
-                                       : (node.treeRoot.selectedPath === entryItem.entryPath
-                                          ? node.treeRoot.selectedTextColor
-                                          : node.treeRoot.textColor)
-                                border.color: node.treeRoot.selectedPath === entryItem.entryPath
-                                              ? node.treeRoot.selectedTextColor
-                                              : node.treeRoot.mutedTextColor
-                                border.width: 1
+                                implicitWidth: 16
+                                implicitHeight: 16
+
+                                readonly property color iconColor: node.treeRoot.selectedPath === entryItem.entryPath
+                                                                   ? node.treeRoot.selectedTextColor
+                                                                   : (mouseArea.containsMouse
+                                                                      ? node.treeRoot.hoverTextColor
+                                                                      : node.treeRoot.textColor)
 
                                 Rectangle {
                                     visible: entryItem.folderEntry
-                                    width: 8
+                                    x: 1
+                                    y: 4
+                                    width: 14
+                                    height: 10
+                                    radius: 2
+                                    color: "transparent"
+                                    border.color: parent.iconColor
+                                    border.width: 1
+                                }
+
+                                Rectangle {
+                                    visible: entryItem.folderEntry
+                                    x: 2
+                                    y: 2
+                                    width: 6
+                                    height: 4
+                                    radius: 1
+                                    color: "transparent"
+                                    border.color: parent.iconColor
+                                    border.width: 1
+                                }
+
+                                Rectangle {
+                                    visible: entryItem.folderEntry
+                                    width: 6
                                     height: 2
                                     radius: 1
-                                    x: Math.round((parent.width - width) / 2)
-                                    y: Math.round((parent.height - height) / 2)
-                                    color: node.treeRoot.selectedPath === entryItem.entryPath
-                                           ? node.treeRoot.selectedTextColor
-                                           : (mouseArea.containsMouse
-                                              ? node.treeRoot.hoverTextColor
-                                              : node.treeRoot.textColor)
+                                    x: 6
+                                    y: 8
+                                    color: parent.iconColor
                                 }
 
                                 Rectangle {
                                     visible: entryItem.folderEntry
                                              && !node.treeRoot.isExpanded(entryItem.entryPath)
                                     width: 2
-                                    height: 8
+                                    height: 6
                                     radius: 1
-                                    x: Math.round((parent.width - width) / 2)
-                                    y: Math.round((parent.height - height) / 2)
-                                    color: node.treeRoot.selectedPath === entryItem.entryPath
-                                           ? node.treeRoot.selectedTextColor
-                                           : (mouseArea.containsMouse
-                                              ? node.treeRoot.hoverTextColor
-                                              : node.treeRoot.textColor)
+                                    x: 8
+                                    y: 6
+                                    color: parent.iconColor
+                                }
+
+                                Rectangle {
+                                    visible: !entryItem.folderEntry
+                                    x: 3
+                                    y: 1
+                                    width: 10
+                                    height: 13
+                                    radius: 2
+                                    color: "transparent"
+                                    border.color: parent.iconColor
+                                    border.width: 1
+                                }
+
+                                Rectangle {
+                                    visible: !entryItem.folderEntry
+                                    x: 9
+                                    y: 1
+                                    width: 4
+                                    height: 4
+                                    color: "transparent"
+                                    border.color: parent.iconColor
+                                    border.width: 1
+                                    rotation: 45
+                                    transformOrigin: Item.TopLeft
+                                }
+
+                                Rectangle {
+                                    visible: !entryItem.folderEntry
+                                    x: 5
+                                    y: 6
+                                    width: 6
+                                    height: 1
+                                    radius: 1
+                                    color: parent.iconColor
+                                }
+
+                                Rectangle {
+                                    visible: !entryItem.folderEntry
+                                    x: 5
+                                    y: 9
+                                    width: 5
+                                    height: 1
+                                    radius: 1
+                                    color: parent.iconColor
                                 }
                             }
 
