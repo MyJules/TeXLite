@@ -117,6 +117,37 @@ Rectangle {
         view.resetScale()
     }
 
+    function zoomByFactor(factor) {
+        const scrollPosition = getCurrentScrollPosition()
+        const nextZoom = renderScale * factor
+
+        restoreScrollPosition(Qt.point(scrollPosition.x * factor,
+                                       scrollPosition.y * factor),
+                              nextZoom)
+    }
+
+    function setVerticalScrollFromThumb(thumbY, thumbHeight, trackHeight) {
+        if (!viewerTableView)
+            return
+
+        const available = Math.max(1, trackHeight - thumbHeight - 4)
+        const ratio = Math.max(0, Math.min(1, (thumbY - 2) / available))
+        const maxScroll = Math.max(0, viewerTableView.contentHeight - viewerTableView.height)
+
+        viewerTableView.contentY = ratio * maxScroll
+    }
+
+    function setHorizontalScrollFromThumb(thumbX, thumbWidth, trackWidth) {
+        if (!viewerTableView)
+            return
+
+        const available = Math.max(1, trackWidth - thumbWidth - 4)
+        const ratio = Math.max(0, Math.min(1, (thumbX - 2) / available))
+        const maxScroll = Math.max(0, viewerTableView.contentWidth - viewerTableView.width)
+
+        viewerTableView.contentX = ratio * maxScroll
+    }
+
     property int openPageNum: 0
     property point openPageLocation: Qt.point(0, 0)
     property real openPageZoom: 0
@@ -214,6 +245,7 @@ Rectangle {
         z: 2
 
         Rectangle {
+            id: verticalScrollTrack
             visible: root.viewerTableView
                      && root.viewerTableView.contentHeight > root.viewerTableView.height + 1
             width: 10
@@ -227,6 +259,7 @@ Rectangle {
             color: "#15151588"
 
             Rectangle {
+                id: verticalThumb
                 width: 6
                 x: 2
                 radius: 3
@@ -246,10 +279,31 @@ Rectangle {
                     const ratio = root.viewerTableView.height / root.viewerTableView.contentHeight
                     return Math.max(44, (parent.height - 4) * Math.min(1, ratio))
                 }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+
+                    onPressed: function(mouse) {
+                        root.setVerticalScrollFromThumb(parent.y + mouse.y - parent.height / 2,
+                                                        parent.height,
+                                                        verticalScrollTrack.height)
+                    }
+
+                    onPositionChanged: function(mouse) {
+                        if (!(mouse.buttons & Qt.LeftButton))
+                            return
+
+                        root.setVerticalScrollFromThumb(parent.y + mouse.y - parent.height / 2,
+                                                        parent.height,
+                                                        verticalScrollTrack.height)
+                    }
+                }
             }
         }
 
         Rectangle {
+            id: horizontalScrollTrack
             visible: root.viewerTableView
                      && root.viewerTableView.contentWidth > root.viewerTableView.width + 1
             height: 10
@@ -263,6 +317,7 @@ Rectangle {
             color: "#15151588"
 
             Rectangle {
+                id: horizontalThumb
                 height: 6
                 y: 2
                 radius: 3
@@ -281,6 +336,26 @@ Rectangle {
 
                     const ratio = root.viewerTableView.width / root.viewerTableView.contentWidth
                     return Math.max(44, (parent.width - 4) * Math.min(1, ratio))
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+
+                    onPressed: function(mouse) {
+                        root.setHorizontalScrollFromThumb(parent.x + mouse.x - parent.width / 2,
+                                                          parent.width,
+                                                          horizontalScrollTrack.width)
+                    }
+
+                    onPositionChanged: function(mouse) {
+                        if (!(mouse.buttons & Qt.LeftButton))
+                            return
+
+                        root.setHorizontalScrollFromThumb(parent.x + mouse.x - parent.width / 2,
+                                                          parent.width,
+                                                          horizontalScrollTrack.width)
+                    }
                 }
             }
         }
@@ -316,7 +391,7 @@ Rectangle {
                     font.pointSize: 12
                     font.bold: true
 
-                    onClicked: view.renderScale *= Math.sqrt(2)
+                    onClicked: root.zoomByFactor(Math.sqrt(2))
                 }
 
                 ToolButton {
@@ -327,7 +402,7 @@ Rectangle {
                     font.pointSize: 12
                     font.bold: true
 
-                    onClicked: view.renderScale /= Math.sqrt(2)
+                    onClicked: root.zoomByFactor(1 / Math.sqrt(2))
                 }
 
                 Label {
