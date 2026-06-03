@@ -337,6 +337,7 @@ ApplicationWindow {
         root.editorDirty = false
         root.suppressEditorDirtyTracking = false
         dirView.directory = fileSystem.getFileDir(fileName)
+        dirView.selectedPath = fileName
         currentFilePath = fileName
         fileSystem.watchFile(fileName)
     }

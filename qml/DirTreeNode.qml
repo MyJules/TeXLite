@@ -218,8 +218,8 @@ Item {
                                 node.treeRoot.selectedPath = entryItem.entryPath
 
                                 if (entryItem.folderEntry) {
-                                    node.treeRoot.setExpanded(entryItem.entryPath, true)
-                                    node.treeRoot.dirSelected(entryItem.entryPath)
+                                    node.treeRoot.setExpanded(entryItem.entryPath,
+                                                              !node.treeRoot.isExpanded(entryItem.entryPath))
                                 } else {
                                     node.treeRoot.fileSelected(entryItem.entryPath)
                                 }
