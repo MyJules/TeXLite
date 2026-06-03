@@ -11,6 +11,20 @@ Rectangle {
     color: "#292929"
     clip: true
 
+    function buildLineNumberText() {
+        const lineCount = Math.max(1, latexTextArea.text.split("\n").length)
+        let numbers = ""
+
+        for (let lineNumber = 1; lineNumber <= lineCount; ++lineNumber) {
+            numbers += lineNumber
+
+            if (lineNumber < lineCount)
+                numbers += "\n"
+        }
+
+        return numbers
+    }
+
     function insertText(position, text) {
         latexTextArea.insert(position, text)
     }
@@ -41,28 +55,78 @@ Rectangle {
     property real lineGapSize: 1
     property int areaLineCount: 0
     property real scrolledLines: 0
+    property real lineNumberOffsetY: latexTextArea.topPadding
+                                     - (latexTextAreaScrollView.contentItem
+                                        && latexTextAreaScrollView.contentItem.contentY
+                                        ? latexTextAreaScrollView.contentItem.contentY : 0)
+    property string lineNumbersText: buildLineNumberText()
+    property int lineNumberDigits: Math.max(2, lineNumbersText.split("\n").length.toString().length)
+    property real gutterDigitWidth: Math.max(8, textPointSize * 0.8)
+    property int gutterWidth: Math.ceil(18 + (lineNumberDigits * gutterDigitWidth))
 
-    ScrollView {
-        id: latexTextAreaScrollView
+    RowLayout {
         anchors.fill: parent
-        clip: true
+        spacing: 0
 
-        ScrollBar.vertical.onPositionChanged: {
-            calculateCoords()
-            dCursorPositionChanged()
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.preferredWidth: root.gutterWidth
+            color: "#232323"
+            border.color: "#313131"
+            border.width: 1
+            clip: true
+
+            Text {
+                id: lineNumbers
+                visible: latexTextArea.length > 0
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                readonly property int displayedLineCount: Math.max(1, root.lineNumbersText.split("\n").length)
+                readonly property real lineContentHeight: paintedHeight / displayedLineCount
+                readonly property real centeredOffset: Math.max(0,
+                                                                (root.lineGapSize - lineContentHeight) / 2)
+                y: root.lineNumberOffsetY + centeredOffset + 1
+                text: root.lineNumbersText
+                color: "#8f8f8f"
+                font.pointSize: latexTextArea.font.pointSize
+                font.family: "Consolas"
+                horizontalAlignment: Text.AlignRight
+                lineHeightMode: Text.FixedHeight
+                lineHeight: Math.max(1, root.lineGapSize)
+            }
         }
 
-        TextArea {
-            id: latexTextArea
-            focus: true
-            font.pointSize: 12
-            selectByMouse: true
-            wrapMode: TextEdit.NoWrap
-            placeholderText: "LaTeX Editor"
+        ScrollView {
+            id: latexTextAreaScrollView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
 
-            onCursorPositionChanged: {
+            ScrollBar.vertical.onPositionChanged: {
                 calculateCoords()
                 dCursorPositionChanged()
+            }
+
+            TextArea {
+                id: latexTextArea
+                focus: true
+                font.pointSize: 12
+                selectByMouse: true
+                wrapMode: TextEdit.NoWrap
+
+                onCursorPositionChanged: {
+                    calculateCoords()
+                    dCursorPositionChanged()
+                }
+
+                onTextChanged: {
+                    root.lineNumbersText = root.buildLineNumberText()
+                    calculateCoords()
+                }
+
+                onFontChanged: {
+                    calculateCoords()
+                }
             }
         }
     }
@@ -128,11 +192,10 @@ Rectangle {
     }
 
     function calculateCoords() {
-        let scrolledPositionX = latexTextAreaScrollView.ScrollBar.horizontal.position
-        let scrolledPositionY = latexTextAreaScrollView.ScrollBar.vertical.position
-        var scrolledLineX = (scrolledPositionX * latexTextArea.contentWidth)
-        var scrolledLineY = (scrolledPositionY * latexTextArea.contentHeight)
         var zeroRect = latexTextArea.positionToRectangle(0)
+        const contentY = latexTextAreaScrollView.contentItem
+            && latexTextAreaScrollView.contentItem.contentY
+            ? latexTextAreaScrollView.contentItem.contentY : 0
 
         cursorLine = (latexTextArea.cursorRectangle.y - zeroRect.y)
                 / (latexTextArea.cursorRectangle.height)
@@ -140,7 +203,7 @@ Rectangle {
         lineGapSize = latexTextArea.cursorRectangle.height
         areaLineCount = root.height / lineGapSize
 
-        scrolledLines = scrolledLineY / lineGapSize
+        scrolledLines = contentY / lineGapSize
 
         var mappedGlobal = latexTextArea.mapToGlobal(
                     latexTextArea.cursorRectangle.x,
@@ -148,5 +211,10 @@ Rectangle {
         var mapped = root.mapFromGlobal(mappedGlobal.x, mappedGlobal.y)
         cursorX = mapped.x
         cursorY = mapped.y
+    }
+
+    Component.onCompleted: {
+        lineNumbersText = buildLineNumberText()
+        calculateCoords()
     }
 }
