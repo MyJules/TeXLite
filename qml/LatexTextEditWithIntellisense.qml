@@ -74,10 +74,15 @@ LatexTextEdit {
         }
 
         onKeywordSelected: function (keyword) {
-            root.removeText(
-                        root.cursorPosition - intellisense.searchWord.length,
-                        root.cursorPosition)
-            root.insertText(root.cursorPosition, keyword)
+            let removeStart = root.cursorPosition - intellisense.searchWord.length
+
+            if (keyword.startsWith("\\") && removeStart > 0
+                    && root.text.charAt(removeStart - 1) === "\\") {
+                removeStart -= 1
+            }
+
+            root.removeText(removeStart, root.cursorPosition)
+            root.insertText(removeStart, keyword)
             intellisense.focus = false
             intellisense.close()
             latexTextEdit.textFocus = true
