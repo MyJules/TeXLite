@@ -93,6 +93,7 @@ Rectangle {
         if (!tableView)
             return
 
+        viewerTableView = tableView
         tableView.rowSpacing = 6
         tableView.anchors.leftMargin = 0
     }
@@ -122,6 +123,7 @@ Rectangle {
     property point openScrollPosition: Qt.point(-1, -1)
     property int scrollRestoreAttempts: 0
     property int styleRefreshAttempts: 0
+    property var viewerTableView: null
     property alias source: doc.source
     property alias renderScale: view.renderScale
     property alias currentPage: view.currentPage
@@ -205,6 +207,83 @@ Rectangle {
 
         Component.onCompleted: root.scheduleViewerStyleRefresh()
         onDocumentChanged: root.scheduleViewerStyleRefresh()
+    }
+
+    Item {
+        anchors.fill: parent
+        z: 2
+
+        Rectangle {
+            visible: root.viewerTableView
+                     && root.viewerTableView.contentHeight > root.viewerTableView.height + 1
+            width: 10
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.topMargin: 12
+            anchors.bottomMargin: 12
+            anchors.rightMargin: 6
+            radius: 5
+            color: "#15151588"
+
+            Rectangle {
+                width: 6
+                x: 2
+                radius: 3
+                color: "#5f6368"
+                y: {
+                    if (!root.viewerTableView)
+                        return 2
+
+                    const maxScroll = Math.max(1, root.viewerTableView.contentHeight - root.viewerTableView.height)
+                    const available = parent.height - height - 4
+                    return 2 + (root.viewerTableView.contentY / maxScroll) * Math.max(0, available)
+                }
+                height: {
+                    if (!root.viewerTableView)
+                        return 40
+
+                    const ratio = root.viewerTableView.height / root.viewerTableView.contentHeight
+                    return Math.max(44, (parent.height - 4) * Math.min(1, ratio))
+                }
+            }
+        }
+
+        Rectangle {
+            visible: root.viewerTableView
+                     && root.viewerTableView.contentWidth > root.viewerTableView.width + 1
+            height: 10
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 12
+            anchors.rightMargin: 24
+            anchors.bottomMargin: 6
+            radius: 5
+            color: "#15151588"
+
+            Rectangle {
+                height: 6
+                y: 2
+                radius: 3
+                color: "#5f6368"
+                x: {
+                    if (!root.viewerTableView)
+                        return 2
+
+                    const maxScroll = Math.max(1, root.viewerTableView.contentWidth - root.viewerTableView.width)
+                    const available = parent.width - width - 4
+                    return 2 + (root.viewerTableView.contentX / maxScroll) * Math.max(0, available)
+                }
+                width: {
+                    if (!root.viewerTableView)
+                        return 40
+
+                    const ratio = root.viewerTableView.width / root.viewerTableView.contentWidth
+                    return Math.max(44, (parent.width - 4) * Math.min(1, ratio))
+                }
+            }
+        }
     }
 
     Pane {
