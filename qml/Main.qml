@@ -26,6 +26,10 @@ ApplicationWindow {
     property string compiledPDFPath
     property string projectCreationErrorText: ""
     property string saveErrorText: ""
+    property string loadedFileText: ""
+    property bool suppressEditorDirtyTracking: false
+    property bool editorDirty: false
+    property string pendingExternalFilePath: ""
 
     onClosing: clearPDFSource()
 
@@ -85,6 +89,9 @@ ApplicationWindow {
             clearPDFSource()
             compiledPDFPath = ""
             currentFilePath = ""
+            loadedFileText = ""
+            editorDirty = false
+            fileSystem.watchFile("")
             appFooter.foooterLineCountText = ""
             editor.visible = false
             projectView.visible = true
@@ -230,6 +237,13 @@ ApplicationWindow {
             SplitView.minimumWidth: 150
             SplitView.preferredWidth: 200
 
+            onTextChanged: {
+                if (root.suppressEditorDirtyTracking)
+                    return
+
+                root.editorDirty = latexTextEdit.text !== root.loadedFileText
+            }
+
             onDCursorPositionChanged: {
                 appFooter.foooterLineCountText
                         = editor.visible ? ": " + (latexTextEdit.cursorLine + 1) : ""
@@ -283,6 +297,21 @@ ApplicationWindow {
         buttons: MessageDialog.Ok
     }
 
+    MessageDialog {
+        id: externalFileChangedDialog
+        title: "File Changed"
+        text: "The current file changed outside TeXLite. Reload and discard local edits?"
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            if (role === MessageDialog.YesRole && root.pendingExternalFilePath) {
+                root.loadFileWithDir(root.pendingExternalFilePath)
+            }
+
+            root.pendingExternalFilePath = ""
+        }
+    }
+
     function compile() {
         if (!pdfLoader.visible)
             return
@@ -302,9 +331,14 @@ ApplicationWindow {
     }
 
     function loadFileWithDir(fileName) {
+        root.suppressEditorDirtyTracking = true
         latexTextEdit.text = fileSystem.readFile(fileName)
+        root.loadedFileText = latexTextEdit.text
+        root.editorDirty = false
+        root.suppressEditorDirtyTracking = false
         dirView.directory = fileSystem.getFileDir(fileName)
         currentFilePath = fileName
+        fileSystem.watchFile(fileName)
     }
 
     function saveCurrentFile() {
@@ -316,6 +350,10 @@ ApplicationWindow {
         fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
         if (fileSystem.lastError)
             root.saveErrorText = fileSystem.lastError
+        else {
+            root.loadedFileText = latexTextEdit.text
+            root.editorDirty = false
+        }
     }
 
     function clearPDFSource() {
@@ -330,5 +368,22 @@ ApplicationWindow {
         projectView.visible = false
         editor.visible = true
         compile()
+    }
+
+    Connections {
+        target: fileSystem
+
+        function onWatchedFileChanged(filePath) {
+            if (!root.currentFilePath || filePath !== root.currentFilePath)
+                return
+
+            if (!root.editorDirty) {
+                root.loadFileWithDir(filePath)
+                return
+            }
+
+            root.pendingExternalFilePath = filePath
+            externalFileChangedDialog.open()
+        }
     }
 }

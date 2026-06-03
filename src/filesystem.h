@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QString>
 #include <QQuickItem>
+#include <QDateTime>
+
+class QFileSystemWatcher;
 
 class FileSystem : public QObject
 {
@@ -21,16 +24,26 @@ public:
     Q_INVOKABLE QString getFileDir(const QString& filePath);
     Q_INVOKABLE void copyFile(const QString& from, const QString& to);
     Q_INVOKABLE QString createExampleProject(const QString& exampleId, const QString& targetDir);
+    Q_INVOKABLE void watchFile(const QString& filePath);
 
     QString lastError() const;
 
 signals:
     void lastErrorChanged();
+    void watchedFileChanged(const QString& filePath);
 
 private:
+    void refreshWatchedFileState(bool emitChange);
+    void onWatchedFileChanged(const QString& path);
+    void onWatchedDirectoryChanged(const QString& path);
     void setLastError(const QString& error);
 
     QString m_lastError;
+    QFileSystemWatcher *m_fileWatcher;
+    QString m_watchedFilePath;
+    QString m_watchedDirectoryPath;
+    QDateTime m_watchedFileLastModified;
+    bool m_ignoreNextWatchedChange;
 };
 
 #endif // FILESYSTEM_H

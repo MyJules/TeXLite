@@ -4,8 +4,10 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QFileSystemWatcher>
 #include <QSaveFile>
 #include <QTextStream>
+#include <QUrl>
 
 namespace {
 QString toLocalPath(const QString &path)
@@ -71,8 +73,14 @@ bool copyDirectoryRecursively(const QString &sourcePath, const QString &targetPa
 }
 
 FileSystem::FileSystem(QObject *parent)
+    : QObject(parent)
+    , m_fileWatcher(new QFileSystemWatcher(this))
+    , m_ignoreNextWatchedChange(false)
 {
-
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
+            this, &FileSystem::onWatchedFileChanged);
+    connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged,
+            this, &FileSystem::onWatchedDirectoryChanged);
 }
 
 Q_INVOKABLE QString FileSystem::readFile(const QString &filePath)
@@ -114,6 +122,11 @@ Q_INVOKABLE void FileSystem::writeToFile(const QString &filePath, const QString 
         setLastError(QString("Could not save file '%1': %2")
                      .arg(path, file.errorString()));
         return;
+    }
+
+    if (path == m_watchedFilePath) {
+        m_ignoreNextWatchedChange = true;
+        watchFile(path);
     }
 }
 
@@ -192,9 +205,85 @@ Q_INVOKABLE QString FileSystem::createExampleProject(const QString &exampleId, c
     return QUrl::fromLocalFile(QDir(targetPath).filePath("main.tex")).toString();
 }
 
+Q_INVOKABLE void FileSystem::watchFile(const QString &filePath)
+{
+    const QString path = toLocalPath(filePath);
+
+    if (!m_watchedFilePath.isEmpty()) {
+        m_fileWatcher->removePath(m_watchedFilePath);
+        m_watchedFilePath.clear();
+    }
+
+    if (!m_watchedDirectoryPath.isEmpty()) {
+        m_fileWatcher->removePath(m_watchedDirectoryPath);
+        m_watchedDirectoryPath.clear();
+    }
+
+    m_watchedFileLastModified = QDateTime();
+
+    if (path.isEmpty())
+        return;
+
+    m_watchedFilePath = path;
+    m_watchedDirectoryPath = QFileInfo(path).dir().path();
+
+    if (!m_watchedDirectoryPath.isEmpty())
+        m_fileWatcher->addPath(m_watchedDirectoryPath);
+
+    refreshWatchedFileState(false);
+}
+
 QString FileSystem::lastError() const
 {
     return m_lastError;
+}
+
+void FileSystem::onWatchedFileChanged(const QString &path)
+{
+    Q_UNUSED(path)
+    refreshWatchedFileState(true);
+}
+
+void FileSystem::onWatchedDirectoryChanged(const QString &path)
+{
+    Q_UNUSED(path)
+    refreshWatchedFileState(true);
+}
+
+void FileSystem::refreshWatchedFileState(bool emitChange)
+{
+    if (m_watchedFilePath.isEmpty())
+        return;
+
+    const QFileInfo fileInfo(m_watchedFilePath);
+
+    if (!m_watchedDirectoryPath.isEmpty()
+            && !m_fileWatcher->directories().contains(m_watchedDirectoryPath)) {
+        m_fileWatcher->addPath(m_watchedDirectoryPath);
+    }
+
+    if (!fileInfo.exists())
+        return;
+
+    if (!m_fileWatcher->files().contains(m_watchedFilePath))
+        m_fileWatcher->addPath(m_watchedFilePath);
+
+    const QDateTime lastModified = fileInfo.lastModified();
+    const bool changed = m_watchedFileLastModified.isValid()
+            && lastModified.isValid()
+            && lastModified != m_watchedFileLastModified;
+
+    m_watchedFileLastModified = lastModified;
+
+    if (!emitChange || !changed)
+        return;
+
+    if (m_ignoreNextWatchedChange) {
+        m_ignoreNextWatchedChange = false;
+        return;
+    }
+
+    emit watchedFileChanged(QUrl::fromLocalFile(m_watchedFilePath).toString());
 }
 
 void FileSystem::setLastError(const QString &error)
