@@ -14,20 +14,68 @@ Rectangle {
         return view.children.length > 0 ? view.children[0] : null
     }
 
+    function getLocationForCell(tableView, cell) {
+        if (cell.x < 0 || cell.y < 0)
+            return null
+
+        const currentItem = tableView.itemAtCell(cell)
+
+        if (!currentItem)
+            return null
+
+        return {
+            page: cell.y,
+            location: Qt.point((tableView.contentX - currentItem.x
+                                + tableView.jumpLocationMargin.x) / renderScale,
+                               (tableView.contentY - currentItem.y
+                                + tableView.jumpLocationMargin.y) / renderScale)
+        }
+    }
+
+    function getViewStateAt(positionX, positionY) {
+        const tableView = getTableView()
+
+        if (!tableView)
+            return null
+
+        const clampedX = Math.max(0, Math.min(root.width - 1, positionX))
+        const clampedY = Math.max(0, Math.min(root.height - 1, positionY))
+        const cell = tableView.cellAtPosition(clampedX, clampedY, true)
+
+        return getLocationForCell(tableView, cell)
+    }
+
+    function getCurrentViewState() {
+        const sampleXs = [root.width / 2, root.width * 0.25, root.width * 0.75]
+        const sampleYs = [root.height / 2, 1, root.height * 0.25, root.height * 0.75,
+                          root.height - 1]
+
+        for (let yIndex = 0; yIndex < sampleYs.length; ++yIndex) {
+            for (let xIndex = 0; xIndex < sampleXs.length; ++xIndex) {
+                const state = getViewStateAt(sampleXs[xIndex], sampleYs[yIndex])
+
+                if (state)
+                    return state
+            }
+        }
+
+        return {
+            page: currentPage >= 0 ? currentPage : 0,
+            location: Qt.point(0, 0)
+        }
+    }
+
     function getCurrentLocation() {
+        return getCurrentViewState().location
+    }
+
+    function getCurrentScrollPosition() {
         const tableView = getTableView()
 
         if (!tableView)
             return Qt.point(0, 0)
 
-        const cell = tableView.cellAtPos(root.width / 2, root.height / 2)
-        const currentItem = tableView.itemAtCell(cell)
-
-        if (!currentItem)
-            return Qt.point(0, 0)
-
-        return Qt.point((tableView.contentX - currentItem.x + tableView.jumpLocationMargin.x) / renderScale,
-                        (tableView.contentY - currentItem.y + tableView.jumpLocationMargin.y) / renderScale)
+        return Qt.point(tableView.contentX, tableView.contentY)
     }
 
     function openPage(pageNumber) {
@@ -57,6 +105,13 @@ Rectangle {
         goToPageTimer.start()
     }
 
+    function restoreScrollPosition(position, zoom) {
+        openScrollPosition = position
+        openPageZoom = zoom
+        scrollRestoreAttempts = 20
+        scrollRestoreTimer.restart()
+    }
+
     function reset() {
         view.resetScale()
     }
@@ -64,6 +119,8 @@ Rectangle {
     property int openPageNum: 0
     property point openPageLocation: Qt.point(0, 0)
     property real openPageZoom: 0
+    property point openScrollPosition: Qt.point(-1, -1)
+    property int scrollRestoreAttempts: 0
     property int styleRefreshAttempts: 0
     property alias source: doc.source
     property alias renderScale: view.renderScale
@@ -98,6 +155,41 @@ Rectangle {
             root.styleRefreshAttempts -= 1
             if (root.styleRefreshAttempts <= 0)
                 stop()
+        }
+    }
+
+    Timer {
+        id: scrollRestoreTimer
+        interval: 50
+        running: false
+        repeat: true
+        onTriggered: {
+            const tableView = getTableView()
+
+            if (!tableView)
+                return
+
+            if (openPageZoom > 0)
+                renderScale = openPageZoom
+
+            const targetX = Math.max(0, Math.min(openScrollPosition.x,
+                                                 Math.max(0,
+                                                          tableView.contentWidth
+                                                          - tableView.width)))
+            const targetY = Math.max(0, Math.min(openScrollPosition.y,
+                                                 Math.max(0,
+                                                          tableView.contentHeight
+                                                          - tableView.height)))
+
+            tableView.contentX = targetX
+            tableView.contentY = targetY
+
+            scrollRestoreAttempts -= 1
+            if (scrollRestoreAttempts <= 0
+                    || (Math.abs(tableView.contentX - targetX) < 0.5
+                        && Math.abs(tableView.contentY - targetY) < 0.5)) {
+                stop()
+            }
         }
     }
 

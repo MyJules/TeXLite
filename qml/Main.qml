@@ -138,9 +138,15 @@ ApplicationWindow {
             case TexEngine.Idle:
                 pdfLoader.sourceComponent = pdfViewComponent
                 pdfLoader.item.source = compiledPDFPath
-                pdfLoader.item.openLocation(pdfLoader.lastPage,
-                                            pdfLoader.lastLocation,
-                                            pdfLoader.lastRenderScale)
+                if (pdfLoader.lastScrollPosition.x >= 0
+                        && pdfLoader.lastScrollPosition.y >= 0) {
+                    pdfLoader.item.restoreScrollPosition(pdfLoader.lastScrollPosition,
+                                                         pdfLoader.lastRenderScale)
+                } else {
+                    pdfLoader.item.openLocation(pdfLoader.lastPage,
+                                                pdfLoader.lastLocation,
+                                                pdfLoader.lastRenderScale)
+                }
 
                 if (appMenuBar.saveDocumentClickedFlag) {
                     appMenuBar.saveDocumentClickedFlag = false
@@ -150,9 +156,12 @@ ApplicationWindow {
                 break
             case TexEngine.Processing:
                 if (pdfLoader.sourceComponent == pdfViewComponent) {
+                    const currentViewState = pdfLoader.item.getCurrentViewState()
+
                     pdfLoader.lastRenderScale = pdfLoader.item.renderScale
-                    pdfLoader.lastPage = pdfLoader.item.currentPage
-                    pdfLoader.lastLocation = pdfLoader.item.getCurrentLocation()
+                    pdfLoader.lastPage = currentViewState.page
+                    pdfLoader.lastLocation = currentViewState.location
+                    pdfLoader.lastScrollPosition = pdfLoader.item.getCurrentScrollPosition()
                 }
 
                 clearPDFSource()
@@ -235,6 +244,7 @@ ApplicationWindow {
             property real lastRenderScale: 0
             property int lastPage: 0
             property point lastLocation: Qt.point(0, 0)
+            property point lastScrollPosition: Qt.point(-1, -1)
 
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200

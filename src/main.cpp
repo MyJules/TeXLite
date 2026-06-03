@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TextCharFormat>("com.highliter", 1, 0, "TextCharFormat");
 
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/TeXLite/qml/Main.qml"_qs);
+    const QUrl url(QStringLiteral("qrc:/TeXLite/qml/Main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
