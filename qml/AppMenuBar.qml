@@ -3,6 +3,7 @@ import QtCore
 import QtQuick.Dialogs
 import QtQuick.Controls
 import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts
 
 Row {
     id: root
@@ -46,22 +47,32 @@ Row {
         onActivated: newFileDialog.open()
     }
 
+    function togglePopup(popup) {
+        if (popup.opened)
+            popup.close()
+        else
+            popup.openAnchored()
+    }
+
     ToolButton {
+        id: fileButton
         flat: true
         font.pointSize: 10
         height: 30
         text: "File"
-        onClicked: {
-            filePopup.popup()
-        }
+        onClicked: root.togglePopup(filePopup)
 
-        Menu {
+        AppPopupMenu {
             id: filePopup
+            anchorItem: fileButton
+            menuWidth: 210
 
-            MenuItem {
+            AppMenuItem {
                 text: "New File"
-                font.pointSize: 10
-                onClicked: newFileDialog.open()
+                onClicked: {
+                    filePopup.close()
+                    newFileDialog.open()
+                }
 
                 FileDialog {
                     id: newFileDialog
@@ -74,10 +85,10 @@ Row {
                 }
             }
 
-            MenuItem {
+            AppMenuItem {
                 text: "Open File"
-                font.pointSize: 10
                 onClicked: {
+                    filePopup.close()
                     openFileDialog.open()
                 }
 
@@ -90,32 +101,43 @@ Row {
                 }
             }
 
-            MenuItem {
+            AppMenuItem {
                 id: saveFileButton
-                font.pointSize: 10
                 text: "Save File"
 
                 onClicked: {
+                    filePopup.close()
                     saveFileClicked()
                 }
             }
 
-            MenuSeparator {}
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: "#343434"
+            }
 
-            MenuItem {
+            AppMenuItem {
                 id: closeFileButton
-                font.pointSize: 10
                 text: "Close File"
                 onClicked: {
+                    filePopup.close()
                     closeFileClicked()
                 }
             }
-            MenuSeparator {}
 
-            MenuItem {
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: "#343434"
+            }
+
+            AppMenuItem {
                 text: "Exit"
-                font.pointSize: 10
-                onClicked: Qt.quit()
+                onClicked: {
+                    filePopup.close()
+                    Qt.quit()
+                }
             }
         }
     }
@@ -130,19 +152,21 @@ Row {
     }
 
     ToolButton {
+        id: settingsButton
         flat: true
         height: 30
         font.pointSize: 10
         text: "Settings"
-        onClicked: settingsPopup.popup()
+        onClicked: root.togglePopup(settingsPopup)
 
-        Menu {
+        AppPopupMenu {
             id: settingsPopup
+            anchorItem: settingsButton
+            menuWidth: 220
 
-            MenuItem {
+            AppMenuItem {
                 id: compileOnSaveMenuItem
                 text: "Compile On Save"
-                font.pointSize: 10
                 checkable: true
                 checked: true
             }
@@ -150,29 +174,33 @@ Row {
     }
 
     ToolButton {
+        id: helpButton
         flat: true
         height: 30
         font.pointSize: 10
         text: "Help"
-        onClicked: helpPopup.popup()
+        onClicked: root.togglePopup(helpPopup)
 
-        Menu {
+        AppPopupMenu {
             id: helpPopup
-            MenuItem {
+            anchorItem: helpButton
+            menuWidth: 200
+
+            AppMenuItem {
                 text: "About"
-                font.pointSize: 10
                 onClicked: {
+                    helpPopup.close()
                     helpMessage.open()
                 }
             }
-
-            AppMessageDialog {
-                id: helpMessage
-                title: "About"
-                text: "My simple LaTeX app, made with Qt 6, please be gentle."
-                buttons: Dialog.Ok
-            }
         }
+    }
+
+    AppMessageDialog {
+        id: helpMessage
+        title: "About"
+        text: "My simple LaTeX app, made with Qt 6, please be gentle."
+        buttons: Dialog.Ok
     }
 
     ToolButton {

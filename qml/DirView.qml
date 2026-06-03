@@ -32,6 +32,7 @@ Item {
     property string pendingCreateFolderPath: ""
     property bool pendingCreateFolderEntry: false
     property string dirOperationErrorText: ""
+    property var contextAnchorItem: null
 
     function normalizePath(path) {
         return path ? path.toString() : ""
@@ -73,17 +74,25 @@ Item {
         return folderEntry ? normalizePath(path) : parentPath(path)
     }
 
-    function openEntryContextMenu(path, folderEntry) {
+    function openEntryContextMenu(path, folderEntry, anchorItem) {
         selectedPath = normalizePath(path)
         contextPath = normalizePath(path)
         contextFolderEntry = folderEntry
-        entryContextMenu.popup()
+        contextAnchorItem = anchorItem
+        entryContextMenu.anchorItem = anchorItem
+        entryContextMenu.openAnchored()
     }
 
-    function openDirectoryContextMenu() {
+    function openDirectoryContextMenu(anchorItem, localPoint) {
         contextPath = normalizePath(directory)
         contextFolderEntry = true
-        directoryContextMenu.popup()
+
+        if (localPoint)
+            directoryContextMenu.openAt(anchorItem, localPoint)
+        else {
+            directoryContextMenu.anchorItem = anchorItem
+            directoryContextMenu.openAnchored()
+        }
     }
 
     function beginCreate(folderPath, createFolder) {
@@ -190,6 +199,7 @@ Item {
         spacing: 10
 
         Rectangle {
+            id: headerPanel
             Layout.fillWidth: true
             Layout.preferredHeight: 68
             radius: 10
@@ -257,11 +267,14 @@ Item {
 
             TapHandler {
                 acceptedButtons: Qt.RightButton
-                onTapped: root.openDirectoryContextMenu()
+                onTapped: function(eventPoint) {
+                    root.openDirectoryContextMenu(headerPanel, eventPoint.position)
+                }
             }
         }
 
         ScrollView {
+            id: dirScrollView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
@@ -269,7 +282,9 @@ Item {
 
             TapHandler {
                 acceptedButtons: Qt.RightButton
-                onTapped: root.openDirectoryContextMenu()
+                onTapped: function(eventPoint) {
+                    root.openDirectoryContextMenu(dirScrollView, eventPoint.position)
+                }
             }
 
             background: Rectangle {
@@ -290,40 +305,61 @@ Item {
         }
     }
 
-    Menu {
+    AppPopupMenu {
         id: entryContextMenu
+        menuWidth: 220
 
-        MenuItem {
+        AppMenuItem {
             text: "New File"
-            onClicked: root.beginCreate(root.menuFolderPath(root.contextPath,
-                                                            root.contextFolderEntry), false)
+            onClicked: {
+                entryContextMenu.close()
+                root.beginCreate(root.menuFolderPath(root.contextPath,
+                                                     root.contextFolderEntry), false)
+            }
         }
 
-        MenuItem {
+        AppMenuItem {
             text: "New Folder"
-            onClicked: root.beginCreate(root.menuFolderPath(root.contextPath,
-                                                            root.contextFolderEntry), true)
+            onClicked: {
+                entryContextMenu.close()
+                root.beginCreate(root.menuFolderPath(root.contextPath,
+                                                     root.contextFolderEntry), true)
+            }
         }
 
-        MenuSeparator {}
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: "#343434"
+        }
 
-        MenuItem {
+        AppMenuItem {
             text: root.contextFolderEntry ? "Delete Folder" : "Delete File"
-            onClicked: root.beginDelete(root.contextPath, root.contextFolderEntry)
+            onClicked: {
+                entryContextMenu.close()
+                root.beginDelete(root.contextPath, root.contextFolderEntry)
+            }
         }
     }
 
-    Menu {
+    AppPopupMenu {
         id: directoryContextMenu
+        menuWidth: 220
 
-        MenuItem {
+        AppMenuItem {
             text: "New File"
-            onClicked: root.beginCreate(root.normalizePath(root.directory), false)
+            onClicked: {
+                directoryContextMenu.close()
+                root.beginCreate(root.normalizePath(root.directory), false)
+            }
         }
 
-        MenuItem {
+        AppMenuItem {
             text: "New Folder"
-            onClicked: root.beginCreate(root.normalizePath(root.directory), true)
+            onClicked: {
+                directoryContextMenu.close()
+                root.beginCreate(root.normalizePath(root.directory), true)
+            }
         }
     }
 
@@ -332,10 +368,44 @@ Item {
         modal: true
         anchors.centerIn: Overlay.overlay
         width: 520
+        padding: 0
+        closePolicy: Popup.NoAutoClose
         standardButtons: Dialog.Ok | Dialog.Cancel
+        Material.roundedScale: Material.ExtraSmallScale
 
         onAccepted: root.createPendingEntry()
         onOpened: createNameField.forceActiveFocus()
+
+        background: Rectangle {
+            radius: 12
+            color: "#1d1d1d"
+            border.color: "#3a3a3a"
+            border.width: 1
+        }
+
+        header: Rectangle {
+            implicitHeight: 52
+            color: "#242424"
+            radius: 12
+            topLeftRadius: 12
+            topRightRadius: 12
+            bottomLeftRadius: 0
+            bottomRightRadius: 0
+            border.color: "#3a3a3a"
+            border.width: 1
+
+            Label {
+                anchors.fill: parent
+                anchors.leftMargin: 18
+                anchors.rightMargin: 18
+                verticalAlignment: Text.AlignVCenter
+                text: createEntryDialog.title
+                color: "#f0f0f0"
+                font.pointSize: 12
+                font.bold: true
+                elide: Text.ElideRight
+            }
+        }
 
         contentItem: ColumnLayout {
             width: 440
@@ -343,19 +413,78 @@ Item {
 
             Label {
                 Layout.fillWidth: true
+                Layout.leftMargin: 18
+                Layout.rightMargin: 18
+                Layout.topMargin: 18
                 text: root.pendingCreateFolderEntry
                       ? "Enter a folder name"
                       : "Enter a file name"
-                color: root.textColor
+                color: "#d0d0d0"
+                font.pointSize: 10.5
             }
 
             TextField {
                 id: createNameField
                 Layout.fillWidth: true
+                Layout.leftMargin: 18
+                Layout.rightMargin: 18
+                Layout.bottomMargin: 18
                 implicitWidth: 420
                 placeholderText: root.pendingCreateFolderEntry ? "folder" : "file.tex"
                 selectByMouse: true
+
+                background: Rectangle {
+                    radius: 8
+                    color: "#252525"
+                    border.color: parent.activeFocus ? "#707070" : "#454545"
+                    border.width: 1
+                }
+
+                color: "#f0f0f0"
+                placeholderTextColor: "#7f7f7f"
+                font.pointSize: 10.5
             }
+        }
+
+        footer: DialogButtonBox {
+            standardButtons: createEntryDialog.standardButtons
+            spacing: 10
+            padding: 14
+            alignment: Qt.AlignRight
+
+            background: Rectangle {
+                color: "#1d1d1d"
+                border.color: "#3a3a3a"
+                border.width: 1
+                radius: 12
+                topLeftRadius: 0
+                topRightRadius: 0
+                bottomLeftRadius: 12
+                bottomRightRadius: 12
+            }
+
+            delegate: Button {
+                flat: true
+                Material.roundedScale: Material.ExtraSmallScale
+
+                background: Rectangle {
+                    radius: 8
+                    color: down ? "#343434" : hovered ? "#2b2b2b" : "transparent"
+                    border.color: "#4a4a4a"
+                    border.width: 1
+                }
+
+                contentItem: Label {
+                    text: parent.text
+                    color: "#f0f0f0"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 10
+                }
+            }
+
+            onAccepted: createEntryDialog.accept()
+            onRejected: createEntryDialog.reject()
         }
     }
 

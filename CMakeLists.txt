@@ -31,6 +31,8 @@ qt_add_qml_module(appTeXLite
     qml/Main.qml
     qml/AppMenuBar.qml
     qml/AppFooter.qml
+    qml/AppMenuItem.qml
+    qml/AppPopupMenu.qml
     qml/LatexTextEdit.qml
     qml/PDFView.qml
     qml/TexEngines.qml

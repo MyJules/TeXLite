@@ -210,7 +210,8 @@ Item {
                                     return
 
                                 node.treeRoot.openEntryContextMenu(entryItem.entryPath,
-                                                                   entryItem.folderEntry)
+                                                                   entryItem.folderEntry,
+                                                                   mouseArea)
                             }
 
                             onClicked: function(mouse) {
