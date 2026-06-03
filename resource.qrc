@@ -3,6 +3,9 @@
         <file>imgs/icon.png</file>
     </qresource>
     <qresource prefix="/">
+        <file>examples/article/main.tex</file>
+        <file>examples/report/main.tex</file>
+        <file>examples/beamer/main.tex</file>
         <file>qml/IntellisenseMenu.qml</file>
         <file>qml/LatexListModel.qml</file>
         <file>qml/LatexTextEditWithIntellisense.qml</file>

@@ -8,6 +8,9 @@ Item {
     id: root
 
     signal newFileSelected(string fileName)
+    signal createExampleProjectRequested(string exampleId, string targetDir)
+
+    property string selectedExampleProjectId: ""
 
     RowLayout {
         anchors.fill: parent
@@ -24,17 +27,65 @@ Item {
                 font.pointSize: 10
                 Material.roundedScale: Material.ExtraSmallScale
 
-                onClicked: {
-                    openFileDialog.open()
+                onClicked: openFileDialog.open()
+            }
+
+            Button {
+                text: "Create Example Project"
+                flat: true
+                Layout.fillWidth: true
+                Layout.leftMargin: 4
+                font.pointSize: 10
+                Material.roundedScale: Material.ExtraSmallScale
+
+                onClicked: exampleProjectMenu.popup()
+            }
+
+            Menu {
+                id: exampleProjectMenu
+
+                MenuItem {
+                    text: "Article"
+                    font.pointSize: 10
+                    onClicked: {
+                        root.selectedExampleProjectId = "article"
+                        createExampleProjectDialog.open()
+                    }
                 }
 
-                FileDialog {
-                    id: openFileDialog
-                    title: "Please choose a file"
-                    fileMode: FileDialog.OpenFile
-
-                    onAccepted: newFileSelected(openFileDialog.selectedFile)
+                MenuItem {
+                    text: "Report"
+                    font.pointSize: 10
+                    onClicked: {
+                        root.selectedExampleProjectId = "report"
+                        createExampleProjectDialog.open()
+                    }
                 }
+
+                MenuItem {
+                    text: "Beamer Presentation"
+                    font.pointSize: 10
+                    onClicked: {
+                        root.selectedExampleProjectId = "beamer"
+                        createExampleProjectDialog.open()
+                    }
+                }
+            }
+
+            FileDialog {
+                id: openFileDialog
+                title: "Please choose a file"
+                fileMode: FileDialog.OpenFile
+
+                onAccepted: newFileSelected(openFileDialog.selectedFile)
+            }
+
+            FolderDialog {
+                id: createExampleProjectDialog
+                title: "Select a folder for the example project"
+
+                onAccepted: createExampleProjectRequested(root.selectedExampleProjectId,
+                                                          createExampleProjectDialog.selectedFolder)
             }
         }
 

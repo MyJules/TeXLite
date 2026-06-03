@@ -24,6 +24,8 @@ ApplicationWindow {
 
     property string currentFilePath
     property string compiledPDFPath
+    property string projectCreationErrorText: ""
+    property string saveErrorText: ""
 
     onClosing: clearPDFSource()
 
@@ -42,8 +44,13 @@ ApplicationWindow {
         }
 
         onSaveFileClicked: {
-            fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
-            compile()
+            saveCurrentFile()
+            if (root.saveErrorText) {
+                saveErrorDialog.open()
+                return
+            }
+            if (pdfLoader.visible)
+                compile()
         }
 
         onCreateNewFileClicked: function (fileName) {
@@ -59,7 +66,6 @@ ApplicationWindow {
         onSaveDocumentClicked: {
             if (!compiledPDFPath)
                 return
-            fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
             compileForce()
             appMenuBar.saveDocumentClickedFlag = true
         }
@@ -121,7 +127,6 @@ ApplicationWindow {
         }
 
         onDCompilationStarted: {
-            fileSystem.clearTempFolder()
         }
 
         onDCompilationError: function (error) {
@@ -133,8 +138,9 @@ ApplicationWindow {
             case TexEngine.Idle:
                 pdfLoader.sourceComponent = pdfViewComponent
                 pdfLoader.item.source = compiledPDFPath
-                pdfLoader.item.scale = pdfLoader.lastRenderScale
-                pdfLoader.item.openPage(pdfLoader.lastPage)
+                pdfLoader.item.openLocation(pdfLoader.lastPage,
+                                            pdfLoader.lastLocation,
+                                            pdfLoader.lastRenderScale)
 
                 if (appMenuBar.saveDocumentClickedFlag) {
                     appMenuBar.saveDocumentClickedFlag = false
@@ -144,8 +150,9 @@ ApplicationWindow {
                 break
             case TexEngine.Processing:
                 if (pdfLoader.sourceComponent == pdfViewComponent) {
-                    pdfLoader.lastRenderScale = pdfLoader.item.scale
+                    pdfLoader.lastRenderScale = pdfLoader.item.renderScale
                     pdfLoader.lastPage = pdfLoader.item.currentPage
+                    pdfLoader.lastLocation = pdfLoader.item.getCurrentLocation()
                 }
 
                 clearPDFSource()
@@ -167,6 +174,20 @@ ApplicationWindow {
         anchors.fill: parent
 
         onNewFileSelected: function (fileName) {
+            root.onNewFileSelected(fileName)
+        }
+
+        onCreateExampleProjectRequested: function (exampleId, targetDir) {
+            let fileName = fileSystem.createExampleProject(exampleId, targetDir)
+
+            if (!fileName) {
+                root.projectCreationErrorText = fileSystem.lastError
+                        ? fileSystem.lastError
+                        : "Failed to create the example project."
+                projectCreationErrorDialog.open()
+                return
+            }
+
             root.onNewFileSelected(fileName)
         }
     }
@@ -213,6 +234,7 @@ ApplicationWindow {
 
             property real lastRenderScale: 0
             property int lastPage: 0
+            property point lastLocation: Qt.point(0, 0)
 
             SplitView.preferredWidth: 600
             SplitView.minimumWidth: 200
@@ -237,13 +259,31 @@ ApplicationWindow {
         id: fileSystem
     }
 
+    MessageDialog {
+        id: projectCreationErrorDialog
+        title: "Example Project Error"
+        text: root.projectCreationErrorText
+        buttons: MessageDialog.Ok
+    }
+
+    MessageDialog {
+        id: saveErrorDialog
+        title: "Save File Error"
+        text: root.saveErrorText
+        buttons: MessageDialog.Ok
+    }
+
     function compile() {
         if (!pdfLoader.visible)
             return
+        fileSystem.clearTempFolder()
+        saveCurrentFile()
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")
     }
 
     function compileForce() {
+        fileSystem.clearTempFolder()
+        saveCurrentFile()
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")
     }
 
@@ -255,6 +295,17 @@ ApplicationWindow {
         latexTextEdit.text = fileSystem.readFile(fileName)
         dirView.directory = fileSystem.getFileDir(fileName)
         currentFilePath = fileName
+    }
+
+    function saveCurrentFile() {
+        root.saveErrorText = ""
+
+        if (!currentFilePath)
+            return
+
+        fileSystem.writeToFile(currentFilePath, latexTextEdit.text)
+        if (fileSystem.lastError)
+            root.saveErrorText = fileSystem.lastError
     }
 
     function clearPDFSource() {

@@ -9,6 +9,7 @@
 class FileSystem : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)
     QML_ELEMENT
 public:
     FileSystem(QObject *parent = nullptr);
@@ -19,6 +20,17 @@ public:
     Q_INVOKABLE void clearTempFolder();
     Q_INVOKABLE QString getFileDir(const QString& filePath);
     Q_INVOKABLE void copyFile(const QString& from, const QString& to);
+    Q_INVOKABLE QString createExampleProject(const QString& exampleId, const QString& targetDir);
+
+    QString lastError() const;
+
+signals:
+    void lastErrorChanged();
+
+private:
+    void setLastError(const QString& error);
+
+    QString m_lastError;
 };
 
 #endif // FILESYSTEM_H
