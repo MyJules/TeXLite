@@ -26,6 +26,7 @@ ApplicationWindow {
     property string mainFilePath: ""
     property string compiledPDFPath
     property string projectCreationErrorText: ""
+    property string compilationErrorText: ""
     property string saveErrorText: ""
     property string loadedFileText: ""
     property bool suppressEditorDirtyTracking: false
@@ -64,7 +65,7 @@ ApplicationWindow {
                 saveErrorDialog.open()
                 return
             }
-            if (pdfLoader.visible)
+            if (appMenuBar.compileOnSaveEnabled)
                 compile()
         }
 
@@ -144,6 +145,7 @@ ApplicationWindow {
         id: texEngines
 
         onDCompilationFinished: function (filePath) {
+            root.compilationErrorText = ""
             compiledPDFPath = "file:" + filePath
         }
 
@@ -151,7 +153,12 @@ ApplicationWindow {
         }
 
         onDCompilationError: function (error) {
-            pdfLoader.item.errorString = error
+            root.compilationErrorText = error
+
+            if (pdfLoader.visible && pdfLoader.item)
+                pdfLoader.item.errorString = error
+            else
+                compilationErrorDialog.open()
         }
 
         onDStateChanged: {
@@ -189,8 +196,12 @@ ApplicationWindow {
                 pdfLoader.sourceComponent = bisyPDFIndicatorComponent
                 break
             case TexEngine.Error:
-                clearPDFSource()
-                pdfLoader.sourceComponent = compilationErrorViewComponent
+                if (pdfLoader.visible) {
+                    clearPDFSource()
+                    pdfLoader.sourceComponent = compilationErrorViewComponent
+                    if (pdfLoader.item)
+                        pdfLoader.item.errorString = root.compilationErrorText
+                }
                 break
             default:
                 break
@@ -232,6 +243,7 @@ ApplicationWindow {
         DirView {
             id: dirView
             visible: false
+            fileSystem: fileSystem
             SplitView.minimumWidth: 150
             SplitView.preferredWidth: 250
             SplitView.maximumWidth: 250
@@ -242,6 +254,43 @@ ApplicationWindow {
 
             onDirSelected: function (dirPath) {
                 dirView.directory = dirPath
+            }
+
+            onPathDeleted: function (deletedPath, folderEntry) {
+                const deletedPrefix = deletedPath.endsWith("/")
+                        ? deletedPath
+                        : deletedPath + "/"
+                const removedCurrentFile = root.currentFilePath
+                        && (root.currentFilePath === deletedPath
+                            || (folderEntry && root.currentFilePath.startsWith(deletedPrefix)))
+                const removedMainFile = root.mainFilePath
+                        && (root.mainFilePath === deletedPath
+                            || (folderEntry && root.mainFilePath.startsWith(deletedPrefix)))
+
+                if (!removedCurrentFile && !removedMainFile)
+                    return
+
+                clearPDFSource()
+                compiledPDFPath = ""
+
+                if (removedCurrentFile) {
+                    currentFilePath = ""
+                    loadedFileText = ""
+                    editorDirty = false
+                    latexTextEdit.text = ""
+                    fileSystem.watchFile("")
+                    appFooter.foooterLineCountText = ""
+                }
+
+                if (removedMainFile) {
+                    mainFilePath = ""
+                    texEngines.processingFile = ""
+                }
+
+                if (!currentFilePath) {
+                    editor.visible = false
+                    projectView.visible = true
+                }
             }
         }
 
@@ -297,38 +346,46 @@ ApplicationWindow {
         id: fileSystem
     }
 
-    MessageDialog {
+    AppMessageDialog {
         id: projectCreationErrorDialog
         title: "Example Project Error"
         text: root.projectCreationErrorText
-        buttons: MessageDialog.Ok
+        buttons: Dialog.Ok
     }
 
-    MessageDialog {
+    AppMessageDialog {
         id: saveErrorDialog
         title: "Save File Error"
         text: root.saveErrorText
-        buttons: MessageDialog.Ok
+        buttons: Dialog.Ok
     }
 
-    MessageDialog {
+    AppMessageDialog {
+        id: compilationErrorDialog
+        title: "Compilation Error"
+        text: root.compilationErrorText
+        buttons: Dialog.Ok
+    }
+
+    AppMessageDialog {
         id: externalFileChangedDialog
         title: "File Changed"
         text: "The current file changed outside TeXLite. Reload and discard local edits?"
-        buttons: MessageDialog.Yes | MessageDialog.No
+        buttons: Dialog.Yes | Dialog.No
 
-        onButtonClicked: function (button, role) {
-            if (role === MessageDialog.YesRole && root.pendingExternalFilePath) {
+        onAccepted: {
+            if (root.pendingExternalFilePath) {
                 root.loadFileWithDir(root.pendingExternalFilePath)
             }
+            root.pendingExternalFilePath = ""
+        }
 
+        onRejected: {
             root.pendingExternalFilePath = ""
         }
     }
 
     function compile() {
-        if (!pdfLoader.visible)
-            return
         fileSystem.clearTempFolder()
         saveCurrentFile()
         texEngines.currentEngine.compileToTempFolder(Date.now() + "")

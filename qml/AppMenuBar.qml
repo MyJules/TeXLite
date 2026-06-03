@@ -1,4 +1,5 @@
 import QtQuick
+import QtCore
 import QtQuick.Dialogs
 import QtQuick.Controls
 import QtQuick.Controls.Material 2.15
@@ -17,6 +18,12 @@ Row {
     property alias comileButtonEnabled: compileButton.enabled
     property alias saveButtonEnabled: saveFileButton.enabled
     property alias closeButtonEnabled: closeFileButton.enabled
+    property alias compileOnSaveEnabled: compileOnSaveMenuItem.checked
+
+    Settings {
+        category: "AppMenuBar"
+        property alias compileOnSaveEnabled: compileOnSaveMenuItem.checked
+    }
 
     Shortcut {
         context: Qt.ApplicationShortcut
@@ -126,6 +133,26 @@ Row {
         flat: true
         height: 30
         font.pointSize: 10
+        text: "Settings"
+        onClicked: settingsPopup.popup()
+
+        Menu {
+            id: settingsPopup
+
+            MenuItem {
+                id: compileOnSaveMenuItem
+                text: "Compile On Save"
+                font.pointSize: 10
+                checkable: true
+                checked: true
+            }
+        }
+    }
+
+    ToolButton {
+        flat: true
+        height: 30
+        font.pointSize: 10
         text: "Help"
         onClicked: helpPopup.popup()
 
@@ -139,11 +166,11 @@ Row {
                 }
             }
 
-            MessageDialog {
+            AppMessageDialog {
                 id: helpMessage
                 title: "About"
                 text: "My simple LaTeX app, made with Qt 6, please be gentle."
-                buttons: MessageDialog.Ok
+                buttons: Dialog.Ok
             }
         }
     }

@@ -202,10 +202,21 @@ Item {
                         MouseArea {
                             id: mouseArea
                             anchors.fill: parent
-                            acceptedButtons: Qt.LeftButton
+                            acceptedButtons: Qt.LeftButton | Qt.RightButton
                             hoverEnabled: true
 
-                            onClicked: {
+                            onPressed: function(mouse) {
+                                if (mouse.button !== Qt.RightButton)
+                                    return
+
+                                node.treeRoot.openEntryContextMenu(entryItem.entryPath,
+                                                                   entryItem.folderEntry)
+                            }
+
+                            onClicked: function(mouse) {
+                                if (mouse.button !== Qt.LeftButton)
+                                    return
+
                                 node.treeRoot.selectedPath = entryItem.entryPath
 
                                 if (entryItem.folderEntry) {
@@ -214,7 +225,10 @@ Item {
                                 }
                             }
 
-                            onDoubleClicked: {
+                            onDoubleClicked: function(mouse) {
+                                if (mouse.button !== Qt.LeftButton)
+                                    return
+
                                 node.treeRoot.selectedPath = entryItem.entryPath
 
                                 if (entryItem.folderEntry) {

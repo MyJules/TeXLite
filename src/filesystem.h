@@ -19,7 +19,9 @@ public:
     Q_INVOKABLE QString readFile(const QString& filePath);
     Q_INVOKABLE void writeToFile(const QString& filePath, const QString& content);
     Q_INVOKABLE void removeFile(const QString& filePath);
+    Q_INVOKABLE void removePath(const QString& filePath);
     Q_INVOKABLE void newFile(const QString& filePath);
+    Q_INVOKABLE void newFolder(const QString& folderPath);
     Q_INVOKABLE void clearTempFolder();
     Q_INVOKABLE QString getFileDir(const QString& filePath);
     Q_INVOKABLE void copyFile(const QString& from, const QString& to);

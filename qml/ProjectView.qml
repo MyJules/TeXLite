@@ -44,7 +44,7 @@ Item {
                 font.pointSize: 10
                 Material.roundedScale: Material.ExtraSmallScale
 
-                onClicked: openFileDialog.open()
+                onClicked: openProjectDialog.open()
             }
 
             Button {
@@ -60,10 +60,68 @@ Item {
 
             FileDialog {
                 id: openFileDialog
-                title: "Please choose a file"
+                title: "Open Project"
                 fileMode: FileDialog.OpenFile
+                nameFilters: ["TeX files (*.tex)", "All files (*)"]
 
                 onAccepted: newFileSelected(openFileDialog.selectedFile)
+            }
+
+            Dialog {
+                id: openProjectDialog
+                title: "Open Project"
+                anchors.centerIn: Overlay.overlay
+                width: 460
+                modal: true
+                standardButtons: Dialog.Cancel
+                Material.roundedScale: Material.ExtraSmallScale
+
+                contentItem: ColumnLayout {
+                    width: 420
+                    spacing: 14
+
+                    Label {
+                        Layout.fillWidth: true
+                        text: "Choose a LaTeX file to open as the main project file."
+                        color: "#c9c9c9"
+                        font.pointSize: 10
+                        wrapMode: Text.WordWrap
+                    }
+
+                    ItemDelegate {
+                        Layout.fillWidth: true
+                        padding: 16
+
+                        background: Rectangle {
+                            radius: 10
+                            color: parent.hovered ? "#3a3a3a" : "#2f2f2f"
+                            border.color: "#4a4a4a"
+                        }
+
+                        contentItem: Column {
+                            spacing: 6
+
+                            Label {
+                                text: "Browse For Project File"
+                                color: "#f0f0f0"
+                                font.pointSize: 12
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: "Pick the main .tex file for the project, such as main.tex."
+                                color: "#c9c9c9"
+                                font.pointSize: 10
+                                wrapMode: Text.WordWrap
+                            }
+                        }
+
+                        onClicked: {
+                            openProjectDialog.close()
+                            openFileDialog.open()
+                        }
+                    }
+                }
             }
 
             FolderDialog {

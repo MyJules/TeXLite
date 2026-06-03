@@ -16,6 +16,9 @@ int main(int argc, char *argv[])
     qputenv("QT_QUICK_CONTROLS_STYLE", QByteArray("Material"));
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("TeXLite");
+    app.setOrganizationDomain("texlite.app");
+    app.setApplicationName("TeXLite");
     app.setWindowIcon(QIcon(":/icons/imgs/icon.png"));
 
     qmlRegisterType<TexEngine>("com.tex", 1, 0, "TexEngine");

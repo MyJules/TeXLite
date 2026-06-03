@@ -132,24 +132,79 @@ Q_INVOKABLE void FileSystem::writeToFile(const QString &filePath, const QString 
 
 Q_INVOKABLE void FileSystem::removeFile(const QString &filePath)
 {
-    QString path = toLocalPath(filePath);
-    QFile file(path);
+    removePath(filePath);
+}
+
+Q_INVOKABLE void FileSystem::removePath(const QString &filePath)
+{
+    const QString path = toLocalPath(filePath);
+    setLastError("");
+
+    if (path.isEmpty()) {
+        setLastError("No path provided.");
+        return;
+    }
+
+    QFileInfo entryInfo(path);
+    if (!entryInfo.exists()) {
+        setLastError(QString("Path '%1' does not exist.").arg(path));
+        return;
+    }
+
+    bool removed = false;
+    if (entryInfo.isDir())
+        removed = QDir(path).removeRecursively();
+    else
+        removed = QFile::remove(path);
+
+    if (!removed) {
+        setLastError(QString("Could not delete '%1'.").arg(path));
+        return;
+    }
+
+    if (!m_watchedFilePath.isEmpty()
+            && (m_watchedFilePath == path
+                || m_watchedFilePath.startsWith(path + QDir::separator()))) {
+        watchFile("");
+    }
 }
 
 Q_INVOKABLE void FileSystem::newFile(const QString &filePath)
 {
-    QString path = toLocalPath(filePath);
+    const QString path = toLocalPath(filePath);
 
     setLastError("");
 
+    const QFileInfo fileInfo(path);
+    QDir parentDir = fileInfo.dir();
+    if (!parentDir.exists() && !parentDir.mkpath(".")) {
+        setLastError(QString("Could not create directory '%1'.").arg(parentDir.path()));
+        return;
+    }
+
     QFile file(path);
-    if (!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         setLastError(QString("Could not create file '%1'.").arg(path));
         return;
     }
 
     file.close();
-    qDebug() << path;
+}
+
+Q_INVOKABLE void FileSystem::newFolder(const QString &folderPath)
+{
+    const QString path = toLocalPath(folderPath);
+
+    setLastError("");
+
+    if (path.isEmpty()) {
+        setLastError("No folder path provided.");
+        return;
+    }
+
+    QDir dir;
+    if (!dir.mkpath(path))
+        setLastError(QString("Could not create folder '%1'.").arg(path));
 }
 
 Q_INVOKABLE void FileSystem::clearTempFolder()
