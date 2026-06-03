@@ -36,6 +36,7 @@ qt_add_qml_module(appTeXLite
     qml/TexEngines.qml
     qml/BusyPDFIndicator.qml
     qml/DirView.qml
+    qml/DirTreeNode.qml
     qml/CompilationErrorView.qml
     qml/IntellisenseMenu.qml
     qml/LatexListModel.qml

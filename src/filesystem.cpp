@@ -149,7 +149,7 @@ Q_INVOKABLE void FileSystem::clearTempFolder()
 Q_INVOKABLE QString FileSystem::getFileDir(const QString &filePath)
 {
     QFileInfo info(toLocalPath(filePath));
-    return info.dir().path();
+    return QUrl::fromLocalFile(info.dir().path()).toString();
 }
 
 Q_INVOKABLE void FileSystem::copyFile(const QString &from, const QString &to)
