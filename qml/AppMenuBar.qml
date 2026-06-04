@@ -147,7 +147,7 @@ Row {
         flat: true
         height: 30
         font.pointSize: 10
-        text: "Save Document"
+        text: "Save to PDF"
         onClicked: saveDocumentClicked()
     }
 
