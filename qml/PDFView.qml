@@ -10,11 +10,13 @@ Rectangle {
     clip: true
     color: "lightgrey"
 
+    signal sourceJumpRequested(int page, point location)
+
     function getTableView() {
         return view.children.length > 0 ? view.children[0] : null
     }
 
-    function getLocationForCell(tableView, cell) {
+    function getLocationForCell(tableView, cell, positionX, positionY) {
         if (cell.x < 0 || cell.y < 0)
             return null
 
@@ -23,11 +25,14 @@ Rectangle {
         if (!currentItem)
             return null
 
+        const localX = Math.max(0, tableView.contentX + positionX - currentItem.x)
+        const localY = Math.max(0, tableView.contentY + positionY - currentItem.y)
+
         return {
             page: cell.y,
-            location: Qt.point((tableView.contentX - currentItem.x
+            location: Qt.point((localX
                                 + tableView.jumpLocationMargin.x) / renderScale,
-                               (tableView.contentY - currentItem.y
+                               (localY
                                 + tableView.jumpLocationMargin.y) / renderScale)
         }
     }
@@ -42,7 +47,7 @@ Rectangle {
         const clampedY = Math.max(0, Math.min(root.height - 1, positionY))
         const cell = tableView.cellAtPosition(clampedX, clampedY, true)
 
-        return getLocationForCell(tableView, cell)
+        return getLocationForCell(tableView, cell, clampedX, clampedY)
     }
 
     function getCurrentViewState() {
@@ -244,6 +249,20 @@ Rectangle {
 
         Component.onCompleted: root.scheduleViewerStyleRefresh()
         onDocumentChanged: root.scheduleViewerStyleRefresh()
+    }
+
+    MouseArea {
+        anchors.fill: view
+        acceptedButtons: Qt.LeftButton
+        hoverEnabled: false
+
+        onDoubleClicked: function(mouse) {
+            const state = root.getViewStateAt(mouse.x, mouse.y)
+
+            if (state){
+                root.sourceJumpRequested(state.page, state.location)
+            }
+        }
     }
 
     Item {

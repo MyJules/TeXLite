@@ -24,6 +24,8 @@ public:
     Q_INVOKABLE void newFolder(const QString& folderPath);
     Q_INVOKABLE void clearTempFolder();
     Q_INVOKABLE QString getFileDir(const QString& filePath);
+    Q_INVOKABLE QString normalizeFilePath(const QString& filePath);
+    Q_INVOKABLE QString resolveRelativeFilePath(const QString& baseFilePath, const QString& relativePath);
     Q_INVOKABLE void copyFile(const QString& from, const QString& to);
     Q_INVOKABLE QString createExampleProject(const QString& exampleId, const QString& targetDir);
     Q_INVOKABLE void watchFile(const QString& filePath);

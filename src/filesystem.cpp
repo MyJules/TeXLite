@@ -218,6 +218,37 @@ Q_INVOKABLE QString FileSystem::getFileDir(const QString &filePath)
     return QUrl::fromLocalFile(info.dir().path()).toString();
 }
 
+Q_INVOKABLE QString FileSystem::normalizeFilePath(const QString &filePath)
+{
+    const QString localPath = toLocalPath(filePath);
+    if (localPath.isEmpty())
+        return "";
+
+    const QFileInfo fileInfo(localPath);
+    const QString canonicalPath = fileInfo.canonicalFilePath();
+    return canonicalPath.isEmpty() ? QDir::cleanPath(localPath) : canonicalPath;
+}
+
+Q_INVOKABLE QString FileSystem::resolveRelativeFilePath(const QString &baseFilePath,
+                                                        const QString &relativePath)
+{
+    const QString localBasePath = toLocalPath(baseFilePath);
+    QString localRelativePath = toLocalPath(relativePath);
+
+    if (localBasePath.isEmpty() || localRelativePath.isEmpty())
+        return "";
+
+    QFileInfo relativeInfo(localRelativePath);
+    QString resolvedPath = relativeInfo.isAbsolute()
+            ? localRelativePath
+            : QFileInfo(localBasePath).dir().filePath(localRelativePath);
+
+    if (QFileInfo(resolvedPath).suffix().isEmpty())
+        resolvedPath += ".tex";
+
+    return normalizeFilePath(resolvedPath);
+}
+
 Q_INVOKABLE void FileSystem::copyFile(const QString &from, const QString &to)
 {
     const QString sourcePath = toLocalPath(from);

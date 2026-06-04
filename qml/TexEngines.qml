@@ -6,6 +6,7 @@ Item {
     signal dCompilationStarted
     signal dCompilationError(string error)
     signal dStateChanged
+    signal dReverseSearchResolved(string filePath, int line, int column)
 
     property string processingFile: ""
     property string engineName: "pdflatex"
@@ -21,6 +22,7 @@ Item {
         onCompilationFinished: filePath => dCompilationFinished(filePath)
         onCompilationStarted: dCompilationStarted()
         onCompilationError: error => dCompilationError(error)
+        onReverseSearchResolved: (filePath, line, column) => dReverseSearchResolved(filePath, line, column)
         onStateChanged: dStateChanged()
     }
 

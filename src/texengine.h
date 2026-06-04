@@ -28,6 +28,7 @@ public:
     explicit TexEngine(QObject *parent = nullptr);
     ~TexEngine();
     Q_INVOKABLE void compileToTempFolder(const QString);
+    Q_INVOKABLE void syncTeXToSource(const QString &pdfFilePath, int page, qreal x, qreal y);
 
 signals:
     void stateChanged();
@@ -35,6 +36,7 @@ signals:
     void compilationFinished(const QString&);
     void compilationStarted();
     void compilationError(const QString&);
+    void reverseSearchResolved(const QString &filePath, int line, int column);
 
 private:
     QString texEngineCommand();

@@ -5,6 +5,20 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QRegularExpression>
+#include <QUrl>
+
+namespace {
+QString resolveSourcePath(const QString &baseFile, const QString &inputPath)
+{
+    const QString localInputPath = QUrl(inputPath).toLocalFile();
+    const QString path = localInputPath.isEmpty() ? inputPath : localInputPath;
+
+    if (QFileInfo(path).isAbsolute())
+        return path;
+
+    return QFileInfo(baseFile).dir().absoluteFilePath(path);
+}
+}
 
 TexEngine::TexEngine(QObject *parent)
     : QObject{parent}
@@ -61,6 +75,53 @@ void TexEngine::setState(TexEngine::EngineState state)
     emit stateChanged();
 }
 
+void TexEngine::syncTeXToSource(const QString &pdfFilePath, int page, qreal x, qreal y)
+{
+    const QString localPdfPath = QUrl(pdfFilePath).toLocalFile();
+    if (localPdfPath.isEmpty() || !QFile::exists(localPdfPath))
+        return;
+
+    QProcess process;
+    process.setProgram("synctex");
+    process.setArguments({"edit",
+                          "-o",
+                          QString::number(page + 1)
+                          + ":" + QString::number(x, 'f', 2)
+                          + ":" + QString::number(y, 'f', 2)
+                          + ":" + localPdfPath});
+    process.start();
+
+    if (!process.waitForFinished(3000) || process.exitStatus() != QProcess::NormalExit
+            || process.exitCode() != 0) {
+        return;
+    }
+
+        QString output = QString::fromUtf8(process.readAllStandardOutput())
+            + QString::fromUtf8(process.readAllStandardError());
+        output.replace("\r\n", "\n");
+        output.replace('\r', '\n');
+
+    static const QRegularExpression inputPattern(R"(^Input:(.+)$)",
+                                                 QRegularExpression::MultilineOption);
+    static const QRegularExpression linePattern(R"(^Line:(\d+)$)",
+                                                QRegularExpression::MultilineOption);
+    static const QRegularExpression columnPattern(R"(^Column:(\d+)$)",
+                                                  QRegularExpression::MultilineOption);
+
+    const QRegularExpressionMatch inputMatch = inputPattern.match(output);
+    const QRegularExpressionMatch lineMatch = linePattern.match(output);
+    const QRegularExpressionMatch columnMatch = columnPattern.match(output);
+
+    if (!inputMatch.hasMatch() || !lineMatch.hasMatch())
+        return;
+
+    const QString sourcePath = resolveSourcePath(m_currentFile, inputMatch.captured(1).trimmed());
+    const int line = qMax(1, lineMatch.captured(1).toInt());
+    const int column = columnMatch.hasMatch() ? qMax(1, columnMatch.captured(1).toInt()) : 1;
+
+    emit reverseSearchResolved(QUrl::fromLocalFile(sourcePath).toString(), line, column);
+}
+
 Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
 {
     bool isFileExists = QFile::exists(m_currentFile);
@@ -81,6 +142,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
     m_compilationProcess->setProgram(m_texEngineCommand);
     m_compilationProcess->setArguments(QStringList()
                                        << m_texEngineArguments
+                                       << "-synctex=1"
                                        << ("-output-directory=" + tempFolder)
                                        << m_currentFile);
     m_compilationProcess->start();
@@ -95,11 +157,17 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
             const QString baseName = QFileInfo(m_currentFile).baseName();
             const QString compiledFilePath = QDir(tempFolder).filePath(baseName + ".pdf");
             const QString tempFilePath = QDir(tempFolder).filePath(fileName + ".pdf");
+            const QString syncTexFilePath = QDir(tempFolder).filePath(baseName + ".synctex.gz");
+            const QString tempSyncTexFilePath = QDir(tempFolder).filePath(fileName + ".synctex.gz");
 
             if (QFile::exists(tempFilePath))
                 QFile::remove(tempFilePath);
 
+            if (QFile::exists(tempSyncTexFilePath))
+                QFile::remove(tempSyncTexFilePath);
+
             QFile::rename(compiledFilePath, tempFilePath);
+            QFile::rename(syncTexFilePath, tempSyncTexFilePath);
 
             QDir tempDir(tempFolder);
             const QStringList artifacts = tempDir.entryList(QStringList()
@@ -110,8 +178,7 @@ Q_INVOKABLE void TexEngine::compileToTempFolder(const QString fileName)
                                                             << (baseName + ".nav")
                                                             << (baseName + ".snm")
                                                             << (baseName + ".fls")
-                                                            << (baseName + ".fdb_latexmk")
-                                                            << (baseName + ".synctex.gz"),
+                                                            << (baseName + ".fdb_latexmk"),
                                                             QDir::Files);
             for (const QString &artifact : artifacts)
                 tempDir.remove(artifact);

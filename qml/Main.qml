@@ -332,7 +332,14 @@ ApplicationWindow {
 
         Component {
             id: pdfViewComponent
-            PDFView {}
+            PDFView {
+                onSourceJumpRequested: function (page, location) {
+                    texEngines.currentEngine.syncTeXToSource(root.compiledPDFPath,
+                                                             page,
+                                                             location.x,
+                                                             location.y)
+                }
+            }
         }
         Component {
             id: bisyPDFIndicatorComponent
@@ -446,6 +453,28 @@ ApplicationWindow {
         compile()
     }
 
+    function openIncludedSourceIfPresent(baseFilePath, lineNumber) {
+        if (!baseFilePath)
+            return false
+
+        const lines = latexTextEdit.text.split("\n")
+        const lineIndex = Math.max(0, Math.min(lines.length - 1, lineNumber - 1))
+        const lineText = lines.length > 0 ? lines[lineIndex] : ""
+        const match = /\\(?:input|include)\s*\{\s*([^}]+)\s*\}/.exec(lineText)
+
+        if (!match)
+            return false
+
+        const includePath = fileSystem.resolveRelativeFilePath(baseFilePath, match[1])
+
+        if (!includePath)
+            return false
+
+        root.loadFileWithDir(includePath)
+        latexTextEdit.moveCursorTo(1, 1)
+        return true
+    }
+
     Connections {
         target: fileSystem
 
@@ -460,6 +489,25 @@ ApplicationWindow {
 
             root.pendingExternalFilePath = filePath
             externalFileChangedDialog.open()
+        }
+    }
+
+    Connections {
+        target: texEngines
+
+        function onDReverseSearchResolved(filePath, line, column) {
+            const resolvedPath = fileSystem.normalizeFilePath(filePath)
+            const currentPath = fileSystem.normalizeFilePath(root.currentFilePath)
+
+            if (!resolvedPath)
+                return
+
+            if (currentPath !== resolvedPath)
+                root.loadFileWithDir(filePath)
+
+            latexTextEdit.moveCursorTo(line, column)
+
+            openIncludedSourceIfPresent(resolvedPath, line)
         }
     }
 }

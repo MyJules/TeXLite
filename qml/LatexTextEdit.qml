@@ -42,6 +42,32 @@ Rectangle {
         latexTextArea.deselect()
     }
 
+    function moveCursorTo(lineNumber, columnNumber) {
+        const targetLine = Math.max(1, lineNumber)
+        const targetColumn = Math.max(1, columnNumber)
+        const lines = latexTextArea.text.split("\n")
+        let position = 0
+
+        for (let index = 0; index < targetLine - 1 && index < lines.length; ++index)
+            position += lines[index].length + 1
+
+        const currentLine = lines.length > 0
+                ? lines[Math.min(targetLine - 1, lines.length - 1)] : ""
+        position += Math.min(currentLine.length, targetColumn - 1)
+
+        latexTextArea.cursorPosition = position
+        latexTextArea.forceActiveFocus()
+        calculateCoords()
+
+        const cursorRect = latexTextArea.positionToRectangle(position)
+        const contentItem = latexTextAreaScrollView.contentItem
+
+        if (contentItem) {
+            const targetY = Math.max(0, cursorRect.y - (latexTextAreaScrollView.height * 0.3))
+            contentItem.contentY = targetY
+        }
+    }
+
     signal dCursorPositionChanged
 
     property alias text: latexTextArea.text
