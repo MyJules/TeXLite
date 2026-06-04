@@ -124,10 +124,8 @@ Q_INVOKABLE void FileSystem::writeToFile(const QString &filePath, const QString 
         return;
     }
 
-    if (path == m_watchedFilePath) {
-        m_ignoreNextWatchedChange = true;
+    if (path == m_watchedFilePath)
         watchFile(path);
-    }
 }
 
 Q_INVOKABLE void FileSystem::removeFile(const QString &filePath)

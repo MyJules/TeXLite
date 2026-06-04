@@ -120,11 +120,14 @@ ApplicationWindow {
 
             const currentFileName = root.fileNameFromPath(currentFilePath)
             const mainFileName = root.fileNameFromPath(mainFilePath)
+            const displayedCurrentFileName = root.editorDirty
+                    ? "*" + currentFileName
+                    : currentFileName
 
             if (!mainFileName || currentFilePath === mainFilePath)
-                return currentFileName
+                return displayedCurrentFileName
 
-            return mainFileName + " -> " + currentFileName
+            return mainFileName + " -> " + displayedCurrentFileName
         }
 
         showHideFilesEnabled: editor.visible
