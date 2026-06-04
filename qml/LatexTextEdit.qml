@@ -55,7 +55,7 @@ Rectangle {
     property real lineGapSize: 1
     property int areaLineCount: 0
     property real scrolledLines: 0
-    property real lineNumberOffsetY: latexTextArea.topPadding
+    property real lineNumberOffsetY: latexTextAreaScrollView.topPadding + latexTextArea.topPadding
                                      - (latexTextAreaScrollView.contentItem
                                         && latexTextAreaScrollView.contentItem.contentY
                                         ? latexTextAreaScrollView.contentItem.contentY : 0)
@@ -101,6 +101,12 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
+            topPadding: 4
+            bottomPadding: 4
+
+            background: Rectangle {
+                color: "#292929"
+            }
 
             ScrollBar.vertical.onPositionChanged: {
                 calculateCoords()
@@ -112,7 +118,13 @@ Rectangle {
                 focus: true
                 font.pointSize: 12
                 selectByMouse: true
+                topPadding: 0
+                bottomPadding: 0
                 wrapMode: TextEdit.NoWrap
+
+                background: Rectangle {
+                    color: "transparent"
+                }
 
                 onCursorPositionChanged: {
                     calculateCoords()
