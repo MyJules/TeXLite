@@ -16,7 +16,23 @@ Rectangle {
         return view.children.length > 0 ? view.children[0] : null
     }
 
-    function getLocationForCell(tableView, cell, positionX, positionY) {
+    function pageIndexForItem(currentItem, fallbackIndex) {
+        if (!currentItem)
+            return fallbackIndex
+
+        if (currentItem.page !== undefined)
+            return currentItem.page
+
+        if (currentItem.pageNumber !== undefined)
+            return currentItem.pageNumber
+
+        if (currentItem.index !== undefined)
+            return currentItem.index
+
+        return fallbackIndex
+    }
+
+    function getLocationForCell(tableView, cell, contentPositionX, contentPositionY) {
         if (cell.x < 0 || cell.y < 0)
             return null
 
@@ -25,11 +41,11 @@ Rectangle {
         if (!currentItem)
             return null
 
-        const localX = Math.max(0, tableView.contentX + positionX - currentItem.x)
-        const localY = Math.max(0, tableView.contentY + positionY - currentItem.y)
+        const localX = Math.max(0, contentPositionX - currentItem.x)
+        const localY = Math.max(0, contentPositionY - currentItem.y)
 
         return {
-            page: cell.y,
+            page: pageIndexForItem(currentItem, cell.y),
             location: Qt.point((localX
                                 + tableView.jumpLocationMargin.x) / renderScale,
                                (localY
@@ -45,9 +61,11 @@ Rectangle {
 
         const clampedX = Math.max(0, Math.min(root.width - 1, positionX))
         const clampedY = Math.max(0, Math.min(root.height - 1, positionY))
-        const cell = tableView.cellAtPosition(clampedX, clampedY, true)
+        const contentPositionX = tableView.contentX + clampedX
+        const contentPositionY = tableView.contentY + clampedY
+        const cell = tableView.cellAtPosition(contentPositionX, contentPositionY, true)
 
-        return getLocationForCell(tableView, cell, clampedX, clampedY)
+        return getLocationForCell(tableView, cell, contentPositionX, contentPositionY)
     }
 
     function getCurrentViewState() {
