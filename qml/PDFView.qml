@@ -155,6 +155,12 @@ Rectangle {
     property int scrollRestoreAttempts: 0
     property int styleRefreshAttempts: 0
     property var viewerTableView: null
+    property bool verticalThumbDragging: false
+    property real verticalThumbDragY: 2
+    property real verticalThumbPressOffset: 0
+    property bool horizontalThumbDragging: false
+    property real horizontalThumbDragX: 2
+    property real horizontalThumbPressOffset: 0
     property alias source: doc.source
     property alias renderScale: view.renderScale
     property alias currentPage: view.currentPage
@@ -265,6 +271,9 @@ Rectangle {
                 radius: 3
                 color: "#5f6368"
                 y: {
+                    if (root.verticalThumbDragging)
+                        return root.verticalThumbDragY
+
                     if (!root.viewerTableView)
                         return 2
 
@@ -283,9 +292,15 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
+                    preventStealing: true
 
                     onPressed: function(mouse) {
-                        root.setVerticalScrollFromThumb(parent.y + mouse.y - parent.height / 2,
+                        root.verticalThumbDragging = true
+                        root.verticalThumbPressOffset = mouse.y
+                        root.verticalThumbDragY = Math.max(2,
+                                                           Math.min(verticalScrollTrack.height - parent.height - 2,
+                                                                    parent.y))
+                        root.setVerticalScrollFromThumb(root.verticalThumbDragY,
                                                         parent.height,
                                                         verticalScrollTrack.height)
                     }
@@ -294,10 +309,17 @@ Rectangle {
                         if (!(mouse.buttons & Qt.LeftButton))
                             return
 
-                        root.setVerticalScrollFromThumb(parent.y + mouse.y - parent.height / 2,
+                        root.verticalThumbDragY = Math.max(2,
+                                                           Math.min(verticalScrollTrack.height - parent.height - 2,
+                                                                    verticalScrollTrack.mapFromItem(parent, mouse.x, mouse.y).y
+                                                                    - root.verticalThumbPressOffset))
+                        root.setVerticalScrollFromThumb(root.verticalThumbDragY,
                                                         parent.height,
                                                         verticalScrollTrack.height)
                     }
+
+                    onReleased: root.verticalThumbDragging = false
+                    onCanceled: root.verticalThumbDragging = false
                 }
             }
         }
@@ -323,6 +345,9 @@ Rectangle {
                 radius: 3
                 color: "#5f6368"
                 x: {
+                    if (root.horizontalThumbDragging)
+                        return root.horizontalThumbDragX
+
                     if (!root.viewerTableView)
                         return 2
 
@@ -341,9 +366,15 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
+                    preventStealing: true
 
                     onPressed: function(mouse) {
-                        root.setHorizontalScrollFromThumb(parent.x + mouse.x - parent.width / 2,
+                        root.horizontalThumbDragging = true
+                        root.horizontalThumbPressOffset = mouse.x
+                        root.horizontalThumbDragX = Math.max(2,
+                                                             Math.min(horizontalScrollTrack.width - parent.width - 2,
+                                                                      parent.x))
+                        root.setHorizontalScrollFromThumb(root.horizontalThumbDragX,
                                                           parent.width,
                                                           horizontalScrollTrack.width)
                     }
@@ -352,10 +383,17 @@ Rectangle {
                         if (!(mouse.buttons & Qt.LeftButton))
                             return
 
-                        root.setHorizontalScrollFromThumb(parent.x + mouse.x - parent.width / 2,
+                        root.horizontalThumbDragX = Math.max(2,
+                                                             Math.min(horizontalScrollTrack.width - parent.width - 2,
+                                                                      horizontalScrollTrack.mapFromItem(parent, mouse.x, mouse.y).x
+                                                                      - root.horizontalThumbPressOffset))
+                        root.setHorizontalScrollFromThumb(root.horizontalThumbDragX,
                                                           parent.width,
                                                           horizontalScrollTrack.width)
                     }
+
+                    onReleased: root.horizontalThumbDragging = false
+                    onCanceled: root.horizontalThumbDragging = false
                 }
             }
         }
