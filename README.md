@@ -4,6 +4,7 @@ The start screen can also create example LaTeX projects for article, report, and
 
 # Screenshots 
 ![Image](imgs/screen.png)
+![Image](imgs/screen1.png)
 
 # Important
 Please install pdflatex, it's necessary for program to work.
